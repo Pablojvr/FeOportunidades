@@ -23,8 +23,8 @@ export class AppComponent {
     {
       text: 'Administracion',
       icon: 'settings',
-      url: '#',
-      show:false,
+      url: null,
+      show: false,
       menu: [{ text: 'Usuarios', icon: 'people', url: '/usuarios' }],
     },
   ];

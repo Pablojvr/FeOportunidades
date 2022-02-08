@@ -10,7 +10,7 @@
   </mat-toolbar>
 
   <mat-sidenav-container
-    class="example-sidenav-container min-h-full h-full"
+    class="min-h-full h-full"
     [style.marginTop.px]="screenSize == 'xs' ? 56 : 0"
   >
     <mat-sidenav
@@ -27,7 +27,7 @@
           <a
             mat-list-item
             (click)="item.show = !item.show"
-            [routerLinkActive]="['is-active']"
+            [routerLinkActive]="[item.url ? 'is-active' : '']"
             [routerLink]="item.url"
             class="cursor-pointer"
           >
