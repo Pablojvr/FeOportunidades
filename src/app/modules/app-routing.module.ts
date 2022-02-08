@@ -6,8 +6,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {path:"",component:IndexComponent},
-  {path:"login",component:LoginComponent},
+  {path:"",component:LoginComponent},
+  {path:"index",component:IndexComponent},
   {path:"usuarios",component:UsuariosComponent},
   {path:"**",component:NotfoundComponent},
 
