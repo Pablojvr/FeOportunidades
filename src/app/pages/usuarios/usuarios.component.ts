@@ -96,7 +96,13 @@ export class UsuariosComponent implements AfterViewInit {
     this.editedUsuario = Object.assign({}, item);
     this.editedUsuario.password = '';
     let dialogRef = this.dialog.open(EditarUsuarioModalComponent, {
-      data: { editedUsuario: this.editedUsuario },
+      data: {
+        editedUsuario: this.editedUsuario,
+        then: () => {
+          this.loadDataPage();
+          dialogRef.close();
+        },
+      },
       width: '600px',
       maxWidth: '600px',
     });

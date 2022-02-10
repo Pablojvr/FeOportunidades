@@ -20,7 +20,7 @@ export class NavigationComponent implements OnInit {
     {
       text: 'Home',
       icon: 'home',
-      url: '/index',
+      url: '/home',
     },
     {
       text: 'Administracion',

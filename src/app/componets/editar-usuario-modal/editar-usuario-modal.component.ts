@@ -36,6 +36,7 @@ export class EditarUsuarioModalComponent implements OnInit {
     this.userService.saveUser(this.data.editedUsuario).subscribe({
       next: (_) => {
         console.log('Se guardo correctamente');
+        this.data.then();
       },
       error: (_) => console.log('error'),
     });
