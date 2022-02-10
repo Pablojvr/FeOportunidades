@@ -1,12 +1,25 @@
-<div>
-  <h3 class="text-bold">Listado de Usuarios</h3>
+<mat-card>
   <div class="spinner-container" *ngIf="dataSource.loading$ | async">
     <mat-spinner></mat-spinner>
   </div>
+  <div class="flex flex-row items-center">
+    <h1 class="text-bold">Listado de Usuarios</h1>
+    <div class="flex-auto"></div>
+    <!-- <mat-form-field appearance="outline">
+      <mat-label>Buscar Usuarios</mat-label>
 
-  <!-- <mat-input-container> -->
-  <input matInput placeholder="Search usuarios" #input />
-  <!-- </mat-input-container> -->
+      <input matInput placeholder="jose.chavez" #input />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field> -->
+    <button
+      color="primary"
+      class="addBtn"
+      mat-raised-button
+      (click)="addItem()"
+    >
+      <mat-icon>add</mat-icon> Agregar Usuario
+    </button>
+  </div>
 
   <mat-table
     class="usuarios-table mat-elevation-z8"
@@ -41,14 +54,27 @@
       }}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+      <mat-cell class="duration-cell" *matCellDef="let usuario">
+        <button mat-icon-button (click)="editItemDialog(usuario)">
+          <mat-icon class="mat-18" color="orange">edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteItemDialog(usuario)">
+          <mat-icon class="mat-18" color="orange">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
-  <mat-divider></mat-divider>
+  <!-- <mat-divider></mat-divider> -->
   <mat-paginator
+    class="mat-elevation-z8"
     [length]="dataSource?.usuariosLength"
     [pageSize]="10"
     [pageSizeOptions]="[10, 20, 30]"
   ></mat-paginator>
-  <mat-divider></mat-divider>
-</div>
+  <!-- <mat-divider></mat-divider> -->
+</mat-card>

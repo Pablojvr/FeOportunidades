@@ -1,7 +1,8 @@
-.mat-list-base {
-  padding-top: 0px;
+@media screen and (max-width: 599) {
+  mat-sidenav-container {
+    /* min-height: calc(100% - 56px); */
+  }
 }
-
-.is-active {
-  color: #673ab7;
+mat-sidenav-container {
+  /* min-height: calc(100% - 64px); */
 }

@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
 import {
@@ -11,18 +12,18 @@ import {
 import { filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: 'app-layout',
+  templateUrl: './layout.component.html',
+  styleUrls: ['./layout.component.css'],
 })
-export class AppComponent {
+export class LayoutComponent {
   public getScreenWidth: any;
   public getScreenHeight: any;
   public screenSize: String = '';
   public showNavigation: boolean = false;
   public route!: any;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {

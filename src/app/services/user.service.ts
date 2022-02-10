@@ -20,9 +20,17 @@ export class UserService {
     });
   }
 
-  setUser(user: any) {
-    let userId = user.id;
-    delete user.id;
-    return this.http.post(`${this.baseUrl}/Usuarios/${user.id}`, user);
+  saveUser(user: any) {
+    let userId = user.idUsuario;
+    if (!userId) {
+      return this.http.post(`${this.baseUrl}/Usuarios`, user);
+    } else {
+      return this.http.put(`${this.baseUrl}/Usuarios/${userId}`, user);
+    }
+  }
+
+  deleteUser(user: any) {
+    let userId = user.idUsuario;
+    return this.http.delete(`${this.baseUrl}/Usuarios/${userId}`, user);
   }
 }

@@ -7,3 +7,6 @@
   width: 390px;
   position: fixed;
 }
+.addBtn {
+  margin-bottom: 16px !important;
+}

@@ -1,3 +1,6 @@
+import { LayoutModule } from './layout/layout.module';
+import { AuthGuard } from './guards/auth';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { MaterialModule } from './modules/app-material.module';
 import { NgModule } from '@angular/core';
@@ -10,9 +13,10 @@ import { IndexComponent } from './pages/index/index.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { EditarUsuarioModalComponent } from './componets/editar-usuario-modal/editar-usuario-modal.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ConfirmacionModalComponent } from './componets/confirmacion-modal/confirmacion-modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     LoginComponent,
     UsuariosComponent,
     NotfoundComponent,
-
+    EditarUsuarioModalComponent,
+    ConfirmacionModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,9 +34,18 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MaterialModule
+    MaterialModule,
+    SweetAlert2Module,
+    LayoutModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

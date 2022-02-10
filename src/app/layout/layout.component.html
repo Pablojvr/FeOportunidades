@@ -1,0 +1,19 @@
+<div class="min-h-full h-full w-full min-w-full">
+  <app-header (toggleNav)="snav.toggle()"></app-header>
+  <mat-sidenav-container>
+    <mat-sidenav
+      role="navigation"
+      #snav
+      [mode]="screenSize == 'xs' ? 'over' : 'side'"
+      fixedTopGap="56"
+      class="w-52"
+      [opened]="screenSize != 'xs'"
+    >
+      <app-navigation></app-navigation>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <app-footer></app-footer>
+</div>

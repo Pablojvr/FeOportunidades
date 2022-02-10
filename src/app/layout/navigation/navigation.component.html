@@ -1,0 +1,32 @@
+<mat-list>
+  <mat-divider></mat-divider>
+  <ng-container *ngFor="let item of menuItems">
+    <a
+      mat-list-item
+      (click)="item.show = !item.show"
+      [routerLinkActive]="[item.url ? 'is-active' : '']"
+      [routerLink]="item.url"
+      class="cursor-pointer"
+    >
+      <span mat-line>{{ item.text }}</span>
+      <mat-icon md-list-icon class="mat-18">{{ item.icon }}</mat-icon></a
+    >
+    <mat-divider></mat-divider>
+    <mat-list *ngIf="item.show && item.menu" class="pa-0 ma-0">
+      <!-- <mat-divider></mat-divider> -->
+      <div *ngFor="let subItem of item.menu" class="pa-0 ma-0">
+        <a
+          mat-list-item
+          class="cursor-pointer"
+          color="gray"
+          [routerLinkActive]="['is-active']"
+          [routerLink]="subItem.url"
+        >
+          <span mat-line style="margin-left: 30px">{{ subItem.text }}</span>
+          <mat-icon md-list-icon class="mat-18">{{ subItem.icon }}</mat-icon></a
+        >
+        <mat-divider></mat-divider>
+      </div>
+    </mat-list>
+  </ng-container>
+</mat-list>

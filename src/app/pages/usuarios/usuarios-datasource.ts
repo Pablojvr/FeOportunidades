@@ -14,7 +14,8 @@ export interface Usuario {
   login: string;
   nombre: number;
   password: string;
-  usuarioId: number;
+  passwordConfirm: string;
+  idUsuario: number;
   rol: Rol;
   rolFK: number;
 }

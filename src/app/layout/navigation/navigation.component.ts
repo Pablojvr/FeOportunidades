@@ -1,43 +1,44 @@
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { MediaMatcher } from '@angular/cdk/layout';
 import {
-  ChangeDetectorRef,
   Component,
-  OnDestroy,
+  OnInit,
   HostListener,
-  OnChanges,
-  SimpleChanges,
+  Input,
+  ViewChild,
 } from '@angular/core';
-import { filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: 'app-navigation',
+  templateUrl: './navigation.component.html',
+  styleUrls: ['./navigation.component.css'],
 })
-export class AppComponent {
+export class NavigationComponent implements OnInit {
+  @ViewChild('snav') sideBar!: NavigationComponent;
+  @Input() toggleNav!: boolean;
+  constructor() {}
+
+  menuItems: any[] = [
+    {
+      text: 'Home',
+      icon: 'home',
+      url: '/index',
+    },
+    {
+      text: 'Administracion',
+      icon: 'settings',
+      url: null,
+      show: false,
+      menu: [{ text: 'Usuarios', icon: 'people', url: '/usuarios' }],
+    },
+  ];
+
   public getScreenWidth: any;
   public getScreenHeight: any;
   public screenSize: String = '';
-  public showNavigation: boolean = false;
-  public route!: any;
-
-  constructor(private router: Router) {
-    router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        this.route = event;
-      });
-  }
 
   ngOnInit() {
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
     this.setScreenSize(this.getScreenWidth);
-  }
-
-  toggleNav(event: any) {
-    this.showNavigation = !this.showNavigation;
   }
 
   @HostListener('window:resize', ['$event'])
@@ -61,6 +62,4 @@ export class AppComponent {
       this.screenSize = 'xs';
     }
   }
-
-  title = 'FrontEndCofarsa';
 }

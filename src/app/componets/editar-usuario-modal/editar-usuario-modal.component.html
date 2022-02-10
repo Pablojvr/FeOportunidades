@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>
+  {{ data.editedUsuario.idUsuario != null ? "Editar" : "Nuevo" }} usuario
+</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="grid md:grid-cols-2 sm:grid-cols-1 gap-3">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="data.editedUsuario.nombre" />
+      <mat-icon matPrefix>text_fields</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Login</mat-label>
+      <input matInput [(ngModel)]="data.editedUsuario.login" />
+      <mat-icon matPrefix>verified_user</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Contraseña</mat-label>
+      <input
+        matInput
+        [(ngModel)]="data.editedUsuario.password"
+        type="password"
+      />
+      <mat-icon matPrefix>lock</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Confirmacion Contraseña</mat-label>
+      <input
+        matInput
+        [(ngModel)]="data.editedUsuario.passwordConfirm"
+        type="password"
+      />
+      <mat-icon matPrefix>lock</mat-icon>
+    </mat-form-field>
+  </div>
+  <mat-form-field appearance="outline">
+    <mat-label>Rol</mat-label>
+    <mat-select [(ngModel)]="data.editedUsuario.rolFK">
+      <mat-option *ngFor="let rol of roles" [value]="rol.idRol">
+        {{ rol.descripcion }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button cdkFocusInitial (click)="guardarUsuario()">Guardar</button>
+</mat-dialog-actions>
