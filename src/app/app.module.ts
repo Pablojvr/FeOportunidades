@@ -17,6 +17,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { EditarUsuarioModalComponent } from './componets/editar-usuario-modal/editar-usuario-modal.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ConfirmacionModalComponent } from './componets/confirmacion-modal/confirmacion-modal.component';
+import { RolesComponent } from './pages/roles/roles.component';
+import { EditarRolModalComponent } from './componets/editar-rol-modal/editar-rol-modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +28,8 @@ import { ConfirmacionModalComponent } from './componets/confirmacion-modal/confi
     NotfoundComponent,
     EditarUsuarioModalComponent,
     ConfirmacionModalComponent,
+    RolesComponent,
+    EditarRolModalComponent,
   ],
   imports: [
     BrowserModule,

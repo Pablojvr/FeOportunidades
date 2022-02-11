@@ -1,3 +1,4 @@
+import { RolesComponent } from './../pages/roles/roles.component';
 import { LayoutComponent } from './../layout/layout.component';
 import { UsuariosComponent } from './../pages/usuarios/usuarios.component';
 import { NotfoundComponent } from './../pages/notfound/notfound.component';
@@ -19,6 +20,12 @@ const routes: Routes = [
     path: 'usuarios',
     component: LayoutComponent,
     children: [{ path: '', component: UsuariosComponent }],
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'roles',
+    component: LayoutComponent,
+    children: [{ path: '', component: RolesComponent }],
     canActivate: [AuthGuard],
   },
   {

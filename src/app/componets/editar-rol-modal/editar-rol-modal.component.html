@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>
+  {{ data.editedRol.idUsuario != null ? "Editar" : "Nuevo" }} rol
+</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="flex flex-col">
+    <mat-form-field appearance="outline">
+      <mat-label>Descripcion</mat-label>
+      <input matInput [(ngModel)]="data.editedRol.descripcion" />
+      <mat-icon matPrefix>text_fields</mat-icon>
+    </mat-form-field>
+    <!-- <mat-divider></mat-divider> -->
+    <p><b>Deshabilitar modulos</b></p>
+
+    <div class="flex flex-row justify-evenly">
+      <mat-slide-toggle [(ngModel)]="data.editedRol.compras" color="primary"
+        >Compras</mat-slide-toggle
+      >
+
+      <mat-slide-toggle [(ngModel)]="data.editedRol.facturacion" color="primary"
+        >Facturas</mat-slide-toggle
+      >
+      <mat-slide-toggle
+        [(ngModel)]="data.editedRol.devoluciones"
+        color="primary"
+        >Devoluciones</mat-slide-toggle
+      >
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button cdkFocusInitial (click)="guardarRol()">Guardar</button>
+</mat-dialog-actions>

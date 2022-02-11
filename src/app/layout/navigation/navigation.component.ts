@@ -27,7 +27,15 @@ export class NavigationComponent implements OnInit {
       icon: 'settings',
       url: null,
       show: false,
-      menu: [{ text: 'Usuarios', icon: 'people', url: '/usuarios' }],
+      menu: [
+        { text: 'Usuarios', icon: 'people', url: '/usuarios' },
+        {
+          text: 'Roles',
+          icon: 'manage_accounts',
+          url: '/roles',
+          show: false,
+        },
+      ],
     },
   ];
 
