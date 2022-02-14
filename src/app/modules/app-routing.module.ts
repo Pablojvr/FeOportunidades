@@ -1,3 +1,4 @@
+import { ComprasComponent } from './../pages/compras/compras.component';
 import { RolesComponent } from './../pages/roles/roles.component';
 import { LayoutComponent } from './../layout/layout.component';
 import { UsuariosComponent } from './../pages/usuarios/usuarios.component';
@@ -26,6 +27,12 @@ const routes: Routes = [
     path: 'roles',
     component: LayoutComponent,
     children: [{ path: '', component: RolesComponent }],
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'compras',
+    component: LayoutComponent,
+    children: [{ path: '', component: ComprasComponent }],
     canActivate: [AuthGuard],
   },
   {

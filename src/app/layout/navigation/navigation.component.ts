@@ -37,6 +37,11 @@ export class NavigationComponent implements OnInit {
         },
       ],
     },
+    {
+      text: 'Compras',
+      icon: 'shop',
+      url: '/compras',
+    },
   ];
 
   public getScreenWidth: any;

@@ -19,6 +19,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ConfirmacionModalComponent } from './componets/confirmacion-modal/confirmacion-modal.component';
 import { RolesComponent } from './pages/roles/roles.component';
 import { EditarRolModalComponent } from './componets/editar-rol-modal/editar-rol-modal.component';
+import { ComprasComponent } from './pages/compras/compras.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +31,7 @@ import { EditarRolModalComponent } from './componets/editar-rol-modal/editar-rol
     ConfirmacionModalComponent,
     RolesComponent,
     EditarRolModalComponent,
+    ComprasComponent,
   ],
   imports: [
     BrowserModule,
