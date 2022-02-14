@@ -37,9 +37,14 @@ const routes: Routes = [
   },
   {
     path: '**',
-    children: [{ path: '', component: NotfoundComponent }],
-    canActivate: [AuthGuard],
+    redirectTo: 'home',
+    pathMatch: 'full',
   },
+  // {
+  //   path: '**',
+  //   children: [{ path: '', component: NotfoundComponent }],
+  //   canActivate: [AuthGuard],
+  // },
 ];
 
 @NgModule({
