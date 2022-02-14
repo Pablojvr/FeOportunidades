@@ -1,7 +1,4 @@
 <mat-card>
-  <div class="spinner-container" *ngIf="dataSource.loading$ | async">
-    <mat-spinner></mat-spinner>
-  </div>
   <div class="flex flex-row items-center">
     <h1 class="text-bold">Listado de Usuarios</h1>
     <div class="flex-auto"></div>
@@ -19,6 +16,20 @@
     >
       <mat-icon>add</mat-icon> Agregar Usuario
     </button>
+  </div>
+  <ng-container matColumnDef="loading">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      [attr.colspan]="displayedColumns.length"
+    ></th>
+  </ng-container>
+  <div
+    class="spinner-container"
+    class="w-full"
+    *ngIf="dataSource.loading$ | async"
+  >
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
 
   <mat-table
@@ -67,6 +78,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <!-- <tr mat-header-row *matHeaderRowDef="['loading']"></tr> -->
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
   <!-- <mat-divider></mat-divider> -->

@@ -1,7 +1,4 @@
 <mat-card>
-  <div class="spinner-container" *ngIf="dataSource.loading$ | async">
-    <mat-spinner></mat-spinner>
-  </div>
   <div class="flex flex-row items-center">
     <h1 class="text-bold">Listado de roles</h1>
     <div class="flex-auto"></div>
@@ -20,7 +17,13 @@
       <mat-icon>add</mat-icon> Agregar rol
     </button>
   </div>
-
+  <div
+    class="spinner-container"
+    class="w-full"
+    *ngIf="dataSource.loading$ | async"
+  >
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
   <mat-table
     class="roles-table mat-elevation-z8"
     [dataSource]="dataSource"

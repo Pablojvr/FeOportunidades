@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { Observable, merge, BehaviorSubject, of } from 'rxjs';
+import Swal from 'sweetalert2';
 
 export interface Page {
   totalItems: number;
@@ -60,7 +61,15 @@ export class UsuariosDataSource extends DataSource<Usuario> {
     this.userService
       .getUsers(filter, sortDirection, pageIndex, pageSize)
       .pipe(
-        catchError(() => of([])),
+        catchError((error) => {
+          Swal.fire({
+            title: 'Ha ocurrido un problema!',
+            text: error.message ?? '',
+            icon: 'error',
+            heightAuto: false,
+          });
+          return of([]);
+        }),
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe((page: Page[]) => {

@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 import { Rol } from '../usuarios/usuarios-datasource';
+import Swal from 'sweetalert2';
 export interface Page {
   totalItems: number;
   page: number;
@@ -33,7 +34,15 @@ export class RolesDataSource extends DataSource<Rol> {
     this.rolesService
       .getPaginatedRoles(filter, sortDirection, pageIndex, pageSize)
       .pipe(
-        catchError(() => of([])),
+        catchError((error) => {
+          Swal.fire({
+            title: 'Ha ocurrido un problema!',
+            text: error.message ?? '',
+            icon: 'error',
+            heightAuto: false,
+          });
+          return of([]);
+        }),
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe((page: Page[]) => {

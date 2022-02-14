@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
 import {
   Router,
   CanActivate,
@@ -11,13 +12,18 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (localStorage.getItem('loggedInUser')) {
-      // logged in so return true
-      return true;
-    }
+    var user = localStorage.getItem('loggedInUser')
+      ? JSON.parse(localStorage.getItem('loggedInUser') ?? '{}')
+      : null;
 
-    // not logged in so redirect to login page with the return url
-    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-    return false;
+    // logged in so return true
+    if (!user || moment().isAfter(user.expires)) {
+      // not logged in so redirect to login page with the return url
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: state.url },
+      });
+      return false;
+    }
+    return true;
   }
 }

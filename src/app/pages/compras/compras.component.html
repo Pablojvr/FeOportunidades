@@ -14,38 +14,45 @@
           <span class="mx-1 mb-3">Proveedor</span>
           <input
             type="text"
-            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-purple-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           />
         </div>
         <div class="flex flex-row items-center w-6/12">
           <input
             type="text"
-            class="mx-1 appearance-none block w-full bg-gray-200 text-gray-700 border border-purple-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            class="mx-1 appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           />
         </div>
         <div class="flex flex-row items-center w-3/12">
           <span class="mx-1 mb-3">Fecha</span>
           <input
             type="text"
-            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-purple-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           />
         </div>
         <div class="flex flex-row items-center md:w-3/12 sm:w-3/12">
           <span class="mx-1 mb-3">Meses historial</span>
           <input
             type="text"
-            class="appearance-none block w-full bg-gray-300 text-gray-700 border border-purple-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           />
         </div>
         <div class="flex flex-row items-center w-3/12">
           <span class="mx-1 mb-3">Meses Cobertura</span>
           <input
             type="text"
-            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-purple-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           />
         </div>
       </form>
       <div class="w-full rounded">
+        <div
+          class="spinner-container"
+          class="w-full"
+          *ngIf="dataSource.loading$ | async"
+        >
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
         <mat-table
           class="usuarios-table mat-elevation-z8"
           [dataSource]="dataSource"
