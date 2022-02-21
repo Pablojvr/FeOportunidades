@@ -9,30 +9,72 @@
         class="flex w-full flex-wrap"
       >
         <div
-          class="flex flex-row items-center justify-center align-middle w-3/12"
+          class="flex flex-row items-center justify-center align-middle w-9/12"
         >
           <span class="mx-1 mb-3">Proveedor</span>
-          <input
+          <mat-form-field appearance="outline">
+            <!-- <input
+            formControlName="supplier"
+            matInput
+            placeholder="Search"
+            aria-label="State"
+            [matAutocomplete]="auto"
+            [formControl]="searchMoviesCtrl"
             type="text"
             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          />
+          /> -->
+
+            <input
+              matInput
+              [matAutocomplete]="auto"
+              [formControl]="searchMoviesCtrl"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngIf="isLoading" class="is-loading"
+                >Loading...</mat-option
+              >
+              <ng-container *ngIf="!isLoading">
+                <mat-option
+                  *ngFor="let movie of filteredMovies"
+                  [value]="movie.cardName + ' - ' + movie.cardCode"
+                >
+                  <span
+                    ><b>{{ movie.cardName }}</b> ({{ movie.cardCode }})</span
+                  >
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
         </div>
-        <div class="flex flex-row items-center w-6/12">
+        <!-- <div class="flex flex-row items-center w-6/12">
           <input
+            disabled
             type="text"
             class="mx-1 appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           />
-        </div>
+        </div> -->
         <div class="flex flex-row items-center w-3/12">
           <span class="mx-1 mb-3">Fecha</span>
-          <input
-            type="text"
-            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          />
+          <div
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded mb-3 leading-tight focus:outline-none focus:bg-white flex"
+          >
+            <input
+              [matDatepicker]="picker"
+              type="text"
+              class="appearance-none py-3 px-4 bg-transparent"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+
+            <mat-datepicker #picker></mat-datepicker>
+          </div>
         </div>
         <div class="flex flex-row items-center md:w-3/12 sm:w-3/12">
           <span class="mx-1 mb-3">Meses historial</span>
           <input
+            formControlName="numMonths"
             type="text"
             class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           />
@@ -40,6 +82,7 @@
         <div class="flex flex-row items-center w-3/12">
           <span class="mx-1 mb-3">Meses Cobertura</span>
           <input
+            formControlName="numMontsCob"
             type="text"
             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           />
@@ -48,7 +91,7 @@
       <div class="w-full rounded">
         <div
           class="spinner-container"
-          class="w-full"
+          class="w-min-full"
           *ngIf="dataSource.loading$ | async"
         >
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -66,96 +109,67 @@
               >Código</mat-header-cell
             >
             <mat-cell *matCellDef="let usuario">{{
-              usuario.idUsuario
+              usuario.ITEMCODE
             }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="descripcion">
             <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.login
+              usuario.NOMBRE
             }}</mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="mes1">
-            <mat-header-cell *matHeaderCellDef>Mes 1</mat-header-cell>
+          <ng-container
+            *ngFor="let item of [].constructor(numMonths); let i = index"
+            [matColumnDef]="'M' + (i + 1)"
+          >
+            <mat-header-cell *matHeaderCellDef>{{
+              monthNames[i]
+            }}</mat-header-cell>
             <mat-cell class="name-cell" *matCellDef="let usuario">{{
-              usuario.nombre
-            }}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="mes2">
-            <mat-header-cell *matHeaderCellDef>Mes 2</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
-            }}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="mes3">
-            <mat-header-cell *matHeaderCellDef>Mes 3</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
-            }}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="mes4">
-            <mat-header-cell *matHeaderCellDef>Mes 4</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
-            }}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="mes5">
-            <mat-header-cell *matHeaderCellDef>Mes 5</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
-            }}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="mes6">
-            <mat-header-cell *matHeaderCellDef>Mes 6</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
+              usuario["M" + (i + 1)]
             }}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="vtaProm">
             <mat-header-cell *matHeaderCellDef>Vta. Prom</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
+              usuario.VENTA_PROMEDIO
             }}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="existencia">
             <mat-header-cell *matHeaderCellDef>Existencia</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
+              usuario.EXISTENCIAS
             }}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="sugerido">
             <mat-header-cell *matHeaderCellDef>Sugerido</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
+              usuario.SUGERIDO
             }}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="comprado">
-            <mat-header-cell *matHeaderCellDef>Comprado</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>Comprar</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
+              usuario.COMPRAR
             }}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="punit">
             <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
+              usuario.PUNIT
             }}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.rol?.descripcion
+              usuario.TOTAL
             }}</mat-cell>
           </ng-container>
 
@@ -175,12 +189,12 @@
           <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
         </mat-table>
         <!-- <mat-divider></mat-divider> -->
-        <mat-paginator
+        <!-- <mat-paginator
           class="mat-elevation-z8"
           [length]="dataSource?.usuariosLength"
           [pageSize]="10"
           [pageSizeOptions]="[10, 20, 30]"
-        ></mat-paginator>
+        ></mat-paginator> -->
         <!-- <mat-divider></mat-divider> -->
       </div>
     </div>

@@ -1,4 +1,10 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ComprasService } from './../../services/compras.service';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -7,6 +13,9 @@ import { Usuario, UsuariosDataSource } from '../usuarios/usuarios-datasource';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { ComprasDataSource } from './compras-datasource';
+import * as moment from 'moment';
+import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-compras',
@@ -19,20 +28,15 @@ export class ComprasComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Usuario>;
   @ViewChild('input') input!: ElementRef;
-  dataSource: UsuariosDataSource;
-  filter: string = '';
-  sortOrder: string = 'asc';
-  pageNumber: number = 1;
-  pageSize: number = 10;
-  displayedColumns = [
-    'codigo',
-    'descripcion',
-    'mes1',
-    'mes2',
-    'mes3',
-    'mes4',
-    'mes5',
-    'mes6',
+  dataSource: ComprasDataSource;
+  monthNames: any = [];
+  numMonths: number = 2;
+  numMontsCob: number = 2;
+  supplier: string = '327573';
+  displayedColumns: any[] = [];
+  initialColumns = ['codigo', 'descripcion'];
+  middleColumns = ['M1', 'M2'];
+  endColumns = [
     'vtaProm',
     'existencia',
     'sugerido',
@@ -40,21 +44,87 @@ export class ComprasComponent implements OnInit {
     'punit',
     'total',
   ];
+  searchMoviesCtrl = new FormControl();
+  filteredMovies: any;
+  isLoading = false;
+  errorMsg!: string;
+
   constructor(
     private _fb: FormBuilder,
-    private userService: UserService,
+    private comprasService: ComprasService,
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) {
     this.comprasForm = this._fb.group({
-      idProveedor: [null, [Validators.required]],
-      nombreProveedor: [null, Validators.required],
+      numMonths: [null, [Validators.required]],
+      nombreProveedor: [null],
+      numMontsCob: [null, Validators.required],
+      supplier: [null, Validators.required],
     });
-    this.dataSource = new UsuariosDataSource(this.userService);
-    this.dataSource.getUsuarios('', 'asc', 0, 10);
+    this.dataSource = new ComprasDataSource(this.comprasService);
+    this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.supplier);
+    this.updateDisplayedColumns();
+
+    this.searchMoviesCtrl.valueChanges
+      .pipe(
+        debounceTime(500),
+        tap(() => {
+          this.errorMsg = '';
+          this.filteredMovies = [];
+          this.isLoading = true;
+        }),
+        switchMap((value) =>
+          this.comprasService.getProveedores(value ?? '').pipe(
+            finalize(() => {
+              this.isLoading = false;
+            })
+          )
+        )
+      )
+      .subscribe((data) => {
+        if (data.data?.value == undefined) {
+          this.errorMsg = data['Error'];
+          this.filteredMovies = [];
+        } else {
+          this.errorMsg = '';
+          this.filteredMovies = data.data.value;
+        }
+        console.log(data);
+        console.log(this.filteredMovies);
+      });
+  }
+
+  displayFn(data: any): string {
+    console.log(data);
+    return `${data.cardCode} : ${data.cardName}`;
   }
 
   ngOnInit(): void {}
+  get form() {
+    return this.comprasForm.controls;
+  }
+  onSubmit() {
+    this.numMonths = this.form.numMonths.value;
+    this.numMontsCob = this.form.numMontsCob.value;
+    this.supplier = this.form.supplier.value;
+    this.updateDisplayedColumns();
+    this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.supplier);
+  }
 
-  onSubmit() {}
+  updateDisplayedColumns() {
+    // var currentMonth = moment().locale('es').format('MMMM');
+    // this.monthNames = [currentMonth];
+    this.middleColumns = [...Array(this.numMonths).keys()].map((value, i) => {
+      this.monthNames.push(
+        moment().add(-i, 'M').locale('es').format('MMMM - YY')
+      );
+      return `M${i + 1}`;
+    });
+    this.monthNames = this.monthNames.reverse();
+    this.displayedColumns = [
+      ...this.initialColumns,
+      ...this.middleColumns,
+      ...this.endColumns,
+    ];
+  }
 }
