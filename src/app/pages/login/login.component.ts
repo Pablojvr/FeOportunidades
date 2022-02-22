@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -39,9 +40,16 @@ export class LoginComponent implements OnInit {
           this._router.navigate(['/home']);
         },
         error: (error) => {
+          let errorMsg: string;
+          if (error.error instanceof ErrorEvent) {
+            errorMsg = `Error: ${error.error.message}`;
+          } else {
+            errorMsg = this.getServerErrorMessage(error);
+          }
+
           Swal.fire({
             title: '',
-            text: error.message ?? '' + error.error ?? '',
+            text: errorMsg,
             icon: 'error',
             heightAuto: false,
           });
@@ -49,5 +57,25 @@ export class LoginComponent implements OnInit {
           this.loading = false;
         },
       });
+  }
+  private getServerErrorMessage(error: HttpErrorResponse): string {
+    console.log(error);
+    switch (error.status) {
+      case 400: {
+        return `${error.error}`;
+      }
+      case 404: {
+        return `Not Found: ${error.message}`;
+      }
+      case 403: {
+        return `Access Denied: ${error.message}`;
+      }
+      case 500: {
+        return `Internal Server Error: ${error.message}`;
+      }
+      default: {
+        return `Unknown Server Error`;
+      }
+    }
   }
 }

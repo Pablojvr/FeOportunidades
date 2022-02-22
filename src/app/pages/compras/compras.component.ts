@@ -57,9 +57,9 @@ export class ComprasComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.comprasForm = this._fb.group({
-      numMonths: [null, [Validators.required]],
+      numMonths: [2, [Validators.required]],
       nombreProveedor: [null],
-      numMontsCob: [null, Validators.required],
+      numMontsCob: [2, Validators.required],
       supplier: [null, Validators.required],
     });
     this.dataSource = new ComprasDataSource(this.comprasService);
