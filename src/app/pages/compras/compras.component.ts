@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { ComprasService } from './../../services/compras.service';
 import {
   FormBuilder,
@@ -44,7 +45,7 @@ export class ComprasComponent implements OnInit {
     'punit',
     'total',
   ];
-  searchMoviesCtrl = new FormControl();
+  supplierControl = new FormControl();
   filteredMovies: any;
   isLoading = false;
   errorMsg!: string;
@@ -62,10 +63,10 @@ export class ComprasComponent implements OnInit {
       supplier: [null, Validators.required],
     });
     this.dataSource = new ComprasDataSource(this.comprasService);
-    this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.supplier);
+    // this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.supplier);
     this.updateDisplayedColumns();
 
-    this.searchMoviesCtrl.valueChanges
+    this.comprasForm.controls.supplier.valueChanges
       .pipe(
         debounceTime(500),
         tap(() => {
@@ -106,8 +107,19 @@ export class ComprasComponent implements OnInit {
   onSubmit() {
     this.numMonths = this.form.numMonths.value;
     this.numMontsCob = this.form.numMontsCob.value;
-    this.supplier = this.form.supplier.value;
+    var supplierData = this.form.supplier.value.split('-');
+    this.supplier = supplierData[1].trim() ?? '';
     this.updateDisplayedColumns();
+    if (!this.numMonths || !this.numMontsCob || !this.supplier) {
+      Swal.fire({
+        title: '',
+        text: 'Uno o mas campos estan vacios',
+        icon: 'error',
+        heightAuto: false,
+      });
+      return;
+    }
+    console.log(this.numMonths, this.numMontsCob, this.supplier);
     this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.supplier);
   }
 

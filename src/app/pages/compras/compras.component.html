@@ -27,7 +27,7 @@
             <input
               matInput
               [matAutocomplete]="auto"
-              [formControl]="searchMoviesCtrl"
+              formControlName="supplier"
             />
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngIf="isLoading" class="is-loading"
@@ -55,10 +55,9 @@
         </div> -->
         <div class="flex flex-row items-center w-3/12">
           <span class="mx-1 mb-3">Fecha</span>
-          <div
-            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded mb-3 leading-tight focus:outline-none focus:bg-white flex"
-          >
+          <mat-form-field appearance="outline">
             <input
+              matInput
               [matDatepicker]="picker"
               type="text"
               class="appearance-none py-3 px-4 bg-transparent"
@@ -69,23 +68,35 @@
             ></mat-datepicker-toggle>
 
             <mat-datepicker #picker></mat-datepicker>
-          </div>
+          </mat-form-field>
         </div>
         <div class="flex flex-row items-center md:w-3/12 sm:w-3/12">
           <span class="mx-1 mb-3">Meses historial</span>
-          <input
-            formControlName="numMonths"
-            type="text"
-            class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          />
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              formControlName="numMonths"
+              type="number"
+              class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            />
+          </mat-form-field>
         </div>
         <div class="flex flex-row items-center w-3/12">
           <span class="mx-1 mb-3">Meses Cobertura</span>
-          <input
-            formControlName="numMontsCob"
-            type="text"
-            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          />
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              formControlName="numMontsCob"
+              type="number"
+              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            />
+          </mat-form-field>
+        </div>
+        <div class="flex flex-auto"></div>
+        <div class="flex flex-column items-center align-items-end">
+          <button mat-flat-button color="primary">
+            <mat-icon class="mat-18">search</mat-icon>
+          </button>
         </div>
       </form>
       <div class="w-full rounded">
@@ -154,9 +165,21 @@
 
           <ng-container matColumnDef="comprado">
             <mat-header-cell *matHeaderCellDef>Comprar</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.COMPRAR
-            }}</mat-cell>
+            <mat-cell class="duration-cell" *matCellDef="let usuario">
+              <mat-form-field appearance="outline">
+                <mat-label>Unidades</mat-label>
+                <input
+                  matInput
+                  placeholder="Unidades"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="off"
+                  type="number"
+                  ngModel="usuario.COMPRAR"
+                  required
+                />
+              </mat-form-field>
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="punit">
