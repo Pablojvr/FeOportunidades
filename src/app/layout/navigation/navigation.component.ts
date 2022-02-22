@@ -40,7 +40,20 @@ export class NavigationComponent implements OnInit {
     {
       text: 'Compras',
       icon: 'shop',
-      url: '/compras',
+      url: null,
+      menu: [
+        {
+          text: 'Pedido Sugerido',
+          icon: 'summarize',
+          url: '/compras/pedido_sugerido',
+          show: false,
+        },
+        {
+          text: 'Ingreso de Compras',
+          icon: 'post_add',
+          url: '/compras/ingreso_compras',
+        },
+      ],
     },
   ];
 

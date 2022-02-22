@@ -32,7 +32,10 @@ const routes: Routes = [
   {
     path: 'compras',
     component: LayoutComponent,
-    children: [{ path: '', component: ComprasComponent }],
+    children: [
+      { path: 'pedido_sugerido', component: ComprasComponent },
+      { path: 'ingreso_compras', component: ComprasComponent },
+    ],
     canActivate: [AuthGuard],
   },
   {

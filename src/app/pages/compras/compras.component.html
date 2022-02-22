@@ -1,7 +1,8 @@
 <mat-card>
   <mat-card-content>
     <div class="flex flex-wrap">
-      <div class="w-full"><h1>COFARSAL - Compras y Facturación</h1></div>
+      <div class="w-full"><h1>Pedido Sugerido</h1></div>
+      <div class="w-full"><h4>Compras y Facturación</h4></div>
 
       <form
         [formGroup]="comprasForm"
@@ -190,7 +191,7 @@
                   autocapitalize="off"
                   spellcheck="off"
                   type="number"
-                  ngModel="usuario.COMPRAR"
+                  [(ngModel)]="usuario.COMPRAR"
                   required
                 />
               </mat-form-field>
@@ -206,9 +207,11 @@
 
           <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let usuario">{{
-              usuario.TOTAL
-            }}</mat-cell>
+            <mat-cell class="duration-cell" *matCellDef="let usuario"
+              >${{
+                usuario.COMPRAR ? usuario.PUNIT * usuario.COMPRAR : 0
+              }}</mat-cell
+            >
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
