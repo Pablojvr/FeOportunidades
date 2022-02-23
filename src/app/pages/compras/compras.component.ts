@@ -123,6 +123,22 @@ export class ComprasComponent implements OnInit {
     this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.supplier);
   }
 
+  getProveedores() {
+    this.isLoading = true;
+    this.comprasService.getProveedores('').subscribe((data) => {
+      if (data.data?.value == undefined) {
+        this.errorMsg = data['Error'];
+        this.filteredMovies = [];
+      } else {
+        this.errorMsg = '';
+        this.filteredMovies = data.data.value;
+      }
+      this.isLoading = false;
+      console.log(data);
+      console.log(this.filteredMovies);
+    });
+  }
+
   updateDisplayedColumns() {
     // var currentMonth = moment().locale('es').format('MMMM');
     // this.monthNames = [currentMonth];

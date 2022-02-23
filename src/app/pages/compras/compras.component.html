@@ -29,6 +29,7 @@
               matInput
               [matAutocomplete]="auto"
               formControlName="supplier"
+              (focus)="getProveedores()"
             />
             <mat-icon matSuffix class="mat-18">store</mat-icon>
             <mat-autocomplete #auto="matAutocomplete">
@@ -38,10 +39,10 @@
               <ng-container *ngIf="!isLoading">
                 <mat-option
                   *ngFor="let movie of filteredMovies"
-                  [value]="movie.cardName + ' - ' + movie.cardCode"
+                  [value]="movie.groupName + ' - ' + movie.number"
                 >
                   <span
-                    ><b>{{ movie.cardName }}</b> ({{ movie.cardCode }})</span
+                    ><b>{{ movie.groupName }}</b> ({{ movie.number }})</span
                   >
                 </mat-option>
               </ng-container>

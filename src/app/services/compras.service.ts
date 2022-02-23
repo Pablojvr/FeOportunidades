@@ -9,7 +9,7 @@ export class ComprasService {
   constructor(private http: HttpClient) {}
 
   getProveedores(filter = '') {
-    return this.http.get<any>(`${this.baseUrl}/Compras/getSuppliers`, {
+    return this.http.get<any>(`${this.baseUrl}/Compras/getItemGroups`, {
       params: new HttpParams()
         // .set('courseId', UserId.toString())
         .set('filter', filter),
