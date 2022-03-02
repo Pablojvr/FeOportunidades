@@ -12,35 +12,35 @@ import Swal from 'sweetalert2';
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class ComprasDataSource extends DataSource<Object> {
-  public usuarioSubject = new BehaviorSubject<any[]>([]);
+export class ListadoComprasDataSource extends DataSource<Object> {
+  public solicudesSubject = new BehaviorSubject<Object[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
-  public usuariosLength = 0;
+  public solicitudesLength = 0;
   public loading$ = this.loadingSubject.asObservable();
   constructor(private comprasService: ComprasService) {
     super();
   }
 
   connect(collectionViewer: CollectionViewer): Observable<any[]> {
-    return this.usuarioSubject.asObservable();
+    return this.solicudesSubject.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
-    this.usuarioSubject.complete();
+    this.solicudesSubject.complete();
     this.loadingSubject.complete();
   }
 
-  getReporte(
-    numMonths: number = 2,
-    numMonthsCob: number = 2,
-    supplier = '10',
-    then: any = null
+  getPaginatedSolicitudDeCompra(
+    fechaIni: string = '',
+    fechaFin: string = '',
+    pageIndex: number = -1,
+    pageSize: number = -1
   ) {
     interface Reporte extends Object {}
     this.loadingSubject.next(true);
 
     this.comprasService
-      .getSuggestedPurchaseOrderReport(numMonths, numMonthsCob, supplier)
+      .getPaginatedSolicitudDeCompra(fechaIni, fechaFin, pageIndex, pageSize)
       .pipe(
         catchError((error) => {
           Swal.fire({
@@ -55,12 +55,21 @@ export class ComprasDataSource extends DataSource<Object> {
       )
       .subscribe((page: any) => {
         console.log(page);
-        // this.usuariosLength = page[0].totalItems;
-        this.usuarioSubject.next(page);
-        if (typeof then === 'function') {
-          then();
-        }
+        this.solicitudesLength = page.totalItems;
+        this.solicudesSubject.next(page.items);
       });
+  }
+
+  removeSolicitud(data: any) {
+    const roomArr: any[] = this.solicudesSubject.getValue();
+
+    roomArr.forEach((item, index) => {
+      if (item === data) {
+        roomArr.splice(index, 1);
+      }
+    });
+
+    this.solicudesSubject.next(roomArr);
   }
 }
 

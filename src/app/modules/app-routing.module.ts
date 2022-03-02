@@ -1,3 +1,4 @@
+import { IndexComprasComponent } from './../pages/index-compras/index-compras.component';
 import { ComprasComponent } from './../pages/compras/compras.component';
 import { RolesComponent } from './../pages/roles/roles.component';
 import { LayoutComponent } from './../layout/layout.component';
@@ -33,7 +34,9 @@ const routes: Routes = [
     path: 'compras',
     component: LayoutComponent,
     children: [
-      { path: 'pedido_sugerido', component: ComprasComponent },
+      { path: '', component: IndexComprasComponent },
+      { path: 'new', component: ComprasComponent },
+      { path: 'edit/:id', component: ComprasComponent },
       { path: 'ingreso_compras', component: ComprasComponent },
     ],
     canActivate: [AuthGuard],

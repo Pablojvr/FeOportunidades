@@ -3,13 +3,16 @@ import { AuthGuard } from './guards/auth';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { MaterialModule } from './modules/app-material.module';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeEs, 'es');
 import { AppRoutingModule } from './modules/app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IndexComponent } from './pages/index/index.component';
+import { IndexComprasComponent } from './pages/index-compras/index-compras.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,10 +23,12 @@ import { ConfirmacionModalComponent } from './componets/confirmacion-modal/confi
 import { RolesComponent } from './pages/roles/roles.component';
 import { EditarRolModalComponent } from './componets/editar-rol-modal/editar-rol-modal.component';
 import { ComprasComponent } from './pages/compras/compras.component';
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
     IndexComponent,
+    IndexComprasComponent,
     LoginComponent,
     UsuariosComponent,
     NotfoundComponent,
@@ -45,12 +50,14 @@ import { ComprasComponent } from './pages/compras/compras.component';
     LayoutModule,
   ],
   providers: [
+    DatePipe,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
     },
+    { provide: LOCALE_ID, useValue: 'es' },
   ],
   bootstrap: [AppComponent],
 })

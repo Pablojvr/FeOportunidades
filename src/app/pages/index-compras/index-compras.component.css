@@ -2,7 +2,7 @@
   overflow-x: auto;
 }
 
-.mat-cell,
+/* .mat-cell,
 .mat-header-cell {
   word-wrap: initial;
   display: table-cell;
@@ -15,8 +15,8 @@
 }
 .mat-row,
 .mat-header-row {
-  display: table-row;
-}
+  display: table-row; */
+/* } */
 mat-form-field {
   width: 100%;
 }

@@ -43,9 +43,9 @@ export class NavigationComponent implements OnInit {
       url: null,
       menu: [
         {
-          text: 'Pedido Sugerido',
+          text: 'Solicitudes de Compra',
           icon: 'summarize',
-          url: '/compras/pedido_sugerido',
+          url: '/compras',
           show: false,
         },
         {
