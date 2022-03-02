@@ -39,14 +39,8 @@ export class ComprasComponent implements OnInit {
   displayedColumns: any[] = [];
   initialColumns = ['codigo', 'descripcion', 'proveedor'];
   middleColumns = ['M1', 'M2'];
-  endColumns = [
-    'vtaProm',
-    'existencia',
-    'sugerido',
-    'comprado',
-    'punit',
-    'total',
-  ];
+  onlyNewColums = ['vtaProm', 'existencia', 'sugerido'];
+  endColumns = ['comprado', 'punit', 'total'];
   filteredLabs: any;
   isLoading = false;
   errorMsg!: string;
@@ -129,6 +123,7 @@ export class ComprasComponent implements OnInit {
         } else {
           this.errorMsg = '';
           this.solicitud = data;
+          this.updateDisplayedColumns();
           this.comprasForm.setValue({
             laboratory: {
               groupName: this.solicitud.groupName,
@@ -202,10 +197,14 @@ export class ComprasComponent implements OnInit {
       return `M${i + 1}`;
     });
     this.monthNames = this.monthNames.reverse();
+    var endArray =
+      this.solicitud == null
+        ? [...this.onlyNewColums, ...this.endColumns]
+        : this.endColumns;
     this.displayedColumns = [
       ...this.initialColumns,
       ...this.middleColumns,
-      ...this.endColumns,
+      ...endArray,
     ];
   }
 
@@ -240,6 +239,8 @@ export class ComprasComponent implements OnInit {
         listadoActiculosDataSource[index] = Object.assign(found, {
           COMPRAR: item.amount,
           PUNIT: parseInt(item.price),
+          PROVEEDOR: item.cardName,
+          CARDCODE: item.cardCode,
         });
       }
     });
