@@ -268,7 +268,7 @@ export class ComprasComponent implements OnInit {
   //   console.log(solicitud);
   // }
 
-  guardarSolicitud() {
+  guardarSolicitud(aprobar: any = 1) {
     var articulosSolicitados = this.dataSource.usuarioSubject
       .getValue()
       .filter((item: any) => item.COMPRAR > 0)
@@ -281,14 +281,24 @@ export class ComprasComponent implements OnInit {
           price: item.PUNIT,
         };
       });
-    var laboratoryData = this.form.laboratory.value;
-    this.laboratory = laboratoryData.number;
-    var solicitud = {
-      fecha: this.fecha,
-      groupCode: laboratoryData.number + '',
-      groupName: laboratoryData.groupName,
-      articulos: articulosSolicitados,
-    };
+    var solicitud = null;
+    if (this.solicitud != null) {
+      solicitud = Object.assign(this.solicitud, {
+        articulos: articulosSolicitados,
+      });
+    } else {
+      var laboratoryData = this.form.laboratory.value;
+      this.laboratory = laboratoryData.number;
+      solicitud = {
+        fecha: this.fecha,
+        groupCode: laboratoryData.number + '',
+        groupName: laboratoryData.groupName,
+        articulos: articulosSolicitados,
+      };
+    }
+
+    solicitud.estadoSolicitudFK = aprobar;
+
     Swal.fire({
       title: '',
       text: 'Guardando...',
@@ -339,6 +349,8 @@ export class ComprasComponent implements OnInit {
 
     console.log(solicitud);
   }
+
+  generarOrdenCompras() {}
   private getServerErrorMessage(error: HttpErrorResponse): string {
     console.log(error);
     switch (error.status) {
@@ -346,13 +358,16 @@ export class ComprasComponent implements OnInit {
         return `${error.error}`;
       }
       case 404: {
-        return `Not Found: ${error.message}`;
+        return `Not Found: ${error.error}`;
       }
       case 403: {
-        return `Access Denied: ${error.message}`;
+        return `Access Denied: ${error.error}`;
       }
       case 500: {
-        return `Internal Server Error: ${error.message}`;
+        return `Internal Server Error: ${error.error}`;
+      }
+      case 0: {
+        return `client-side or network error occurred: ${error.error}`;
       }
       default: {
         return `Unknown Server Error`;

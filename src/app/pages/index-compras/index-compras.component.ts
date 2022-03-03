@@ -35,7 +35,7 @@ export class IndexComprasComponent implements OnInit {
     'codigo',
     'fecha',
     'proveedor',
-    'total',
+    'estado',
     'acciones',
   ];
 

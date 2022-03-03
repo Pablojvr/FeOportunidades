@@ -63,7 +63,7 @@ export class ComprasService {
   }
 
   saveSolicitudDeCompra(sol: any) {
-    let solId = sol.idRol;
+    let solId = sol.idSolicitudCompra;
     if (!solId) {
       return this.http.post(`${this.baseUrl}/SolicitudCompras`, sol);
     } else {

@@ -1,8 +1,14 @@
 <mat-card>
   <mat-card-content>
     <div class="flex flex-wrap">
-      <div class="w-full"><h1>Pedido Sugerido</h1></div>
-      <div class="w-full"><h4>Compras y Facturación</h4></div>
+      <div class="w-full">
+        <h1>
+          {{ solicitud ? "" : "Nueva" }} Solicitud de Compra
+          <b>{{ solicitud ? "#" + solicitud.idSolicitudCompra : "" }}</b>
+        </h1>
+      </div>
+      <!-- <div class="w-full"><h4>Compras y Facturación</h4></div> -->
+      <div>Estado: {{ solicitud?.estado?.nombreEstadoSolicitud }}</div>
 
       <form
         [formGroup]="comprasForm"
@@ -159,6 +165,7 @@
               </span> -->
               <!-- <span *ngIf="item.loadingSuppliers"> Cargando...</span> -->
               <mat-form-field
+                *ngIf="!(solicitud && solicitud?.estadoSolicitudFK != 1)"
                 [floatLabel]="
                   item.loadingSuppliers ||
                   (!item.loadingSuppliers && !item.suppliers && !item.CARDCODE)
@@ -200,6 +207,9 @@
                   </div>
                 </mat-label>
               </mat-form-field>
+              <span *ngIf="solicitud && solicitud?.estadoSolicitudFK != 1">{{
+                item.PROVEEDOR
+              }}</span>
             </mat-cell>
           </ng-container>
 
@@ -242,6 +252,7 @@
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
                 <input
+                  [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
                   matInput
                   min="0"
                   matInput
@@ -265,6 +276,7 @@
                 <mat-label>Precio</mat-label>
                 <span matPrefix class="money-input-prefix">$&nbsp;</span>
                 <input
+                  [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
                   matInput
                   min="0.0"
                   matInput
@@ -300,12 +312,47 @@
             <a
               mat-button
               mat-flat-button
-              color="accent"
+              color="primary"
               (click)="guardarSolicitud()"
+              *ngIf="!solicitud"
             >
+              <mat-icon class="mat-18">save</mat-icon>
               Guardar
             </a>
-            <a mat-stroked-button color="primary"> Regresar </a>
+
+            <a
+              mat-button
+              mat-flat-button
+              color="primary"
+              (click)="guardarSolicitud()"
+              *ngIf="solicitud && solicitud?.estadoSolicitudFK < 2"
+            >
+              <mat-icon class="mat-18">save</mat-icon>
+              Guardar cambios
+            </a>
+
+            <a
+              mat-button
+              mat-flat-button
+              color="accent"
+              (click)="guardarSolicitud(2)"
+              *ngIf="solicitud && solicitud?.estadoSolicitudFK < 2"
+            >
+              <mat-icon class="mat-18">check</mat-icon>
+              Guardar y Aprobar
+            </a>
+            <a
+              *ngIf="solicitud && solicitud.estadoSolicitudFK == 2"
+              mat-button
+              mat-flat-button
+              color="warn"
+              (click)="generarOrdenCompras()"
+            >
+              Generar Orden de Compras
+            </a>
+            <a mat-sf-button color="primary" routerLink="/compras">
+              Regresar
+            </a>
           </div>
         </div>
       </div>

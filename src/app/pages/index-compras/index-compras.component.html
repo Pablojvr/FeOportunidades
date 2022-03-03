@@ -102,28 +102,32 @@
             </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="total">
-            <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item"
-              >${{ item.COMPRAR ? item.PUNIT * item.COMPRAR : 0 }}</mat-cell
-            >
+          <ng-container matColumnDef="estado">
+            <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              <div>{{ item.estado.nombreEstadoSolicitud }}</div>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="acciones">
             <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
               <button
                 mat-icon-button
-                *ngIf="item.estado == 0"
                 [routerLink]="['/compras/edit', item.idSolicitudCompra]"
               >
-                <mat-icon class="mat-18">edit</mat-icon>
+                <mat-icon class="mat-18" *ngIf="item.estadoSolicitudFK == 1"
+                  >edit</mat-icon
+                >
+                <mat-icon class="mat-18" *ngIf="item.estadoSolicitudFK != 1"
+                  >visibility</mat-icon
+                >
               </button>
-              <button mat-icon-button *ngIf="item.estado > 1">
+              <button mat-icon-button *ngIf="item.estadoSolicitudFK > 2">
                 <mat-icon class="mat-18">watch</mat-icon>
               </button>
               <button
                 mat-icon-button
-                *ngIf="item.estado == 0"
+                *ngIf="item.estadoSolicitudFK == 1"
                 (click)="deleteSolicitud(item)"
               >
                 <mat-icon class="mat-18"> delete </mat-icon>
