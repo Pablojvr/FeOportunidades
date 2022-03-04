@@ -24,6 +24,7 @@ import { RolesComponent } from './pages/roles/roles.component';
 import { EditarRolModalComponent } from './componets/editar-rol-modal/editar-rol-modal.component';
 import { ComprasComponent } from './pages/compras/compras.component';
 import { DatePipe } from '@angular/common';
+import { OrdenCompraComponent } from './pages/orden-compra/orden-compra.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +38,7 @@ import { DatePipe } from '@angular/common';
     RolesComponent,
     EditarRolModalComponent,
     ComprasComponent,
+    OrdenCompraComponent,
   ],
   imports: [
     BrowserModule,

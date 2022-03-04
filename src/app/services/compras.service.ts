@@ -75,4 +75,8 @@ export class ComprasService {
     let solId = sol.idSolicitudCompra;
     return this.http.delete(`${this.baseUrl}/SolicitudCompras/${solId}`, sol);
   }
+
+  saveOrdenesDeCompra(sol: any) {
+    return this.http.post(`${this.baseUrl}/Compras/newPurchaseOrder`, sol);
+  }
 }

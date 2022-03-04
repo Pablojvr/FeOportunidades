@@ -272,13 +272,15 @@ export class ComprasComponent implements OnInit {
     var articulosSolicitados = this.dataSource.usuarioSubject
       .getValue()
       .filter((item: any) => item.COMPRAR > 0)
-      .map((item: any) => {
+      .map((item: any, index: number) => {
         return {
           itemCode: item.ITEMCODE,
+          itemName: item.NOMBRE,
           cardCode: item.CARDCODE,
           cardName: item.PROVEEDOR,
           amount: item.COMPRAR,
           price: item.PUNIT,
+          line: index,
         };
       });
     var solicitud = null;

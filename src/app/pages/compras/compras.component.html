@@ -346,11 +346,12 @@
               mat-button
               mat-flat-button
               color="warn"
-              (click)="generarOrdenCompras()"
+              [routerLink]="['/orden_compras/new', solicitud.idSolicitudCompra]"
             >
               Generar Orden de Compras
             </a>
-            <a mat-sf-button color="primary" routerLink="/compras">
+            <a mat-stroked-button color="primary" routerLink="/compras">
+              <mat-icon class="mat-18">undo</mat-icon>
               Regresar
             </a>
           </div>

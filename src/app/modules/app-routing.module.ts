@@ -1,3 +1,4 @@
+import { OrdenCompraComponent } from './../pages/orden-compra/orden-compra.component';
 import { IndexComprasComponent } from './../pages/index-compras/index-compras.component';
 import { ComprasComponent } from './../pages/compras/compras.component';
 import { RolesComponent } from './../pages/roles/roles.component';
@@ -37,7 +38,22 @@ const routes: Routes = [
       { path: '', component: IndexComprasComponent },
       { path: 'new', component: ComprasComponent },
       { path: 'edit/:id', component: ComprasComponent },
-      { path: 'ingreso_compras', component: ComprasComponent },
+    ],
+    canActivate: [AuthGuard],
+  },
+
+  {
+    path: 'orden_compras',
+    component: LayoutComponent,
+    children: [
+      {
+        path: 'new/:idSolicitudCompra',
+        component: OrdenCompraComponent,
+      },
+      {
+        path: ':id',
+        component: OrdenCompraComponent,
+      },
     ],
     canActivate: [AuthGuard],
   },
