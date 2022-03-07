@@ -138,6 +138,16 @@ export class IndexComprasComponent implements OnInit {
       () => {}
     );
   }
+
+  ngAfterViewInit(): void {
+    this.paginator.page
+      .pipe(
+        tap(() => {
+          this.onSubmit();
+        })
+      )
+      .subscribe();
+  }
   private getServerErrorMessage(error: HttpErrorResponse): string {
     console.log(error);
     switch (error.status) {

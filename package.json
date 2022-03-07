@@ -24,6 +24,7 @@
     "@ngneat/tailwind": "^7.0.3",
     "@sweetalert2/ngx-sweetalert2": "^9.0.0",
     "@sweetalert2/theme-material-ui": "^5.0.8",
+    "jspdf": "^2.5.1",
     "moment": "^2.29.1",
     "rxjs": "~6.6.0",
     "sweetalert2": "^10.16.9",

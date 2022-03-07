@@ -110,7 +110,13 @@ export class ComprasComponent implements OnInit {
   selectionChange(event: any, item: any) {
     this.isLoading = true;
     console.log('Se selecciono', event);
-    item.CARDCODE = event.value;
+    let supplier = item.suppliers.find(
+      (element: any) => element.CardCode == event.value
+    );
+    console.log('proveedor', supplier);
+    item.CARDCODE = supplier.CardCode;
+    item.VATCODE = supplier.VatGroupLatinAmerica;
+    item.PROVEEDOR = supplier.CardName;
   }
 
   ngOnInit(): void {
@@ -241,6 +247,7 @@ export class ComprasComponent implements OnInit {
           PUNIT: parseInt(item.price),
           PROVEEDOR: item.cardName,
           CARDCODE: item.cardCode,
+          VATCODE: item.vatCode,
         });
       }
     });
@@ -278,6 +285,7 @@ export class ComprasComponent implements OnInit {
           itemName: item.NOMBRE,
           cardCode: item.CARDCODE,
           cardName: item.PROVEEDOR,
+          vatCode: item.VATGROUP,
           amount: item.COMPRAR,
           price: item.PUNIT,
           line: index,

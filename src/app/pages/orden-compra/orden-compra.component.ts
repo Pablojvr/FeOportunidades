@@ -130,6 +130,7 @@ export class OrdenCompraComponent implements OnInit {
           BaseType: '1470000113',
           BaseEntry: DocEntry,
           BaseLine: o['line'],
+          TaxCode: o['vatCode'],
         });
       });
     });
