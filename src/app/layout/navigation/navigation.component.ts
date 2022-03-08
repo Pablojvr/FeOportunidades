@@ -39,7 +39,7 @@ export class NavigationComponent implements OnInit {
     },
     {
       text: 'Compras',
-      icon: 'shop',
+      icon: 'shopping_bag',
       url: null,
       menu: [
         {

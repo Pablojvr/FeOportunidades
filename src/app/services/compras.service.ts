@@ -62,6 +62,13 @@ export class ComprasService {
     return this.http.get<any>(`${this.baseUrl}/SolicitudCompras/${id}`, {});
   }
 
+  getOrdenesCompraByID(id: any) {
+    return this.http.get<any>(
+      `${this.baseUrl}/Compras/GetPurchaseOrdersByPurchaseRequestDocNum/?filter=${id}`,
+      {}
+    );
+  }
+
   saveSolicitudDeCompra(sol: any) {
     let solId = sol.idSolicitudCompra;
     if (!solId) {

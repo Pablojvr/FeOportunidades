@@ -51,7 +51,7 @@ const routes: Routes = [
         component: OrdenCompraComponent,
       },
       {
-        path: ':id',
+        path: ':idOrdenCompra',
         component: OrdenCompraComponent,
       },
     ],
