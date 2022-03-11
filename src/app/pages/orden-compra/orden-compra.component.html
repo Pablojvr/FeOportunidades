@@ -67,6 +67,18 @@
               }}</mat-cell
             >
           </ng-container>
+          <ng-container matColumnDef="comentario">
+            <mat-header-cell *matHeaderCellDef>Comentario</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-label>Comentario...</mat-label>
+                <textarea
+                  matInput
+                  [(ngModel)]="item.U_EJJE_Concepto"
+                ></textarea>
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
           <tr class="mat-row" *matNoDataRow>
@@ -75,8 +87,16 @@
             </td>
           </tr>
         </mat-table>
+        <mat-form-field
+          appearance="outline"
+          style="width: 100%; padding-top: 30px"
+        >
+          <mat-label>Comentario General</mat-label>
+          <textarea matInput [(ngModel)]="item.Comments"></textarea>
+        </mat-form-field>
+        <mat-divider></mat-divider>
       </div>
-      <mat-divider></mat-divider>
+
       <div class="mt-3" style="text-align: center">
         <a
           *ngIf="solicitud && solicitud.estadoSolicitudFK == 2"

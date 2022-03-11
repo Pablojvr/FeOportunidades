@@ -22,6 +22,7 @@ export class OrdenCompraComponent implements OnInit {
     'comprado',
     'punit',
     'total',
+    'comentario',
   ];
   saving: boolean = false;
   saved: boolean = false;
