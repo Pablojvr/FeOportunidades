@@ -2,7 +2,10 @@
   <mat-card-content>
     <div class="flex flex-col">
       <div *ngFor="let item of ordenes" class="mt-3">
-        <h2>Detalle de Orden de Compra</h2>
+        <h2>
+          Detalle de Orden de Compra
+          <span *ngIf="readOnly">#{{ item.DocNum }}</span>
+        </h2>
         <p>Proveedor: {{ item.CardName }}</p>
         <p>
           Fecha:
@@ -10,7 +13,7 @@
             <mat-label>dd/mm/yyyy</mat-label>
             <input
               [matDatepicker]="picker"
-              matInput
+              [readonly]="readOnly"
               matInput
               type="text"
               [(ngModel)]="item.DocDate"
@@ -20,6 +23,7 @@
             <mat-datepicker-toggle
               matSuffix
               [for]="picker"
+              *ngIf="!readOnly"
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -74,6 +78,7 @@
                 <mat-label>Comentario...</mat-label>
                 <textarea
                   matInput
+                  [readonly]="readOnly"
                   [(ngModel)]="item.U_EJJE_Concepto"
                 ></textarea>
               </mat-form-field>
@@ -92,7 +97,11 @@
           style="width: 100%; padding-top: 30px"
         >
           <mat-label>Comentario General</mat-label>
-          <textarea matInput [(ngModel)]="item.Comments"></textarea>
+          <textarea
+            matInput
+            [(ngModel)]="item.Comments"
+            [readonly]="readOnly"
+          ></textarea>
         </mat-form-field>
         <mat-divider></mat-divider>
       </div>

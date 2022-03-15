@@ -83,11 +83,17 @@
         >
           <ng-container matColumnDef="codigo">
             <mat-header-cell *matHeaderCellDef mat-sort-header
-              >Código</mat-header-cell
+              >#</mat-header-cell
             >
             <mat-cell *matCellDef="let item">{{
               item.idSolicitudCompra
             }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="correlativo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >Num Solicitud</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item">{{ item.docNum }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="fecha">
             <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>

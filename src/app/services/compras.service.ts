@@ -64,7 +64,7 @@ export class ComprasService {
 
   getOrdenesCompraByID(id: any) {
     return this.http.get<any>(
-      `${this.baseUrl}/Compras/GetPurchaseOrdersByPurchaseRequestDocNum/?filter=${id}`,
+      `${this.baseUrl}/Compras/GetPurchaseOrdersBySolicitudId/?id=${id}`,
       {}
     );
   }

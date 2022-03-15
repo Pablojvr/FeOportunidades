@@ -14,6 +14,7 @@ import * as moment from 'moment';
 })
 export class OrdenCompraComponent implements OnInit {
   solicitud!: any;
+  readOnly: boolean = false;
   ordenes: Array<any> = [];
   displayedColumns: any = [
     'codigo',
@@ -36,6 +37,7 @@ export class OrdenCompraComponent implements OnInit {
   ngOnInit(): void {
     var idOrden = this.route.snapshot.paramMap.get('idOrdenCompra');
     if (idOrden) {
+      this.readOnly = true;
       this.comprasService.getOrdenesCompraByID(idOrden).subscribe((data) => {
         if (data == undefined) {
         } else {

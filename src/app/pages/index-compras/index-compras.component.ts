@@ -33,6 +33,7 @@ export class IndexComprasComponent implements OnInit {
   dataSource: ListadoComprasDataSource;
   displayedColumns: any[] = [
     'codigo',
+    'correlativo',
     'fecha',
     'proveedor',
     'estado',
