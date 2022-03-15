@@ -34,25 +34,25 @@ export class OrdenCompraComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // var idOrden = this.route.snapshot.paramMap.get('idOrdenCompra');
-    // if (idOrden) {
-    //   this.comprasService.getOrdenesCompraByID(idOrden).subscribe((data) => {
-    //     if (data == undefined) {
-    //     } else {
-    //       let tempOrdenes = data.data.value.map((item: any) => {
-    //         let newItem = this.capitalizeName(item);
-    //         newItem.DocumentLines = newItem.DocumentLines.map((item2: any) => {
-    //           return this.capitalizeName(item2);
-    //         });
-    //         return newItem;
-    //       });
-    //       console.log(tempOrdenes);
-    //       this.ordenes = tempOrdenes;
-    //     }
-    //     console.log(data);
-    //     console.log(this.solicitud);
-    //   });
-    // }
+    var idOrden = this.route.snapshot.paramMap.get('idOrdenCompra');
+    if (idOrden) {
+      this.comprasService.getOrdenesCompraByID(idOrden).subscribe((data) => {
+        if (data == undefined) {
+        } else {
+          let tempOrdenes = data.data.value.map((item: any) => {
+            let newItem = this.capitalizeName(item);
+            newItem.DocumentLines = newItem.DocumentLines.map((item2: any) => {
+              return this.capitalizeName(item2);
+            });
+            return newItem;
+          });
+          console.log(tempOrdenes);
+          this.ordenes = tempOrdenes;
+        }
+        console.log(data);
+        console.log(this.solicitud);
+      });
+    }
     var idSolicitud = this.route.snapshot.paramMap.get('idSolicitudCompra');
     if (idSolicitud) {
       this.comprasService.getSolicitudCompraByID(idSolicitud).subscribe({
