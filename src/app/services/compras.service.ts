@@ -58,6 +58,26 @@ export class ComprasService {
     });
   }
 
+  getPaginatedEntradaMercancia(
+    fechaIni = '',
+    fechaFin = '',
+    pageNumber = 0,
+    pageSize = 10
+  ) {
+    return this.http.get<Page[]>(`${this.baseUrl}/EntradaMercancia`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('fechaIni', fechaIni)
+        .set('fechaFin', fechaFin)
+        .set('pageNumber', pageNumber.toString())
+        .set('pageSize', pageSize.toString()),
+    });
+  }
+
+  getEntradaMercanciaByID(id: any) {
+    return this.http.get<any>(`${this.baseUrl}/EntradaMercancia/${id}`, {});
+  }
+
   getSolicitudCompraByID(id: any) {
     return this.http.get<any>(`${this.baseUrl}/SolicitudCompras/${id}`, {});
   }
@@ -65,6 +85,13 @@ export class ComprasService {
   getOrdenesCompraByID(id: any) {
     return this.http.get<any>(
       `${this.baseUrl}/Compras/GetPurchaseOrdersBySolicitudId/?id=${id}`,
+      {}
+    );
+  }
+
+  getPurchaseOrdersByDocNum(docNum: any) {
+    return this.http.get<any>(
+      `${this.baseUrl}/Compras/GetPurchaseOrdersByDocNum/?docNum=${docNum}`,
       {}
     );
   }

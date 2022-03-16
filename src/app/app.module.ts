@@ -25,6 +25,8 @@ import { EditarRolModalComponent } from './componets/editar-rol-modal/editar-rol
 import { ComprasComponent } from './pages/compras/compras.component';
 import { DatePipe } from '@angular/common';
 import { OrdenCompraComponent } from './pages/orden-compra/orden-compra.component';
+import { EntradaMercanciaComponent } from './pages/entrada-mercancia/entrada-mercancia.component';
+import { IndexEntradaMercanciaComponent } from './pages/index-entrada-mercancia/index-entrada-mercancia.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +41,8 @@ import { OrdenCompraComponent } from './pages/orden-compra/orden-compra.componen
     EditarRolModalComponent,
     ComprasComponent,
     OrdenCompraComponent,
+    EntradaMercanciaComponent,
+    IndexEntradaMercanciaComponent,
   ],
   imports: [
     BrowserModule,

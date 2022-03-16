@@ -1,3 +1,5 @@
+import { IndexEntradaMercanciaComponent } from './../pages/index-entrada-mercancia/index-entrada-mercancia.component';
+import { EntradaMercanciaComponent } from './../pages/entrada-mercancia/entrada-mercancia.component';
 import { OrdenCompraComponent } from './../pages/orden-compra/orden-compra.component';
 import { IndexComprasComponent } from './../pages/index-compras/index-compras.component';
 import { ComprasComponent } from './../pages/compras/compras.component';
@@ -53,6 +55,21 @@ const routes: Routes = [
       {
         path: ':idOrdenCompra',
         component: OrdenCompraComponent,
+      },
+    ],
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'entrada_mercancia',
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        component: IndexEntradaMercanciaComponent,
+      },
+      {
+        path: 'new/:id',
+        component: EntradaMercanciaComponent,
       },
     ],
     canActivate: [AuthGuard],

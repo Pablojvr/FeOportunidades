@@ -49,9 +49,9 @@ export class NavigationComponent implements OnInit {
           show: false,
         },
         {
-          text: 'Ingreso de Compras',
+          text: 'Ingresos de Compra',
           icon: 'post_add',
-          url: '/compras/ingreso_compras',
+          url: '/entrada_mercancia',
         },
       ],
     },
