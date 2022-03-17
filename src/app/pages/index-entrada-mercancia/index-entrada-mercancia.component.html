@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-content>
     <div class="flex flex-wrap">
-      <div class="w-full"><h1>Entradas de mercancia</h1></div>
+      <div class="w-full"><h1>Ingreso de compras</h1></div>
       <div class="w-full"><h4>Compras</h4></div>
 
       <form
@@ -60,7 +60,7 @@
             style="height: 4em; margin-bottom: 1em"
             routerLink="/entrada_mercancia/new"
           >
-            Nueva Solicitud
+            Nuevo Ingreso
             <mat-icon class="mat-18">add</mat-icon>
           </button>
         </div>
@@ -86,12 +86,12 @@
               >#</mat-header-cell
             >
             <mat-cell *matCellDef="let item">{{
-              item.idSolicitudCompra
+              item.idEntradaMercancia
             }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="correlativo">
             <mat-header-cell *matHeaderCellDef mat-sort-header
-              >Num Solicitud</mat-header-cell
+              >Num. Ingreso</mat-header-cell
             >
             <mat-cell *matCellDef="let item">{{ item.docNum }}</mat-cell>
           </ng-container>
@@ -104,7 +104,7 @@
           <ng-container matColumnDef="proveedor">
             <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
-              {{ item.groupName }}
+              {{ item.cardName }}
             </mat-cell>
           </ng-container>
 
