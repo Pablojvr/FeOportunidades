@@ -17,6 +17,16 @@ export class ComprasService {
     });
   }
 
+  printSolicitudCompra(numMonths = 2,numMonthsCob=2,idSolicitud = 1) {
+    return this.http.get<any>(`${this.baseUrl}/SolicitudCompras/printSolicitudCompra`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('numMonths', numMonths.toString())
+        .set('numMonthsCob', numMonthsCob.toString())
+        .set('idSolicitud', idSolicitud.toString())
+    });
+  }
+
   getVendorsByItemCode(itemCode = '') {
     return this.http.get<any>(`${this.baseUrl}/Compras/getVendorsByItemCode`, {
       params: new HttpParams()

@@ -169,4 +169,65 @@ export class IndexComprasComponent implements OnInit {
       }
     }
   }
+  printSolicitud(item: any) {
+    Swal.fire({
+      title: 'Generar Archivo PDF',
+      icon: 'question',
+      heightAuto: false,
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Descargar',
+      cancelButtonText: 'Cancelar',
+      html:
+      '<label> Meses historico:</label><br>' +
+        '<input id="swal-input1" class="swal2-input" type="number" max="6" min="1" value="2"><br>' +
+        '<label> Meses aprovisionamiento:</label><br>' +
+        '<input id="swal-input2" class="swal2-input" type="number" max="6" min="1" value="2"><br>',
+      focusConfirm: false,
+      preConfirm: () => {
+        let el1: any = document.getElementById('swal-input1');
+        let el2: any = document.getElementById('swal-input2');
+        return [el1.value, el2.value];
+      },
+    }).then(
+      (result: any) => {
+        console.log(result);
+        if (!result.isConfirmed) return;
+        this.comprasService
+          .printSolicitudCompra(
+            result.value[0],
+            result.value[1],
+            item.idSolicitudCompra
+          )
+          .subscribe({
+            next: (data) => {
+              console.log(data);
+              var link = document.createElement('a');
+              document.body.appendChild(link);
+              link.setAttribute('type', 'hidden');
+              link.href = 'data:text/plain;base64,' + data;
+              link.download = `SolicitudCompraNum${item.idSolicitudCompra}.pdf`;
+              link.click();
+              document.body.removeChild(link);
+            },
+            error: (error) => {
+              let errorMsg: string;
+              if (error.error instanceof ErrorEvent) {
+                errorMsg = `Error: ${error.error.message}`;
+              } else {
+                errorMsg = this.getServerErrorMessage(error);
+              }
+
+              Swal.fire({
+                title: '',
+                text: errorMsg,
+                icon: 'error',
+                heightAuto: false,
+              });
+            },
+          });
+      },
+      () => {}
+    );
+  }
 }
