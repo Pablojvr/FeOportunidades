@@ -36,14 +36,14 @@ export class EntradaMercanciaComponent implements OnInit {
     'descripcion',
     'lote',
     'vencimiento',
-    'ugravadas',
-    'punit',
+    'UnidadesGravadas',
+    'price',
     'vgrav',
-    'ubonificadas',
+    'unidadesBonificadas',
     'descuento',
-    'vbonif',
-    'vdesc',
-    'tgravado',
+    'valorBonificado',
+    'valorDescuento',
+    'totalGravado',
     'tunidades',
     'costoreal',
     'preciopublico',
@@ -249,7 +249,7 @@ export class EntradaMercanciaComponent implements OnInit {
         var index = listadoActiculosDataSource.indexOf(found);
         listadoActiculosDataSource[index] = Object.assign(found, {
           COMPRAR: item.amount,
-          PUNIT: parseInt(item.price),
+          price: parseInt(item.price),
           PROVEEDOR: item.cardName,
           CARDCODE: item.cardCode,
           VATCODE: item.vatCode,
@@ -267,7 +267,7 @@ export class EntradaMercanciaComponent implements OnInit {
   //         ItemCode: item.ITEMCODE,
   //         LineVendor: item.CARDCODE,
   //         Quantity: item.COMPRAR,
-  //         Price: item.PUNIT,
+  //         Price: item.price,
   //         LineNum: index,
   //       };
   //     });
@@ -280,40 +280,7 @@ export class EntradaMercanciaComponent implements OnInit {
   //   console.log(solicitud);
   // }
 
-  guardarSolicitud(aprobar: any = 1) {
-    var articulosSolicitados = this.dataSource.usuarioSubject
-      .getValue()
-      .filter((item: any) => item.COMPRAR > 0)
-      .map((item: any, index: number) => {
-        return {
-          itemCode: item.ITEMCODE,
-          itemName: item.NOMBRE,
-          cardCode: item.CARDCODE,
-          cardName: item.PROVEEDOR,
-          vatCode: item.VATGROUP,
-          amount: item.COMPRAR,
-          price: item.PUNIT,
-          line: index,
-        };
-      });
-    var solicitud = null;
-    if (this.solicitud != null) {
-      solicitud = Object.assign(this.solicitud, {
-        articulos: articulosSolicitados,
-      });
-    } else {
-      var laboratoryData = this.form.laboratory.value;
-      this.laboratory = laboratoryData.number;
-      solicitud = {
-        fecha: this.fecha,
-        groupCode: laboratoryData.number + '',
-        groupName: laboratoryData.groupName,
-        articulos: articulosSolicitados,
-      };
-    }
-
-    solicitud.estadoSolicitudFK = aprobar;
-
+  guardarSolicitud() {
     Swal.fire({
       title: '',
       text: 'Guardando...',
@@ -322,7 +289,7 @@ export class EntradaMercanciaComponent implements OnInit {
       showCancelButton: false,
       showConfirmButton: false,
     });
-    this.comprasService.saveSolicitudDeCompra(solicitud).subscribe({
+    this.comprasService.saveEntradaMercancia(this.solicitud).subscribe({
       next: (_) => {
         this.saving = false;
         this.saved = true;
@@ -336,10 +303,10 @@ export class EntradaMercanciaComponent implements OnInit {
           showConfirmButton: false,
         }).then(
           () => {
-            this._router.navigate(['/compras']);
+            this._router.navigate(['/entrada_mercancia']);
           },
           (dismiss: any) => {
-            this._router.navigate(['/compras']);
+            // this._router.navigate(['/entrada_mercancia']);
           }
         );
       },
@@ -362,32 +329,41 @@ export class EntradaMercanciaComponent implements OnInit {
       },
     });
 
-    console.log(solicitud);
+    console.log(this.solicitud);
   }
 
   updateItemCalculatedValues(item: any) {
-    console.log("HA CAMBIADO UN VALOR")
-    item.VGRAVADO =
-      item.UGRAVADAS && item.PUNIT ? item.UGRAVADAS * item.PUNIT : 0;
-    item.VBONIF =
-      item.UBONIFICADAS && item.PUNIT ? item.UBONIFICADAS * item.PUNIT : 0;
-    item.VDESC =
-      item.UGRAVADAS && item.PUNIT && item.DESCUENTO
-        ? item.UGRAVADAS * item.PUNIT * (item.DESCUENTO / 100)
+    console.log('HA CAMBIADO UN VALOR');
+    item.valorGravado =
+      item.unidadesGravadas && item.price
+        ? item.unidadesGravadas * item.price
         : 0;
-    item.TGRAV =
-      item.UGRAVADAS && item.PUNIT && item.UBONIFICADAS
-        ? item.UGRAVADAS * item.PUNIT - item.UBONIFICADAS * item.PUNIT
+    item.valorBonificado =
+      item.unidadesBonificadas && item.price
+        ? item.unidadesBonificadas * item.price
         : 0;
-    item.TUNIDADES =
-      item.UGRAVADAS && item.UBONIFICADAS
-        ? item.UGRAVADAS + item.UBONIFICADAS
+    item.valorDescuento =
+      item.unidadesGravadas && item.price && item.descuento
+        ? item.unidadesGravadas * item.price * (item.descuento / 100)
         : 0;
-    item.COSTOREAL =
-      item.UGRAVADAS && item.PUNIT && item.UBONIFICADAS
-        ? ((item.UGRAVADAS - item.UBONIFICADAS) * item.PUNIT) /
-          (item.UGRAVADAS + item.UBONIFICADAS)
+    item.valorDescuento = item.valorDescuento.toFixed(4);
+    item.totalGravado =
+      item.unidadesGravadas && item.price && item.unidadesBonificadas
+        ? item.unidadesGravadas * item.price -
+          item.unidadesBonificadas * item.price
         : 0;
+    item.totalGravado = item.totalGravado.toFixed(4);
+    item.totalUnidades =
+      item.unidadesGravadas && item.unidadesBonificadas
+        ? item.unidadesGravadas + item.unidadesBonificadas
+        : 0;
+
+    item.costoReal =
+      item.unidadesGravadas && item.price && item.unidadesBonificadas
+        ? ((item.unidadesGravadas - item.unidadesBonificadas) * item.price) /
+          (item.unidadesGravadas + item.unidadesBonificadas)
+        : 0;
+    item.costoReal = item.costoReal.toFixed(4);
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);
@@ -399,7 +375,7 @@ export class EntradaMercanciaComponent implements OnInit {
       { itemCode, itemDescription, baseLine, baseEntry, baseType, taxCode }
     );
     console.log(newObj);
-    this.solicitud.documentLines.splice(index+1, 0, newObj);
+    this.solicitud.documentLines.splice(index + 1, 0, newObj);
     this.table.renderRows();
   }
   private getServerErrorMessage(error: HttpErrorResponse): string {

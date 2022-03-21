@@ -115,6 +115,17 @@ export class ComprasService {
     }
   }
 
+
+
+  saveEntradaMercancia(sol: any) {
+    let solId = sol.idSolicitudCompra;
+    if (!solId) {
+      return this.http.post(`${this.baseUrl}/EntradaMercancia`, sol);
+    } else {
+      return this.http.put(`${this.baseUrl}/EntradaMercancia/${solId}`, sol);
+    }
+  }
+
   deleteSolicitudDeCompra(sol: any) {
     let solId = sol.idSolicitudCompra;
     return this.http.delete(`${this.baseUrl}/SolicitudCompras/${solId}`, sol);

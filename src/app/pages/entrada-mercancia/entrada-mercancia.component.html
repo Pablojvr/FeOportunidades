@@ -108,7 +108,7 @@
 							<mat-form-field appearance="outline"
 								style="width: 100px">
 								<mat-label>Lote</mat-label>
-								<input [(ngModel)]="item.LOTE"
+								<input [(ngModel)]="item.lote"
 									matInput
 									type="text"
 									required>
@@ -125,7 +125,7 @@
 							<mat-form-field appearance="outline"
 								style="width: 100px">
 								<mat-label>Vencimiento</mat-label>
-								<input [(ngModel)]="item.VENCIMIENTO"
+								<input [(ngModel)]="item.fechaExpiracion"
 									matInput
 									type="date"
 									required>
@@ -135,14 +135,14 @@
 					</ng-container>
 
 
-					<ng-container matColumnDef="ugravadas">
+					<ng-container matColumnDef="UnidadesGravadas">
 						<mat-header-cell *matHeaderCellDef>U.Gravadas</mat-header-cell>
 						<mat-cell *matCellDef="let item"
 							class="duration-cell">
 							<mat-form-field appearance="outline"
 								style="width: 100px">
 								<mat-label>Unidades</mat-label>
-								<input [(ngModel)]="item.UGRAVADAS"
+								<input [(ngModel)]="item.unidadesGravadas"
                 (keyup)="updateItemCalculatedValues(item)"
 									matInput
 									min="0"
@@ -155,7 +155,7 @@
 					</ng-container>
 
 
-					<ng-container matColumnDef="punit">
+					<ng-container matColumnDef="price">
 						<mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
 						<mat-cell *matCellDef="let item"
 							class="duration-cell">
@@ -167,7 +167,7 @@
 									class="money-input-prefix">
 									$&nbsp;
 								</span>
-								<input [(ngModel)]="item.PUNIT"
+								<input [(ngModel)]="item.price"
                 (keyup)="updateItemCalculatedValues(item)"
 									matInput
 									min="0.0"
@@ -186,18 +186,18 @@
 							class="duration-cell">
 							$
               {{
-                item.VGRAVADO
+                item.valorGravado
               }}
 						</mat-cell>
 					</ng-container>
-					<ng-container matColumnDef="ubonificadas">
+					<ng-container matColumnDef="unidadesBonificadas">
 						<mat-header-cell *matHeaderCellDef>U.Bonificadas</mat-header-cell>
 						<mat-cell *matCellDef="let item"
 							class="duration-cell">
 							<mat-form-field appearance="outline"
 								style="width: 100px">
 								<mat-label>Unidades</mat-label>
-								<input [(ngModel)]="item.UBONIFICADAS"
+								<input [(ngModel)]="item.unidadesBonificadas"
                 (keyup)="updateItemCalculatedValues(item)"
 									matInput
 									min="0"
@@ -215,7 +215,7 @@
 							<mat-form-field appearance="outline"
 								style="width: 100px">
 								<mat-label>%</mat-label>
-								<input [(ngModel)]="item.DESCUENTO"
+								<input [(ngModel)]="item.descuento"
                 (keyup)="updateItemCalculatedValues(item)"
 									matInput
 									min="0"
@@ -226,33 +226,33 @@
 							</mat-form-field>
 						</mat-cell>
 					</ng-container>
-					<ng-container matColumnDef="vbonif">
+					<ng-container matColumnDef="valorBonificado">
 						<mat-header-cell *matHeaderCellDef>V. Bonif</mat-header-cell>
 						<mat-cell *matCellDef="let item"
 							class="duration-cell">
 							$
               {{
-                item.VBONIF
+                item.valorBonificado
               }}
 						</mat-cell>
 					</ng-container>
-					<ng-container matColumnDef="vdesc">
+					<ng-container matColumnDef="valorDescuento">
 						<mat-header-cell *matHeaderCellDef>V. Desc</mat-header-cell>
 						<mat-cell *matCellDef="let item"
 							class="duration-cell">
 							$
               {{
-               item.VDESC
+               item.valorDescuento
               }}
 						</mat-cell>
 					</ng-container>
-					<ng-container matColumnDef="tgravado">
-						<mat-header-cell *matHeaderCellDef>V. Desc</mat-header-cell>
+					<ng-container matColumnDef="totalGravado">
+						<mat-header-cell *matHeaderCellDef>T.Gravado</mat-header-cell>
 						<mat-cell *matCellDef="let item"
 							class="duration-cell">
 							$
               {{
-                item.TGRAV
+                item.totalGravado
               }}
 						</mat-cell>
 					</ng-container>
@@ -261,7 +261,7 @@
 						<mat-cell *matCellDef="let item"
 							class="duration-cell">
 							{{
-               item.TUNIDADES
+               item.totalUnidades
               }}
 						</mat-cell>
 					</ng-container>
@@ -271,8 +271,8 @@
 						<mat-header-cell *matHeaderCellDef>Costo Real</mat-header-cell>
 						<mat-cell *matCellDef="let item"
 							class="duration-cell">
-							{{
-               item.COSTOREAL
+							$ {{
+               item.costoReal
               }}
 						</mat-cell>
 					</ng-container>
@@ -289,7 +289,7 @@
 									class="money-input-prefix">
 									$&nbsp;
 								</span>
-								<input [(ngModel)]="item.PPUBLICO"
+								<input [(ngModel)]="item.PrecioPublico"
 									matInput
 									min="0.0"
 									matInput
@@ -317,40 +317,13 @@
 				<div style="position: relative">
 					<mat-divider></mat-divider>
 					<div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">
-						<a *ngIf="!solicitud"
+						<a
 							(click)="guardarSolicitud()"
 							mat-button
 							mat-flat-button
 							color="primary">
 							<mat-icon class="mat-18">save</mat-icon>
 							Guardar
-						</a>
-
-
-						<a *ngIf="solicitud && solicitud?.estadoSolicitudFK < 2"
-							(click)="guardarSolicitud()"
-							mat-button
-							mat-flat-button
-							color="primary">
-							<mat-icon class="mat-18">save</mat-icon>
-							Guardar cambios
-						</a>
-
-
-						<a *ngIf="solicitud && solicitud?.estadoSolicitudFK < 2"
-							(click)="guardarSolicitud(2)"
-							mat-button
-							mat-flat-button
-							color="accent">
-							<mat-icon class="mat-18">check</mat-icon>
-							Guardar y Aprobar
-						</a>
-						<a *ngIf="solicitud && solicitud.estadoSolicitudFK == 2"
-							[routerLink]="['/orden_compras/new', solicitud.idSolicitudCompra]"
-							mat-button
-							mat-flat-button
-							color="warn">
-							Generar Orden de Compras
 						</a>
 						<a mat-stroked-button
 							color="primary"
