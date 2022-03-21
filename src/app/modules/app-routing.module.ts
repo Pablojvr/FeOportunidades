@@ -71,6 +71,10 @@ const routes: Routes = [
         path: 'new/:id',
         component: EntradaMercanciaComponent,
       },
+      {
+        path: 'new',
+        component: EntradaMercanciaComponent,
+      },
     ],
     canActivate: [AuthGuard],
   },

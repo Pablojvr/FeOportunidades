@@ -1,22 +1,21 @@
 <mat-card>
-  <mat-card-content>
-    <div class="flex flex-wrap">
-      <div class="w-full">
-        <h1>{{ solicitud && false ? "" : "Nueva" }} Ingreso de compras</h1>
-      </div>
-      <!-- <div class="w-full"><h4>Compras y Facturación</h4></div> -->
+	<mat-card-content>
+		<div class="flex flex-wrap">
+			<div class="w-full">
+				<h1>
+					{{ solicitud && false ? "" : "Nueva" }} Ingreso de compras
+				</h1>
+			</div>
+			<!-- <div class="w-full"><h4>Compras y Facturación</h4></div> -->
 
-      <form
-        [formGroup]="comprasForm"
-        (ngSubmit)="onSubmit()"
-        class="flex w-full flex-wrap"
-      >
-        <div
-          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center justify-center align-middle md:w-9/12 w-full"
-        >
-          <span class="mx-1 mb-3">Proveedor</span>
-          <mat-form-field appearance="outline">
-            <!-- <input
+
+			<form [formGroup]="comprasForm"
+				(ngSubmit)="onSubmit()"
+				class="flex w-full flex-wrap">
+				<div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center justify-center align-middle md:w-9/12 w-full">
+					<span class="mx-1 mb-3">Proveedor</span>
+					<mat-form-field appearance="outline">
+						<!-- <input
             formControlName="laboratory"
             matInput
             placeholder="Search"
@@ -26,344 +25,342 @@
             type="text"
             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           /> -->
-            <input
-              matInput
-              formControlName="proveedor"
-              type="text"
-              class="appearance-none py-3 px-4 bg-transparent"
-            />
-          </mat-form-field>
-        </div>
-        <!-- <div class="flex flex-row items-center w-6/12">
+						<input matInput
+							formControlName="proveedor"
+							type="text"
+							class="appearance-none py-3 px-4 bg-transparent">
+					</mat-form-field>
+				</div>
+				<!-- <div class="flex flex-row items-center w-6/12">
           <input
             disabled
             type="text"
             class="mx-1 appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           />
         </div> -->
-        <div
-          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-3/12 w-full"
-        >
-          <span class="mx-1 mb-3">Fecha</span>
-          <mat-form-field appearance="outline">
-            <input
-              matInput
-              [matDatepicker]="picker"
-              formControlName="fecha"
-              type="text"
-              class="appearance-none py-3 px-4 bg-transparent"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
+				<div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-3/12 w-full">
+					<span class="mx-1 mb-3">Fecha</span>
+					<mat-form-field appearance="outline">
+						<input [matDatepicker]="picker"
+							matInput
+							formControlName="fecha"
+							type="text"
+							class="appearance-none py-3 px-4 bg-transparent">
+						<mat-datepicker-toggle [for]="picker"
+							matSuffix></mat-datepicker-toggle>
 
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div
-          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full"
-        >
-          <span class="mx-1 mb-3">Número Factura</span>
-          <mat-form-field appearance="outline">
-            <input
-              matInput
-              formControlName="numFactura"
-              class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            />
-          </mat-form-field>
-        </div>
-        <div
-          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full"
-        >
-          <span class="mx-1 mb-3">No. Orden de Compra</span>
-          <mat-form-field appearance="outline">
-            <input
-              matInput
-              formControlName="numOrdenCompra"
-              min="1"
-              type="text"
-              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            />
-          </mat-form-field>
-        </div>
-        <div class="flex flex-auto"></div>
-      </form>
-      <div class="w-full rounded">
-        <div
-          class="spinner-container"
-          class="w-min-full"
-          *ngIf="dataSource.loading$ | async"
-        >
-          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        </div>
-        <mat-table
-          class="items-table mat-elevation-z8"
-          [dataSource]="solicitud.documentLines"
-          matSort
-          matSortActive="id"
-          matSortDirection="asc"
-          matSortDisableClear
-        >
-          <ng-container matColumnDef="codigo">
-            <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
-            <mat-cell *matCellDef="let item">{{ item.itemCode }}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="descripcion">
-            <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">{{
+
+						<mat-datepicker #picker></mat-datepicker>
+					</mat-form-field>
+				</div>
+				<div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
+					<span class="mx-1 mb-3">Número Factura</span>
+					<mat-form-field appearance="outline">
+						<input matInput
+							formControlName="numFactura"
+							class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+					</mat-form-field>
+				</div>
+				<div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
+					<span class="mx-1 mb-3">No. Orden de Compra</span>
+					<mat-form-field appearance="outline">
+						<input matInput
+							formControlName="numOrdenCompra"
+							min="1"
+							type="text"
+							class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+					</mat-form-field>
+				</div>
+				<div class="flex flex-auto"></div>
+			</form>
+			<div class="w-full rounded">
+				<div *ngIf="dataSource.loading$ | async"
+					class="spinner-container"
+					class="w-min-full">
+					<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+				</div>
+				<mat-table [dataSource]="solicitud.documentLines"
+           #table
+					class="items-table mat-elevation-z8"
+					matSort
+					matSortActive="id"
+					matSortDirection="asc"
+					matSortDisableClear>
+					<ng-container matColumnDef="codigo">
+						<mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
+						<mat-cell *matCellDef="let item">{{ item.itemCode }}</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="descripcion">
+						<mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							{{
               item.itemDescription
-            }}</mat-cell>
-          </ng-container>
+            }}
+						</mat-cell>
+					</ng-container>
 
-          <ng-container matColumnDef="lote">
-            <mat-header-cell *matHeaderCellDef>Lote</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item"
-              ><mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Lote</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  [(ngModel)]="item.LOTE"
-                  required
-                /> </mat-form-field
-            ></mat-cell>
-          </ng-container>
 
-          <ng-container matColumnDef="vencimiento">
-            <mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item"
-              ><mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Vencimiento</mat-label>
-                <input
-                  matInput
-                  type="date"
-                  [(ngModel)]="item.VENCIMIENTO"
-                  required
-                /> </mat-form-field
-            ></mat-cell>
-          </ng-container>
+					<ng-container matColumnDef="lote">
+						<mat-header-cell *matHeaderCellDef>Lote</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							<mat-form-field appearance="outline"
+								style="width: 100px">
+								<mat-label>Lote</mat-label>
+								<input [(ngModel)]="item.LOTE"
+									matInput
+									type="text"
+									required>
+							</mat-form-field>
+              <mat-icon style="color:green" (click)="duplicateItem(item)">add</mat-icon>
+						</mat-cell>
+					</ng-container>
 
-          <ng-container matColumnDef="ugravadas">
-            <mat-header-cell *matHeaderCellDef>U.Gravadas</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Unidades</mat-label>
-                <input
-                  matInput
-                  min="0"
-                  matInput
-                  placeholder="0"
-                  type="number"
-                  [(ngModel)]="item.UGRAVADAS"
-                  required
-                />
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
 
-          <ng-container matColumnDef="punit">
-            <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              <mat-form-field
-                appearance="outline"
-                style="width: 100px"
-                class="money-input"
-              >
-                <mat-label>Precio</mat-label>
-                <span matPrefix class="money-input-prefix">$&nbsp;</span>
-                <input
-                  matInput
-                  min="0.0"
-                  matInput
-                  placeholder="0"
-                  type="number"
-                  [(ngModel)]="item.PUNIT"
-                  required
-                />
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
+					<ng-container matColumnDef="vencimiento">
+						<mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							<mat-form-field appearance="outline"
+								style="width: 100px">
+								<mat-label>Vencimiento</mat-label>
+								<input [(ngModel)]="item.VENCIMIENTO"
+									matInput
+									type="date"
+									required>
+							</mat-form-field>
 
-          <ng-container matColumnDef="vgrav">
-            <mat-header-cell *matHeaderCellDef>V. Gravado</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              $
+						</mat-cell>
+					</ng-container>
+
+
+					<ng-container matColumnDef="ugravadas">
+						<mat-header-cell *matHeaderCellDef>U.Gravadas</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							<mat-form-field appearance="outline"
+								style="width: 100px">
+								<mat-label>Unidades</mat-label>
+								<input [(ngModel)]="item.UGRAVADAS"
+                (keyup)="updateItemCalculatedValues(item)"
+									matInput
+									min="0"
+									matInput
+									placeholder="0"
+									type="number"
+									required>
+							</mat-form-field>
+						</mat-cell>
+					</ng-container>
+
+
+					<ng-container matColumnDef="punit">
+						<mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							<mat-form-field appearance="outline"
+								style="width: 100px"
+								class="money-input">
+								<mat-label>Precio</mat-label>
+								<span matPrefix
+									class="money-input-prefix">
+									$&nbsp;
+								</span>
+								<input [(ngModel)]="item.PUNIT"
+                (keyup)="updateItemCalculatedValues(item)"
+									matInput
+									min="0.0"
+									matInput
+									placeholder="0"
+									type="number"
+									required>
+							</mat-form-field>
+						</mat-cell>
+					</ng-container>
+
+
+					<ng-container matColumnDef="vgrav">
+						<mat-header-cell *matHeaderCellDef>V. Gravado</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							$
               {{
-                item.UGRAVADAS && item.PUNIT ? item.UGRAVADAS * item.PUNIT : 0
+                item.VGRAVADO
               }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="ubonificadas">
-            <mat-header-cell *matHeaderCellDef>U.Bonificadas</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Unidades</mat-label>
-                <input
-                  matInput
-                  min="0"
-                  matInput
-                  placeholder="0"
-                  type="number"
-                  [(ngModel)]="item.UBONIFICADAS"
-                  required
-                />
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="descuento">
-            <mat-header-cell *matHeaderCellDef>% Desc</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>%</mat-label>
-                <input
-                  matInput
-                  min="0"
-                  matInput
-                  placeholder="0"
-                  type="number"
-                  [(ngModel)]="item.DESCUENTO"
-                  required
-                />
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="vbonif">
-            <mat-header-cell *matHeaderCellDef>V. Bonif</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              $
+						</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="ubonificadas">
+						<mat-header-cell *matHeaderCellDef>U.Bonificadas</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							<mat-form-field appearance="outline"
+								style="width: 100px">
+								<mat-label>Unidades</mat-label>
+								<input [(ngModel)]="item.UBONIFICADAS"
+                (keyup)="updateItemCalculatedValues(item)"
+									matInput
+									min="0"
+									matInput
+									placeholder="0"
+									type="number"
+									required>
+							</mat-form-field>
+						</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="descuento">
+						<mat-header-cell *matHeaderCellDef>% Desc</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							<mat-form-field appearance="outline"
+								style="width: 100px">
+								<mat-label>%</mat-label>
+								<input [(ngModel)]="item.DESCUENTO"
+                (keyup)="updateItemCalculatedValues(item)"
+									matInput
+									min="0"
+									matInput
+									placeholder="0"
+									type="number"
+									required>
+							</mat-form-field>
+						</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="vbonif">
+						<mat-header-cell *matHeaderCellDef>V. Bonif</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							$
               {{
-                item.UBONIFICADAS && item.PUNIT
-                  ? item.UBONIFICADAS * item.PUNIT
-                  : 0
+                item.VBONIF
               }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="vdesc">
-            <mat-header-cell *matHeaderCellDef>V. Desc</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              $
+						</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="vdesc">
+						<mat-header-cell *matHeaderCellDef>V. Desc</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							$
               {{
-                item.UGRAVADAS && item.PUNIT && item.DESCUENTO
-                  ? item.UGRAVADAS * item.PUNIT * (item.DESCUENTO / 100)
-                  : 0
+               item.VDESC
               }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="tgravado">
-            <mat-header-cell *matHeaderCellDef>V. Desc</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              $
+						</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="tgravado">
+						<mat-header-cell *matHeaderCellDef>V. Desc</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							$
               {{
-                item.UGRAVADAS && item.PUNIT && item.UBONIFICADAS
-                  ? item.UGRAVADAS * item.PUNIT - item.UBONIFICADAS * item.PUNIT
-                  : 0
+                item.TGRAV
               }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="tunidades">
-            <mat-header-cell *matHeaderCellDef>T. Unidades</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              {{
-                item.UGRAVADAS && item.UBONIFICADAS
-                  ? item.UGRAVADAS + item.UBONIFICADAS
-                  : 0
+						</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="tunidades">
+						<mat-header-cell *matHeaderCellDef>T. Unidades</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							{{
+               item.TUNIDADES
               }}
-            </mat-cell>
-          </ng-container>
+						</mat-cell>
+					</ng-container>
 
-          <ng-container matColumnDef="costoreal">
-            <mat-header-cell *matHeaderCellDef>Costo Real</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              {{
-                item.UGRAVADAS && item.PUNIT && item.UBONIFICADAS
-                  ? ((item.UGRAVADAS - item.UBONIFICADAS) * item.PUNIT) /
-                    (item.UGRAVADAS + item.UBONIFICADAS)
-                  : 0
+
+					<ng-container matColumnDef="costoreal">
+						<mat-header-cell *matHeaderCellDef>Costo Real</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							{{
+               item.COSTOREAL
               }}
-            </mat-cell>
-          </ng-container>
+						</mat-cell>
+					</ng-container>
 
-          <ng-container matColumnDef="preciopublico">
-            <mat-header-cell *matHeaderCellDef>P. Publico</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Precio</mat-label>
-                <span matPrefix class="money-input-prefix">$&nbsp;</span>
-                <input
-                  matInput
-                  min="0.0"
-                  matInput
-                  placeholder="0"
-                  type="number"
-                  [(ngModel)]="item.PPUBLICO"
-                  required
-                />
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" style="vertical-align: middle" colspan="9999">
-              No se han encontrado registros
-            </td>
-          </tr>
-        </mat-table>
 
-        <div style="position: relative">
-          <mat-divider></mat-divider>
-          <div
-            class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200"
-          >
-            <a
-              mat-button
-              mat-flat-button
-              color="primary"
-              (click)="guardarSolicitud()"
-              *ngIf="!solicitud"
-            >
-              <mat-icon class="mat-18">save</mat-icon>
-              Guardar
-            </a>
+					<ng-container matColumnDef="preciopublico">
+						<mat-header-cell *matHeaderCellDef>P. Publico</mat-header-cell>
+						<mat-cell *matCellDef="let item"
+							class="duration-cell">
+							<mat-form-field appearance="outline"
+								style="width: 100px">
+								<mat-label>Precio</mat-label>
+								<span matPrefix
+									class="money-input-prefix">
+									$&nbsp;
+								</span>
+								<input [(ngModel)]="item.PPUBLICO"
+									matInput
+									min="0.0"
+									matInput
+									placeholder="0"
+									type="number"
+									required>
+							</mat-form-field>
+						</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+					<mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+					<tbody>
+						<tr *matNoDataRow
+							class="mat-row">
+							<td class="mat-cell"
+								style="vertical-align: middle"
+								colspan="9999">
+								No se han encontrado registros
+							</td>
+						</tr>
+					</tbody>
+				</mat-table>
 
-            <a
-              mat-button
-              mat-flat-button
-              color="primary"
-              (click)="guardarSolicitud()"
-              *ngIf="solicitud && solicitud?.estadoSolicitudFK < 2"
-            >
-              <mat-icon class="mat-18">save</mat-icon>
-              Guardar cambios
-            </a>
 
-            <a
-              mat-button
-              mat-flat-button
-              color="accent"
-              (click)="guardarSolicitud(2)"
-              *ngIf="solicitud && solicitud?.estadoSolicitudFK < 2"
-            >
-              <mat-icon class="mat-18">check</mat-icon>
-              Guardar y Aprobar
-            </a>
-            <a
-              *ngIf="solicitud && solicitud.estadoSolicitudFK == 2"
-              mat-button
-              mat-flat-button
-              color="warn"
-              [routerLink]="['/orden_compras/new', solicitud.idSolicitudCompra]"
-            >
-              Generar Orden de Compras
-            </a>
-            <a mat-stroked-button color="primary" routerLink="/compras">
-              <mat-icon class="mat-18">undo</mat-icon>
-              Regresar
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </mat-card-content>
+				<div style="position: relative">
+					<mat-divider></mat-divider>
+					<div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">
+						<a *ngIf="!solicitud"
+							(click)="guardarSolicitud()"
+							mat-button
+							mat-flat-button
+							color="primary">
+							<mat-icon class="mat-18">save</mat-icon>
+							Guardar
+						</a>
+
+
+						<a *ngIf="solicitud && solicitud?.estadoSolicitudFK < 2"
+							(click)="guardarSolicitud()"
+							mat-button
+							mat-flat-button
+							color="primary">
+							<mat-icon class="mat-18">save</mat-icon>
+							Guardar cambios
+						</a>
+
+
+						<a *ngIf="solicitud && solicitud?.estadoSolicitudFK < 2"
+							(click)="guardarSolicitud(2)"
+							mat-button
+							mat-flat-button
+							color="accent">
+							<mat-icon class="mat-18">check</mat-icon>
+							Guardar y Aprobar
+						</a>
+						<a *ngIf="solicitud && solicitud.estadoSolicitudFK == 2"
+							[routerLink]="['/orden_compras/new', solicitud.idSolicitudCompra]"
+							mat-button
+							mat-flat-button
+							color="warn">
+							Generar Orden de Compras
+						</a>
+						<a mat-stroked-button
+							color="primary"
+							routerLink="/compras">
+							<mat-icon class="mat-18">undo</mat-icon>
+							Regresar
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</mat-card-content>
 </mat-card>

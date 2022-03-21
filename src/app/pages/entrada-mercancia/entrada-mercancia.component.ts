@@ -22,7 +22,7 @@ export class EntradaMercanciaComponent implements OnInit {
   comprasForm!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<Usuario>;
+  @ViewChild(MatTable) table!: MatTable<any>;
   @ViewChild('input') input!: ElementRef;
   dataSource: ComprasDataSource;
   monthNames: any = [];
@@ -54,9 +54,10 @@ export class EntradaMercanciaComponent implements OnInit {
   filteredLabs: any;
   isLoading = false;
   errorMsg!: string;
-  solicitud: any;
+  solicitud: any = { documentLines: [] };
   saving: any = false;
   saved: any = false;
+  expandedElement: any | null;
 
   constructor(
     private _router: Router,
@@ -364,7 +365,43 @@ export class EntradaMercanciaComponent implements OnInit {
     console.log(solicitud);
   }
 
-  generarOrdenCompras() {}
+  updateItemCalculatedValues(item: any) {
+    console.log("HA CAMBIADO UN VALOR")
+    item.VGRAVADO =
+      item.UGRAVADAS && item.PUNIT ? item.UGRAVADAS * item.PUNIT : 0;
+    item.VBONIF =
+      item.UBONIFICADAS && item.PUNIT ? item.UBONIFICADAS * item.PUNIT : 0;
+    item.VDESC =
+      item.UGRAVADAS && item.PUNIT && item.DESCUENTO
+        ? item.UGRAVADAS * item.PUNIT * (item.DESCUENTO / 100)
+        : 0;
+    item.TGRAV =
+      item.UGRAVADAS && item.PUNIT && item.UBONIFICADAS
+        ? item.UGRAVADAS * item.PUNIT - item.UBONIFICADAS * item.PUNIT
+        : 0;
+    item.TUNIDADES =
+      item.UGRAVADAS && item.UBONIFICADAS
+        ? item.UGRAVADAS + item.UBONIFICADAS
+        : 0;
+    item.COSTOREAL =
+      item.UGRAVADAS && item.PUNIT && item.UBONIFICADAS
+        ? ((item.UGRAVADAS - item.UBONIFICADAS) * item.PUNIT) /
+          (item.UGRAVADAS + item.UBONIFICADAS)
+        : 0;
+  }
+  duplicateItem(item: any) {
+    var index = this.solicitud.documentLines.indexOf(item);
+
+    var { itemCode, itemDescription, baseLine, baseEntry, baseType, taxCode } =
+      item;
+    var newObj = Object.assign(
+      {},
+      { itemCode, itemDescription, baseLine, baseEntry, baseType, taxCode }
+    );
+    console.log(newObj);
+    this.solicitud.documentLines.splice(index+1, 0, newObj);
+    this.table.renderRows();
+  }
   private getServerErrorMessage(error: HttpErrorResponse): string {
     console.log(error);
     switch (error.status) {

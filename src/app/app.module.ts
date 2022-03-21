@@ -10,7 +10,7 @@ import { registerLocaleData } from '@angular/common';
 registerLocaleData(localeEs, 'es');
 import { AppRoutingModule } from './modules/app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { IndexComponent } from './pages/index/index.component';
 import { IndexComprasComponent } from './pages/index-compras/index-compras.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -43,11 +43,14 @@ import { IndexEntradaMercanciaComponent } from './pages/index-entrada-mercancia/
     OrdenCompraComponent,
     EntradaMercanciaComponent,
     IndexEntradaMercanciaComponent,
+
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    NoopAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
