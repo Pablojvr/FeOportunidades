@@ -119,29 +119,27 @@
             <mat-cell class="duration-cell" *matCellDef="let item">
               <button
                 mat-icon-button
-                [routerLink]="['/compras/edit', item.idSolicitudCompra]"
+                [routerLink]="['/entrada_mercancia/view', item.idEntradaMercancia]"
               >
-                <mat-icon class="mat-18" *ngIf="item.estadoSolicitudFK == 1"
-                  >edit</mat-icon
-                >
-                <mat-icon class="mat-18" *ngIf="item.estadoSolicitudFK != 1"
+
+                <mat-icon class="mat-18"
                   >visibility</mat-icon
                 >
               </button>
-              <button
+              <!-- <button
                 mat-icon-button
                 [routerLink]="['/orden_compras', item.idSolicitudCompra]"
                 *ngIf="item.estadoSolicitudFK > 2"
               >
                 <mat-icon class="mat-18">shopping_bag</mat-icon>
-              </button>
-              <button
+              </button> -->
+              <!-- <button
                 mat-icon-button
                 *ngIf="item.estadoSolicitudFK == 1"
                 (click)="deleteSolicitud(item)"
               >
                 <mat-icon class="mat-18"> delete </mat-icon>
-              </button>
+              </button> -->
             </mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

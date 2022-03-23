@@ -30,7 +30,7 @@ export class IndexEntradaMercanciaComponent implements OnInit {
     'correlativo',
     'fecha',
     'proveedor',
-    'estado',
+    // 'estado',
     'acciones',
   ];
 
@@ -133,6 +133,7 @@ export class IndexEntradaMercanciaComponent implements OnInit {
       () => {}
     );
   }
+
 
   ngAfterViewInit(): void {
     this.paginator.page

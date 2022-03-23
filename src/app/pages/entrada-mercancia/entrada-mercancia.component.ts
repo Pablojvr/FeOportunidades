@@ -11,7 +11,6 @@ import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { ComprasService } from 'src/app/services/compras.service';
 import Swal from 'sweetalert2';
 import { ComprasDataSource } from '../compras/compras-datasource';
-import { Usuario } from '../usuarios/usuarios-datasource';
 
 @Component({
   selector: 'app-entrada-mercancia',
@@ -58,6 +57,8 @@ export class EntradaMercanciaComponent implements OnInit {
   saving: any = false;
   saved: any = false;
   expandedElement: any | null;
+  isLoadingPO: boolean = false;
+  filteredPO!: any[];
 
   constructor(
     private _router: Router,
@@ -68,7 +69,7 @@ export class EntradaMercanciaComponent implements OnInit {
   ) {
     this.comprasForm = this._fb.group({
       numFactura: [2, [Validators.required]],
-      proveedor: [null],
+      proveedor: [null, Validators.required],
       numOrdenCompra: [null, Validators.required],
       laboratory: [null, Validators.required],
       fecha: [new Date(), Validators.required],
@@ -77,7 +78,10 @@ export class EntradaMercanciaComponent implements OnInit {
     // this.dataSource.getReporte(this.numFactura, this.numOrdenCompra, this.laboratory);
     this.updateDisplayedColumns();
 
-    this.comprasForm.controls.laboratory.valueChanges
+    this.suscribeInputs();
+  }
+  suscribeInputs() {
+    this.comprasForm.controls.proveedor.valueChanges
       .pipe(
         debounceTime(500),
         tap(() => {
@@ -104,11 +108,51 @@ export class EntradaMercanciaComponent implements OnInit {
         console.log(data);
         console.log(this.filteredLabs);
       });
-  }
 
+    this.comprasForm.controls.numOrdenCompra.valueChanges
+      .pipe(
+        debounceTime(500),
+        tap(() => {
+          this.errorMsg = '';
+          this.filteredLabs = [];
+          this.isLoadingPO = true;
+        }),
+        switchMap((value) =>
+          this.comprasService
+            .getPurchaseOrderList(
+              value ?? '',
+              this.form.proveedor.value?.cardCode
+            )
+            .pipe(
+              finalize(() => {
+                this.isLoadingPO = false;
+              })
+            )
+        )
+      )
+      .subscribe((data) => {
+        if (data.data?.value == undefined) {
+          this.errorMsg = data['Error'];
+          this.filteredPO = [];
+        } else {
+          this.errorMsg = '';
+          this.filteredPO = data.data.value;
+        }
+        console.log(data);
+        console.log(this.filteredPO);
+      });
+  }
   displayFn(data: any): string {
     console.log(data);
-    return data ? data.groupName : '';
+    return data ? data.cardName : '';
+  }
+
+  displayPurchaseOrder(data: any): string {
+    console.log(data);
+    // if (data.docNum && !this.solicitud) {
+    //   this.getPurchaseOrderById(data.docNum);
+    // }
+    return data ? data.docNum : '';
   }
 
   openChanged(event: any, item: any) {
@@ -133,27 +177,57 @@ export class EntradaMercanciaComponent implements OnInit {
   ngOnInit(): void {
     var id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.comprasService.getPurchaseOrdersByDocNum(id).subscribe((data) => {
-        if (data.data == undefined) {
-          this.errorMsg = data['Error'];
-          this.solicitud = null;
-        } else {
-          this.errorMsg = '';
-          this.solicitud = data.data.value[0];
-          // this.updateDisplayedColumns();
-          this.comprasForm.setValue({
-            numOrdenCompra: this.solicitud.docNum,
-            proveedor: this.solicitud.cardName,
-            numFactura: '',
-            laboratory: '',
-            fecha: new Date(),
-          });
-        }
-        this.isLoading = false;
-        console.log(data);
-        console.log(this.solicitud);
-      });
+      this.getPurchaseOrderById(id);
     }
+  }
+
+  getPurchaseOrderById(id: any) {
+    Swal.fire({
+      title: '',
+      text: 'Cargando...',
+      icon: 'info',
+      heightAuto: false,
+      showCancelButton: false,
+      showConfirmButton: false,
+    });
+    this.comprasService.getPurchaseOrdersByDocNum(id).subscribe((data) => {
+      if (data.data == undefined) {
+        this.errorMsg = data['Error'];
+        this.solicitud = null;
+        Swal.fire({
+          title: '',
+          text: 'Ha ocurrido un problema!',
+          icon: 'success',
+          timer: 1000,
+          heightAuto: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+      } else {
+        this.errorMsg = '';
+        this.solicitud = data.data.value[0];
+        // this.updateDisplayedColumns();
+        this.comprasForm.setValue({
+          numOrdenCompra: {docNum:this.solicitud.docNum,docDate:this.solicitud.docDate},
+          proveedor: {cardName:this.solicitud.cardName,cardCode:this.solicitud.cardCode},
+          numFactura: '',
+          laboratory: '',
+          fecha: new Date(),
+        });
+        Swal.fire({
+          title: '',
+          text: 'Listo',
+          icon: 'success',
+          timer: 1000,
+          heightAuto: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+      }
+      this.isLoading = false;
+      console.log(data);
+      console.log(this.solicitud);
+    });
   }
   get form() {
     return this.comprasForm.controls;
@@ -184,7 +258,7 @@ export class EntradaMercanciaComponent implements OnInit {
 
   getProveedores() {
     this.isLoading = true;
-    this.comprasService.getProveedores('').subscribe((data) => {
+    this.comprasService.getSuppliers('').subscribe((data) => {
       if (data.data?.value == undefined) {
         this.errorMsg = data['Error'];
         this.filteredLabs = [];
@@ -196,6 +270,24 @@ export class EntradaMercanciaComponent implements OnInit {
       console.log(data);
       console.log(this.filteredLabs);
     });
+  }
+
+  getPurchaseOrdersList() {
+    this.isLoadingPO = true;
+    this.comprasService
+      .getPurchaseOrderList('', this.form.proveedor.value?.cardCode)
+      .subscribe((data) => {
+        if (data.data?.value == undefined) {
+          this.errorMsg = data['Error'];
+          this.filteredPO = [];
+        } else {
+          this.errorMsg = '';
+          this.filteredPO = data.data.value;
+        }
+        this.isLoadingPO = false;
+        console.log(data);
+        console.log(this.filteredLabs);
+      });
   }
 
   updateDisplayedColumns() {
@@ -289,7 +381,13 @@ export class EntradaMercanciaComponent implements OnInit {
       showCancelButton: false,
       showConfirmButton: false,
     });
-    this.comprasService.saveEntradaMercancia(this.solicitud).subscribe({
+
+    var sol = Object.assign({}, this.solicitud);
+    sol.fecha = this.form.fecha.value;
+    sol.NumeroFactura = this.form.numFactura.value;
+    sol.DocNum = null;
+    sol.DocEntry = null;
+    this.comprasService.saveEntradaMercancia(sol).subscribe({
       next: (_) => {
         this.saving = false;
         this.saved = true;
@@ -306,7 +404,7 @@ export class EntradaMercanciaComponent implements OnInit {
             this._router.navigate(['/entrada_mercancia']);
           },
           (dismiss: any) => {
-            // this._router.navigate(['/entrada_mercancia']);
+            this._router.navigate(['/entrada_mercancia']);
           }
         );
       },

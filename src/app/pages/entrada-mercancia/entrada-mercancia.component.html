@@ -3,7 +3,7 @@
 		<div class="flex flex-wrap">
 			<div class="w-full">
 				<h1>
-					{{ solicitud && false ? "" : "Nueva" }} Ingreso de compras
+					{{ solicitud && false ? "" : "Nuevo" }} Ingreso de compras
 				</h1>
 			</div>
 			<!-- <div class="w-full"><h4>Compras y Facturación</h4></div> -->
@@ -28,16 +28,25 @@
 						<input matInput
 							formControlName="proveedor"
 							type="text"
-							class="appearance-none py-3 px-4 bg-transparent">
+              [matAutocomplete]="auto"
+              (focus)="getProveedores()"
+							class="appearance-none py-3 px-4 bg-transparent"/>
+              <mat-icon matSuffix class="mat-18">store</mat-icon>
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngIf="isLoading" class="is-loading"
+                  >Loading...</mat-option
+                >
+                <ng-container *ngIf="!isLoading">
+                  <mat-option *ngFor="let lab of filteredLabs" [value]="lab">
+                    <span>
+                      <b>{{ lab.cardName }}</b>
+                    </span>
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
 					</mat-form-field>
 				</div>
-				<!-- <div class="flex flex-row items-center w-6/12">
-          <input
-            disabled
-            type="text"
-            class="mx-1 appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          />
-        </div> -->
+
 				<div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-3/12 w-full">
 					<span class="mx-1 mb-3">Fecha</span>
 					<mat-form-field appearance="outline">
@@ -68,8 +77,22 @@
 							formControlName="numOrdenCompra"
 							min="1"
 							type="text"
-							class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
-					</mat-form-field>
+              [matAutocomplete]="autoPO"
+              (focus)="getPurchaseOrdersList()"
+							class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"/>
+              <mat-autocomplete #autoPO ="matAutocomplete" [displayWith]="displayPurchaseOrder" (optionSelected)='getPurchaseOrderById($event.option.value?.docNum)'>
+                <mat-option *ngIf="isLoadingPO" class="is-loading"
+                  >Loading...</mat-option
+                >
+                <ng-container *ngIf="!isLoadingPO">
+                  <mat-option *ngFor="let lab of filteredPO" [value]="lab">
+                    <span>
+                      <b>{{ lab.docNum }} - {{ lab.docDate }}</b>
+                    </span>
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
+            </mat-form-field>
 				</div>
 				<div class="flex flex-auto"></div>
 			</form>

@@ -50,7 +50,6 @@ import { IndexEntradaMercanciaComponent } from './pages/index-entrada-mercancia/
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    NoopAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

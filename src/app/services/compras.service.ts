@@ -17,6 +17,24 @@ export class ComprasService {
     });
   }
 
+  getSuppliers(filter = '') {
+    return this.http.get<any>(`${this.baseUrl}/Compras/getSuppliers`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('filter', filter),
+    });
+  }
+
+
+  getPurchaseOrderList(filter = '',cardCode:string) {
+    return this.http.get<any>(`${this.baseUrl}/Compras/GetPurchaseOrdersBySupplier`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('filter', filter)
+        .set('cardCode', cardCode),
+    });
+  }
+
   printSolicitudCompra(numMonths = 2,numMonthsCob=2,idSolicitud = 1) {
     return this.http.get<any>(`${this.baseUrl}/SolicitudCompras/printSolicitudCompra`, {
       params: new HttpParams()
