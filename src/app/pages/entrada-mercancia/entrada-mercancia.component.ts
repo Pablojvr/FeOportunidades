@@ -385,6 +385,9 @@ export class EntradaMercanciaComponent implements OnInit {
     var sol = Object.assign({}, this.solicitud);
     sol.fecha = this.form.fecha.value;
     sol.NumeroFactura = this.form.numFactura.value;
+    sol.cardCode = this.form.proveedor.value.cardCode;
+    sol.NumeroOrden = this.form.numOrdenCompra.value.docNum;
+    sol.BaseEntry = this.solicitud.docEntry;
     sol.DocNum = null;
     sol.DocEntry = null;
     this.comprasService.saveEntradaMercancia(sol).subscribe({
