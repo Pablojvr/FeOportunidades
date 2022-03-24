@@ -476,6 +476,12 @@ export class EntradaMercanciaComponent implements OnInit {
     this.solicitud.documentLines.splice(index + 1, 0, newObj);
     this.table.renderRows();
   }
+
+  removeItem(item: any) {
+    var index = this.solicitud.documentLines.indexOf(item);
+    this.solicitud.documentLines.splice(index, 1);
+    this.table.renderRows();
+  }
   private getServerErrorMessage(error: HttpErrorResponse): string {
     console.log(error);
     switch (error.status) {

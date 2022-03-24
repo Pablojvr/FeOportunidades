@@ -75,3 +75,25 @@ tr.example-element-row:not(.example-expanded-row):active {
 .example-element-description-attribution {
   opacity: 0.5;
 }
+
+.addButton ,.removeButton{
+
+  height: 26px;
+  width: 26px;
+  color: white;
+  border-style: double;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.285);
+  cursor: pointer;
+}
+.addButton {
+  background: rgb(47, 129, 47);
+  border-radius:   0 0 2px 2px;
+}
+
+
+.removeButton {
+  background: rgb(202, 17, 17);
+  border-radius:  2px 2px 0 0 ;
+}
+
