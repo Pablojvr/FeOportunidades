@@ -166,7 +166,7 @@ export class OrdenCompraComponent implements OnInit {
           UnitPrice: o['price'],
           BaseType: '1470000113',
           BaseEntry: DocEntry,
-          BaseLine: o['line'],
+          BaseLine: `${o['line']}`,
           TaxCode: o['vatCode'],
         });
       });
