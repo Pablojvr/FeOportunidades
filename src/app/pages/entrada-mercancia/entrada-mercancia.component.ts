@@ -45,6 +45,8 @@ export class EntradaMercanciaComponent implements OnInit {
     'totalGravado',
     'tunidades',
     'costoreal',
+    'rentabilidad',
+    'precioVenta',
     'preciopublico',
   ];
   middleColumns = ['M1', 'M2'];
@@ -205,11 +207,23 @@ export class EntradaMercanciaComponent implements OnInit {
         });
       } else {
         this.errorMsg = '';
-        this.solicitud = data.data.value[0];
+        var processedData = data.data.value[0];
+        processedData.documentLines.forEach(function (obj: any) {
+          obj.price = obj.unitPrice;
+          obj.rentabilidad = 12;
+        });
+        this.solicitud = processedData;
         // this.updateDisplayedColumns();
         this.comprasForm.setValue({
-          numOrdenCompra: {docNum:this.solicitud.docNum,docDate:this.solicitud.docDate},
-          proveedor: {cardName:this.solicitud.cardName,cardCode:this.solicitud.cardCode},
+          numOrdenCompra: {
+            docNum: this.solicitud.docNum,
+            docDate: this.solicitud.docDate,
+          },
+          proveedor: {
+            cardName: this.solicitud.cardName,
+            cardCode: this.solicitud.cardCode,
+          },
+
           numFactura: '',
           laboratory: '',
           fecha: new Date(),
@@ -435,36 +449,41 @@ export class EntradaMercanciaComponent implements OnInit {
 
   updateItemCalculatedValues(item: any) {
     console.log('HA CAMBIADO UN VALOR');
+
+    item.totalUnidades =
+      !isNaN(item.unidadesGravadas) && !isNaN(item.unidadesBonificadas)
+        ? item.unidadesGravadas + item.unidadesBonificadas
+        : 0;
     item.valorGravado =
-      item.unidadesGravadas && item.price
-        ? item.unidadesGravadas * item.price
+      !isNaN(item.totalUnidades) && !isNaN(item.price)
+        ? (item.totalUnidades * item.price).toFixed(4)
         : 0;
     item.valorBonificado =
-      item.unidadesBonificadas && item.price
-        ? item.unidadesBonificadas * item.price
+      !isNaN(item.unidadesBonificadas) && !isNaN(item.price)
+        ? (item.unidadesBonificadas * item.price).toFixed(4)
+        : 0;
+
+    item.totalGravado =
+      !isNaN(item.valorGravado) && !isNaN(item.valorBonificado)
+        ? (item.valorGravado - item.valorBonificado).toFixed(4)
         : 0;
     item.valorDescuento =
-      item.unidadesGravadas && item.price && item.descuento
-        ? item.unidadesGravadas * item.price * (item.descuento / 100)
-        : 0;
-    item.valorDescuento = item.valorDescuento.toFixed(4);
-    item.totalGravado =
-      item.unidadesGravadas && item.price && item.unidadesBonificadas
-        ? item.unidadesGravadas * item.price -
-          item.unidadesBonificadas * item.price
-        : 0;
-    item.totalGravado = item.totalGravado.toFixed(4);
-    item.totalUnidades =
-      item.unidadesGravadas && item.unidadesBonificadas
-        ? item.unidadesGravadas + item.unidadesBonificadas
+      !isNaN(item.totalGravado) && !isNaN(item.descuento)
+        ? (item.totalGravado * (item.descuento / 100)).toFixed(4)
         : 0;
 
     item.costoReal =
-      item.unidadesGravadas && item.price && item.unidadesBonificadas
-        ? ((item.unidadesGravadas - item.unidadesBonificadas) * item.price) /
-          (item.unidadesGravadas + item.unidadesBonificadas)
+      !isNaN(item.unidadesGravadas) &&
+      !isNaN(item.valorDescuento) &&
+      !isNaN(item.price) &&
+      !isNaN(item.unidadesBonificadas)
+        ? ((item.totalGravado - item.valorDescuento)/ item.totalUnidades).toFixed(4)
         : 0;
-    item.costoReal = item.costoReal.toFixed(4);
+
+    item.precioVenta =
+      !isNaN(item.costoReal) && !isNaN(item.rentabilidad)
+        ? (item.costoReal * (item.rentabilidad / 100 + 1)).toFixed(4)
+        : 0;
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);

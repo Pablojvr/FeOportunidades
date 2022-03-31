@@ -1,3 +1,5 @@
+import { FacturasComponent } from './../pages/facturas/facturas.component';
+import { IndexFacturasComponent } from './../pages/index-facturas/index-facturas.component';
 import { IndexEntradaMercanciaComponent } from './../pages/index-entrada-mercancia/index-entrada-mercancia.component';
 import { EntradaMercanciaComponent } from './../pages/entrada-mercancia/entrada-mercancia.component';
 import { OrdenCompraComponent } from './../pages/orden-compra/orden-compra.component';
@@ -74,6 +76,21 @@ const routes: Routes = [
       {
         path: 'new',
         component: EntradaMercanciaComponent,
+      },
+    ],
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'facturas',
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        component: IndexFacturasComponent,
+      },
+      {
+        path: 'new',
+        component: FacturasComponent,
       },
     ],
     canActivate: [AuthGuard],

@@ -1,0 +1,150 @@
+<mat-card>
+  <mat-card-content>
+    <div class="flex flex-wrap">
+      <div class="w-full"><h1>Facturacion</h1></div>
+      <div class="w-full"><h4>Facturacion</h4></div>
+
+      <form
+        [formGroup]="comprasForm"
+        (ngSubmit)="onSubmit()"
+        class="flex w-full flex-wrap"
+      >
+        <div
+          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-5/12 w-full"
+        >
+          <span class="mx-1 mb-3"> Fechas</span>
+          <!-- <mat-date-range-input appearance="outline"> -->
+          <!-- <input
+            matStartDate
+              [matDatepicker]="picker"
+
+              type="text"
+              class="appearance-none py-3 px-4 bg-transparent"
+            /> -->
+          <mat-form-field appearance="outline">
+            <mat-date-range-input [rangePicker]="picker">
+              <input
+                matStartDate
+                formControlName="fechaIni"
+                placeholder="Fecha inicio"
+              />
+              <input
+                matEndDate
+                formControlName="fechaFin"
+                placeholder="Fecha fin"
+              />
+            </mat-date-range-input>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-column items-center align-items-end ml-12">
+          <button
+            mat-flat-button
+            color="accent"
+            style="height: 3.7em; margin-bottom: 1.2em"
+          >
+            Filtrar
+            <mat-icon class="mat-18">search</mat-icon>
+          </button>
+        </div>
+        <div class="flex flex-auto"></div>
+        <div class="flex flex-column items-center align-items-end ml-1">
+          <button
+            mat-flat-button
+            color="primary"
+            style="height: 4em; margin-bottom: 1em"
+            routerLink="/facturas/new"
+          >
+            Nueva Factura
+            <mat-icon class="mat-18">add</mat-icon>
+          </button>
+        </div>
+      </form>
+      <div class="w-full rounded">
+        <div
+          class="spinner-container"
+          class="w-min-full"
+          *ngIf="dataSource.loading$ | async"
+        >
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <mat-table
+          class="items-table mat-elevation-z8"
+          [dataSource]="dataSource"
+          matSort
+          matSortActive="id"
+          matSortDirection="asc"
+          matSortDisableClear
+        >
+          <ng-container matColumnDef="codigo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >#</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item">{{
+              item.idEntradaMercancia
+            }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="correlativo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >Num. Ingreso</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item">{{ item.docNum }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="fecha">
+            <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">{{
+              item.fecha | date: "shortDate"
+            }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="proveedor">
+            <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              {{ item.cardName }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              <div>{{ item.estado.nombreEstadoSolicitud }}</div>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              <button
+                mat-icon-button
+                [routerLink]="['/facturas/view', item.idEntradaMercancia]"
+              >
+
+                <mat-icon class="mat-18"
+                  >visibility</mat-icon
+                >
+              </button>
+
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" style="vertical-align: middle" colspan="9999">
+              No se han encontrado registros
+            </td>
+          </tr>
+        </mat-table>
+        <mat-paginator
+          #paginator
+          class="mat-elevation-z8"
+          [length]="dataSource?.solicitudesLength"
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 30]"
+        ></mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

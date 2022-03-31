@@ -27,6 +27,8 @@ import { DatePipe } from '@angular/common';
 import { OrdenCompraComponent } from './pages/orden-compra/orden-compra.component';
 import { EntradaMercanciaComponent } from './pages/entrada-mercancia/entrada-mercancia.component';
 import { IndexEntradaMercanciaComponent } from './pages/index-entrada-mercancia/index-entrada-mercancia.component';
+import { IndexFacturasComponent } from './pages/index-facturas/index-facturas.component';
+import { FacturasComponent } from './pages/facturas/facturas.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,6 +45,8 @@ import { IndexEntradaMercanciaComponent } from './pages/index-entrada-mercancia/
     OrdenCompraComponent,
     EntradaMercanciaComponent,
     IndexEntradaMercanciaComponent,
+    IndexFacturasComponent,
+    FacturasComponent,
 
 
   ],

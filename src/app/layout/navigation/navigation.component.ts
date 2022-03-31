@@ -50,9 +50,27 @@ export class NavigationComponent implements OnInit {
         },
         {
           text: 'Ingresos de Compra',
-          icon: 'post_add',
+          icon: 'archive',
           url: '/entrada_mercancia',
         },
+      ],
+    },
+    {
+      text: 'Facturas',
+      icon: 'receipt',
+      url: null,
+      menu: [
+        {
+          text: 'Facturas',
+          icon: 'receipt',
+          url: '/facturas',
+          show: false,
+        },
+        // {
+        //   text: 'Ingresos de Compra',
+        //   icon: 'post_add',
+        //   url: '/entrada_mercancia',
+        // },
       ],
     },
   ];
