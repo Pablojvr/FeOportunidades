@@ -44,7 +44,7 @@ export class FacturasService {
   }
 
   getClientes(filter = '') {
-    return this.http.get<any>(`${this.baseUrl}/Facturas/`, {
+    return this.http.get<any>(`${this.baseUrl}/Facturas/GetCustomersList`, {
       params: new HttpParams()
         // .set('courseId', UserId.toString())
         .set('filter', filter),

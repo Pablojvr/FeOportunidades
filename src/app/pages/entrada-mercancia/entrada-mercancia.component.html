@@ -24,7 +24,7 @@
             type="text"
             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           /> -->
-            <input matInput name="proveedor" type="text" [(ngModel)]="solicitud.proveedor" [matAutocomplete]="auto" (focus)="getProveedores()"
+            <input matInput name="proveedor" type="text" [(ngModel)]="solicitud.proveedor" [matAutocomplete]="auto" (ngModelChange)="changeProveedor($event)" (focus)="getProveedores()"
               class="appearance-none py-3 px-4 bg-transparent" />
             <mat-icon matSuffix class="mat-18">store</mat-icon>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
@@ -61,7 +61,7 @@
         <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
           <span class="mx-1 mb-3">No. Orden de Compra</span>
           <mat-form-field appearance="outline">
-            <input required matInput name="numOrdenCompra" min="1" type="text"  [(ngModel)]="solicitud.numOrdenCompra" [matAutocomplete]="autoPO"
+            <input required matInput name="numOrdenCompra" min="1" type="text"  [(ngModel)]="solicitud.numOrdenCompra" [matAutocomplete]="autoPO" (ngModelChange)="changeOrdenCompra($event)"
               (focus)="getPurchaseOrdersList()"
               class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" />
             <mat-autocomplete #autoPO="matAutocomplete" [displayWith]="displayPurchaseOrder"

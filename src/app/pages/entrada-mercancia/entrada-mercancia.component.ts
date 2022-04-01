@@ -98,7 +98,7 @@ export class EntradaMercanciaComponent implements OnInit {
         }),
         switchMap((value) =>
           this.comprasService
-            .getProveedores(this.proveedor.getValue() ?? '')
+            .getSuppliers(this.proveedor.getValue() ?? '')
             .pipe(
               finalize(() => {
                 this.isLoading = false;
