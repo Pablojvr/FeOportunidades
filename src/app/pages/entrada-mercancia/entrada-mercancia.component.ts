@@ -1,5 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  EventEmitter,
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -7,6 +13,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { SubjectSubscriber } from 'rxjs/internal/Subject';
 import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { ComprasService } from 'src/app/services/compras.service';
 import Swal from 'sweetalert2';
@@ -18,18 +26,14 @@ import { ComprasDataSource } from '../compras/compras-datasource';
   styleUrls: ['./entrada-mercancia.component.css'],
 })
 export class EntradaMercanciaComponent implements OnInit {
-  comprasForm!: FormGroup;
+  // comprasForm!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
-  @ViewChild('input') input!: ElementRef;
+  numOrdenCompra = new  BehaviorSubject<string>("");
+  proveedor = new  BehaviorSubject<string>("");
   dataSource: ComprasDataSource;
-  monthNames: any = [];
-  numFactura: number = 0;
-  numOrdenCompra: number = 0;
-  laboratory: string = '327573';
   fecha: string = '';
-  displayedColumns: any[] = [];
   initialColumns = [
     'codigo',
     'descripcion',
@@ -69,21 +73,22 @@ export class EntradaMercanciaComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) {
-    this.comprasForm = this._fb.group({
-      numFactura: [2, [Validators.required]],
-      proveedor: [null, Validators.required],
-      numOrdenCompra: [null, Validators.required],
-      laboratory: [null, Validators.required],
-      fecha: [new Date(), Validators.required],
-    });
+    // this.comprasForm = this._fb.group({
+    //   numFactura: [2, [Validators.required]],
+    //   proveedor: [null, Validators.required],
+    //   numOrdenCompra: [null, Validators.required],
+    //   laboratory: [null, Validators.required],
+    //   fecha: [new Date(), Validators.required],
+    // });
     this.dataSource = new ComprasDataSource(this.comprasService);
     // this.dataSource.getReporte(this.numFactura, this.numOrdenCompra, this.laboratory);
-    this.updateDisplayedColumns();
+    // this.updateDisplayedColumns();
 
     this.suscribeInputs();
   }
   suscribeInputs() {
-    this.comprasForm.controls.proveedor.valueChanges
+    this.proveedor
+      .asObservable()
       .pipe(
         debounceTime(500),
         tap(() => {
@@ -92,11 +97,13 @@ export class EntradaMercanciaComponent implements OnInit {
           this.isLoading = true;
         }),
         switchMap((value) =>
-          this.comprasService.getProveedores(value ?? '').pipe(
-            finalize(() => {
-              this.isLoading = false;
-            })
-          )
+          this.comprasService
+            .getProveedores(this.proveedor.getValue() ?? '')
+            .pipe(
+              finalize(() => {
+                this.isLoading = false;
+              })
+            )
         )
       )
       .subscribe((data) => {
@@ -111,7 +118,8 @@ export class EntradaMercanciaComponent implements OnInit {
         console.log(this.filteredLabs);
       });
 
-    this.comprasForm.controls.numOrdenCompra.valueChanges
+    this.numOrdenCompra
+      .asObservable()
       .pipe(
         debounceTime(500),
         tap(() => {
@@ -123,7 +131,7 @@ export class EntradaMercanciaComponent implements OnInit {
           this.comprasService
             .getPurchaseOrderList(
               value ?? '',
-              this.form.proveedor.value?.cardCode
+              this.solicitud.proveedor?.cardCode
             )
             .pipe(
               finalize(() => {
@@ -143,6 +151,13 @@ export class EntradaMercanciaComponent implements OnInit {
         console.log(data);
         console.log(this.filteredPO);
       });
+  }
+
+  changeOrdenCompra(value:any){
+    this.numOrdenCompra.next(value)
+  }
+  changeProveedor(value:any){
+    this.proveedor.next(value)
   }
   displayFn(data: any): string {
     console.log(data);
@@ -214,20 +229,16 @@ export class EntradaMercanciaComponent implements OnInit {
         });
         this.solicitud = processedData;
         // this.updateDisplayedColumns();
-        this.comprasForm.setValue({
-          numOrdenCompra: {
-            docNum: this.solicitud.docNum,
-            docDate: this.solicitud.docDate,
-          },
-          proveedor: {
-            cardName: this.solicitud.cardName,
-            cardCode: this.solicitud.cardCode,
-          },
+        this.solicitud.numOrdenCompra = {
+          docNum: this.solicitud.docNum,
+          docDate: this.solicitud.docDate,
+        };
+        this.solicitud.proveedor = {
+          cardName: this.solicitud.cardName,
+          cardCode: this.solicitud.cardCode,
+        };
+        this.solicitud.fecha = new Date();
 
-          numFactura: '',
-          laboratory: '',
-          fecha: new Date(),
-        });
         Swal.fire({
           title: '',
           text: 'Listo',
@@ -243,32 +254,7 @@ export class EntradaMercanciaComponent implements OnInit {
       console.log(this.solicitud);
     });
   }
-  get form() {
-    return this.comprasForm.controls;
-  }
-  onSubmit() {
-    this.numFactura = this.form.numFactura.value;
-    this.numOrdenCompra = this.form.numOrdenCompra.value;
-    var laboratoryData = this.form.laboratory.value;
-    this.laboratory = laboratoryData.number;
-    this.fecha = this.form.fecha.value;
-    this.updateDisplayedColumns();
-    if (!this.numFactura || !this.numOrdenCompra || !this.laboratory) {
-      Swal.fire({
-        title: '',
-        text: 'Uno o mas campos estan vacios',
-        icon: 'error',
-        heightAuto: false,
-      });
-      return;
-    }
-    console.log(this.numFactura, this.numOrdenCompra, this.laboratory);
-    this.dataSource.getReporte(
-      this.numFactura,
-      this.numOrdenCompra,
-      this.laboratory
-    );
-  }
+
 
   getProveedores() {
     this.isLoading = true;
@@ -289,7 +275,7 @@ export class EntradaMercanciaComponent implements OnInit {
   getPurchaseOrdersList() {
     this.isLoadingPO = true;
     this.comprasService
-      .getPurchaseOrderList('', this.form.proveedor.value?.cardCode)
+      .getPurchaseOrderList('', this.solicitud.proveedor?.cardCode)
       .subscribe((data) => {
         if (data.data?.value == undefined) {
           this.errorMsg = data['Error'];
@@ -304,26 +290,7 @@ export class EntradaMercanciaComponent implements OnInit {
       });
   }
 
-  updateDisplayedColumns() {
-    // var currentMonth = moment().locale('es').format('MMMM');
-    // this.monthNames = [currentMonth];
-    this.middleColumns = [...Array(this.numFactura).keys()].map((value, i) => {
-      this.monthNames.push(
-        moment().add(-i, 'M').locale('es').format('MMMM - YY')
-      );
-      return `M${i + 1}`;
-    });
-    this.monthNames = this.monthNames.reverse();
-    var endArray =
-      this.solicitud == null
-        ? [...this.onlyNewColums, ...this.endColumns]
-        : this.endColumns;
-    this.displayedColumns = [
-      ...this.initialColumns,
-      ...this.middleColumns,
-      ...endArray,
-    ];
-  }
+
 
   editProveedor(item: any) {
     item.editing = false;
@@ -397,10 +364,10 @@ export class EntradaMercanciaComponent implements OnInit {
     });
 
     var sol = Object.assign({}, this.solicitud);
-    sol.fecha = this.form.fecha.value;
-    sol.NumeroFactura = this.form.numFactura.value;
-    sol.cardCode = this.form.proveedor.value.cardCode;
-    sol.NumeroOrden = this.form.numOrdenCompra.value.docNum;
+
+    sol.NumeroFactura = this.solicitud.numFactura;
+    sol.cardCode = this.solicitud.proveedor.cardCode;
+    sol.NumeroOrden = this.solicitud.numOrdenCompra.docNum;
     sol.BaseEntry = this.solicitud.docEntry;
     sol.DocNum = null;
     sol.DocEntry = null;
@@ -447,7 +414,15 @@ export class EntradaMercanciaComponent implements OnInit {
     console.log(this.solicitud);
   }
 
-  updateItemCalculatedValues(item: any) {
+  updateItemCalculatedValues(item: any, name: any) {
+    if (item.descuento != '' && item.descuento != null) {
+      item.descuento < 0 ? (item.descuento = 0) : item.descuento;
+      item.descuento > 100 ? (item.descuento = 100) : item.descuento;
+    }
+    if (item.rentabilidad != '' && item.rentabilidad != null) {
+      item.rentabilidad < 0 ? (item.rentabilidad = 0) : item.rentabilidad;
+      item.rentabilidad > 100 ? (item.rentabilidad = 100) : item.rentabilidad;
+    }
     console.log('HA CAMBIADO UN VALOR');
 
     item.totalUnidades =
@@ -471,15 +446,18 @@ export class EntradaMercanciaComponent implements OnInit {
       !isNaN(item.totalGravado) && !isNaN(item.descuento)
         ? (item.totalGravado * (item.descuento / 100)).toFixed(4)
         : 0;
-
-    item.costoReal =
-      !isNaN(item.unidadesGravadas) &&
-      !isNaN(item.valorDescuento) &&
-      !isNaN(item.price) &&
-      !isNaN(item.unidadesBonificadas)
-        ? ((item.totalGravado - item.valorDescuento)/ item.totalUnidades).toFixed(4)
-        : 0;
-
+    if (name != 'costoReal') {
+      item.costoReal =
+        !isNaN(item.unidadesGravadas) &&
+        !isNaN(item.valorDescuento) &&
+        !isNaN(item.price) &&
+        !isNaN(item.unidadesBonificadas)
+          ? (
+              (item.totalGravado - item.valorDescuento) /
+              item.totalUnidades
+            ).toFixed(4)
+          : 0;
+    }
     item.precioVenta =
       !isNaN(item.costoReal) && !isNaN(item.rentabilidad)
         ? (item.costoReal * (item.rentabilidad / 100 + 1)).toFixed(4)
@@ -488,11 +466,26 @@ export class EntradaMercanciaComponent implements OnInit {
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);
 
-    var { itemCode, itemDescription, baseLine, baseEntry, baseType, taxCode } =
-      item;
+    var {
+      itemCode,
+      itemDescription,
+      baseLine,
+      baseEntry,
+      baseType,
+      taxCode,
+      price,
+    } = item;
     var newObj = Object.assign(
       {},
-      { itemCode, itemDescription, baseLine, baseEntry, baseType, taxCode }
+      {
+        itemCode,
+        itemDescription,
+        baseLine,
+        baseEntry,
+        baseType,
+        taxCode,
+        price,
+      }
     );
     console.log(newObj);
     this.solicitud.documentLines.splice(index + 1, 0, newObj);

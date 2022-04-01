@@ -8,8 +8,8 @@
       </div>
       <!-- <div class="w-full"><h4>Compras y Facturación</h4></div> -->
 
-
-      <form [formGroup]="comprasForm" (ngSubmit)="onSubmit()" class="flex w-full flex-wrap">
+      <form class="flex w-full flex-wrap" #heroForm="ngForm">
+      <div class="flex w-full flex-wrap">
         <div
           class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center justify-center align-middle md:w-9/12 w-full">
           <span class="mx-1 mb-3">Proveedor</span>
@@ -24,7 +24,7 @@
             type="text"
             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           /> -->
-            <input matInput formControlName="proveedor" type="text" [matAutocomplete]="auto" (focus)="getProveedores()"
+            <input matInput name="proveedor" type="text" [(ngModel)]="solicitud.proveedor" [matAutocomplete]="auto" (focus)="getProveedores()"
               class="appearance-none py-3 px-4 bg-transparent" />
             <mat-icon matSuffix class="mat-18">store</mat-icon>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
@@ -43,7 +43,7 @@
         <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-3/12 w-full">
           <span class="mx-1 mb-3">Fecha</span>
           <mat-form-field appearance="outline">
-            <input [matDatepicker]="picker" matInput formControlName="fecha" type="text"
+            <input [(ngModel)]="solicitud.fecha" required [matDatepicker]="picker" matInput name="fecha" type="text"
               class="appearance-none py-3 px-4 bg-transparent">
             <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
 
@@ -54,14 +54,14 @@
         <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
           <span class="mx-1 mb-3">Número Factura</span>
           <mat-form-field appearance="outline">
-            <input matInput formControlName="numFactura"
+            <input matInput name="numFactura" [(ngModel)]="solicitud.numFactura" required
               class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
           </mat-form-field>
         </div>
         <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
           <span class="mx-1 mb-3">No. Orden de Compra</span>
           <mat-form-field appearance="outline">
-            <input matInput formControlName="numOrdenCompra" min="1" type="text" [matAutocomplete]="autoPO"
+            <input required matInput name="numOrdenCompra" min="1" type="text"  [(ngModel)]="solicitud.numOrdenCompra" [matAutocomplete]="autoPO"
               (focus)="getPurchaseOrdersList()"
               class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" />
             <mat-autocomplete #autoPO="matAutocomplete" [displayWith]="displayPurchaseOrder"
@@ -78,7 +78,7 @@
           </mat-form-field>
         </div>
         <div class="flex flex-auto"></div>
-      </form>
+      </div>
       <div class="w-full rounded">
         <div *ngIf="dataSource.loading$ | async" class="spinner-container" class="w-min-full">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -87,11 +87,11 @@
           matSortActive="id" matSortDirection="asc" matSortDisableClear>
           <ng-container matColumnDef="codigo">
             <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
-            <mat-cell *matCellDef="let item">{{ item.itemCode }}</mat-cell>
+            <mat-cell *matCellDef="let item;let index=index">{{ item.itemCode }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="descripcion">
             <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               {{
               item.itemDescription
               }}
@@ -101,15 +101,16 @@
 
           <ng-container matColumnDef="lote">
             <mat-header-cell *matHeaderCellDef>Lote</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <div class="flex flex-row">
                 <mat-form-field appearance="outline" style="width: 100px">
                   <mat-label>Lote</mat-label>
-                  <input [(ngModel)]="item.lote" matInput type="text" required>
+                  <input name="lote{{index}}" [(ngModel)]="item.lote" matInput type="text" required>
                 </mat-form-field>
                 <div class="flex flex-col" style="padding-top:2px;height:64px;">
-                  <mat-icon class="removeButton"  matTooltip="Elimina la linea actual" (click)="removeItem(item)">remove</mat-icon>
-                  <mat-icon class="addButton"   matTooltip="Agrega una linea" (click)="duplicateItem(item)">add</mat-icon>
+                  <mat-icon class="removeButton" matTooltip="Elimina la linea actual" (click)="removeItem(item)">remove
+                  </mat-icon>
+                  <mat-icon class="addButton" matTooltip="Agrega una linea" (click)="duplicateItem(item)">add</mat-icon>
                 </div>
               </div>
             </mat-cell>
@@ -118,10 +119,10 @@
 
           <ng-container matColumnDef="vencimiento">
             <mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 160px">
                 <mat-label>Vencimiento</mat-label>
-                <input [(ngModel)]="item.fechaExpiracion" matInput type="date" required>
+                <input name="fechaExpiracion{{index}}" [(ngModel)]="item.fechaExpiracion" matInput type="date" required>
               </mat-form-field>
 
             </mat-cell>
@@ -130,24 +131,24 @@
 
           <ng-container matColumnDef="UnidadesGravadas">
             <mat-header-cell *matHeaderCellDef>U.Gravadas</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-                <input [(ngModel)]="item.unidadesGravadas" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
-                  matInput placeholder="0" type="number" required>
+                <input name="unidadesGravadas{{index}}"  [(ngModel)]="item.unidadesGravadas" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput
+                  min="0" matInput placeholder="0" type="number" required>
               </mat-form-field>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="price">
             <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px" class="money-input">
                 <mat-label>Precio</mat-label>
                 <span matPrefix class="money-input-prefix">
                   $&nbsp;
                 </span>
-                <input [(ngModel)]="item.price" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0.0" matInput
-                  placeholder="0" type="number" required>
+                <input name="price{{index}}" [(ngModel)]="item.price" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput min="0.0"
+                  matInput placeholder="0" type="number" required>
               </mat-form-field>
             </mat-cell>
           </ng-container>
@@ -155,7 +156,7 @@
 
           <ng-container matColumnDef="vgrav">
             <mat-header-cell *matHeaderCellDef>V. Gravado</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               $
               {{
               item.valorGravado
@@ -164,27 +165,33 @@
           </ng-container>
           <ng-container matColumnDef="unidadesBonificadas">
             <mat-header-cell *matHeaderCellDef>U.Bonificadas</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-                <input [(ngModel)]="item.unidadesBonificadas" (ngModelChange)="updateItemCalculatedValues(item)" matInput
-                  min="0" matInput placeholder="0" type="number" required>
+                <input name="unidadesBonificadas{{index}}" [(ngModel)]="item.unidadesBonificadas" (ngModelChange)="updateItemCalculatedValues(item,$event)"
+                  matInput min="0" matInput placeholder="0" type="number" required>
               </mat-form-field>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="descuento">
             <mat-header-cell *matHeaderCellDef>% Desc</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let rowIdx = index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>%</mat-label>
-                <input [(ngModel)]="item.descuento" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0" matInput
-                  placeholder="0" type="number" required>
+                <input #descuento="ngModel" name="txtDescuento{{rowIdx}}" [(ngModel)]="item.descuento"
+                  (ngModelChange)="updateItemCalculatedValues(item,$event)"
+
+                  matInput min="0" max="100" matInput placeholder="0"
+                  type="number" required>
+                <mat-error *ngIf="descuento?.invalid">
+                  <div *ngIf="descuento.errors?.required">El descuento es <br>requerido</div>
+                </mat-error>
               </mat-form-field>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="valorBonificado">
             <mat-header-cell *matHeaderCellDef>V. Bonif</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               $
               {{
               item.valorBonificado
@@ -193,7 +200,7 @@
           </ng-container>
           <ng-container matColumnDef="valorDescuento">
             <mat-header-cell *matHeaderCellDef>V. Desc</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               $
               {{
               item.valorDescuento
@@ -202,7 +209,7 @@
           </ng-container>
           <ng-container matColumnDef="totalGravado">
             <mat-header-cell *matHeaderCellDef>T.Gravado</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               $
               {{
               item.totalGravado
@@ -211,7 +218,7 @@
           </ng-container>
           <ng-container matColumnDef="tunidades">
             <mat-header-cell *matHeaderCellDef>T. Unidades</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               {{
               item.totalUnidades
               }}
@@ -221,32 +228,37 @@
 
           <ng-container matColumnDef="costoreal">
             <mat-header-cell *matHeaderCellDef>Costo Real</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
-              $ {{
-              item.costoReal
-              }}
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
+              <mat-form-field appearance="outline" style="width: 100px" class="money-input">
+                <mat-label>Precio</mat-label>
+                <span matPrefix class="money-input-prefix">
+                  $&nbsp;
+                </span>
+                <input name="costoReal{{index}}" [(ngModel)]="item.costoReal" (ngModelChange)="updateItemCalculatedValues(item,'costoReal')" matInput min="0.0"
+                  matInput placeholder="0" type="number" required>
+              </mat-form-field>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="rentabilidad">
             <mat-header-cell *matHeaderCellDef>% Rentabilidad</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>%</mat-label>
 
-                <input [(ngModel)]="item.rentabilidad"  (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0" max="100" matInput placeholder="0" type="number"
-                  required>
+                <input name="rentabilidad{{index}}" [(ngModel)]="item.rentabilidad" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput
+                  min="0" max="100" matInput placeholder="0" type="number" required>
               </mat-form-field>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="precioVenta">
             <mat-header-cell *matHeaderCellDef>P. Venta</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Precio</mat-label>
                 <span matPrefix class="money-input-prefix">
                   $&nbsp;
                 </span>
-                <input readonly [(ngModel)]="item.precioVenta" matInput min="0.0" matInput placeholder="0" type="number"
+                <input name="precioVenta{{index}}" readonly [(ngModel)]="item.precioVenta" matInput min="0.0" matInput placeholder="0" type="number"
                   required>
               </mat-form-field>
             </mat-cell>
@@ -254,19 +266,19 @@
 
           <ng-container matColumnDef="preciopublico">
             <mat-header-cell *matHeaderCellDef>P. Publico</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
+            <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Precio</mat-label>
                 <span matPrefix class="money-input-prefix">
                   $&nbsp;
                 </span>
-                <input [(ngModel)]="item.PrecioPublico" matInput min="0.0" matInput placeholder="0" type="number"
+                <input name="precioPublico{{index}}" [(ngModel)]="item.PrecioPublico" matInput min="0.0" matInput placeholder="0" type="number"
                   required>
               </mat-form-field>
             </mat-cell>
           </ng-container>
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          <mat-header-row *matHeaderRowDef="initialColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: initialColumns"></mat-row>
           <tbody>
             <tr *matNoDataRow class="mat-row">
               <td class="mat-cell" style="vertical-align: middle" colspan="9999">
@@ -280,7 +292,7 @@
         <div style="position: relative">
           <mat-divider></mat-divider>
           <div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">
-            <a (click)="guardarSolicitud()" mat-button mat-flat-button color="primary">
+            <a [disabled]="!heroForm.form.valid" (click)="guardarSolicitud()" mat-button mat-flat-button color="primary">
               <mat-icon class="mat-18">save</mat-icon>
               Guardar
             </a>
@@ -290,7 +302,9 @@
             </a>
           </div>
         </div>
+
       </div>
+    </form>
     </div>
   </mat-card-content>
 </mat-card>
