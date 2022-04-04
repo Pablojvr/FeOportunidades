@@ -60,7 +60,7 @@ export class FacturasService {
   }
 
   obtenerStockUltimoLotePorItemCode(itemCode:string,skip:number) {
-    return this.http.get<any>(`${this.baseUrl}/Facturas/`, {
+    return this.http.get<any>(`${this.baseUrl}/Facturas/getBatchByItemCodeOrderByExpDate`, {
       params: new HttpParams()
         // .set('courseId', UserId.toString())
         .set('itemCode', itemCode)

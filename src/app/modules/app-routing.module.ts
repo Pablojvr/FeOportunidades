@@ -62,7 +62,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'entrada_mercancia',
+    path: 'ingreso_compras',
     component: LayoutComponent,
     children: [
       {
@@ -71,6 +71,10 @@ const routes: Routes = [
       },
       {
         path: 'new/:id',
+        component: EntradaMercanciaComponent,
+      },
+      {
+        path: 'view/:idEntradaMercancia',
         component: EntradaMercanciaComponent,
       },
       {

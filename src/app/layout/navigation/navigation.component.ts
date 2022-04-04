@@ -51,7 +51,7 @@ export class NavigationComponent implements OnInit {
         {
           text: 'Ingresos de Compra',
           icon: 'archive',
-          url: '/entrada_mercancia',
+          url: '/ingreso_compras',
         },
       ],
     },

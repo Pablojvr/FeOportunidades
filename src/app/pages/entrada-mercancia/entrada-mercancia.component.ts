@@ -34,6 +34,7 @@ export class EntradaMercanciaComponent implements OnInit {
   proveedor = new  BehaviorSubject<string>("");
   dataSource: ComprasDataSource;
   fecha: string = '';
+  readMode = true;
   initialColumns = [
     'codigo',
     'descripcion',
@@ -193,8 +194,16 @@ export class EntradaMercanciaComponent implements OnInit {
 
   ngOnInit(): void {
     var id = this.route.snapshot.paramMap.get('id');
+    var idEntradaMercancia = this.route.snapshot.paramMap.get('idEntradaMercancia');
     if (id) {
+      this.readMode = false;
       this.getPurchaseOrderById(id);
+    }else
+    if(idEntradaMercancia){
+      this.readMode = true;
+      this.getEntradaMercancia(idEntradaMercancia);
+    }else{
+      this.readMode = false;
     }
   }
 
@@ -255,6 +264,58 @@ export class EntradaMercanciaComponent implements OnInit {
     });
   }
 
+  getEntradaMercancia(id: any) {
+    Swal.fire({
+      title: '',
+      text: 'Cargando...',
+      icon: 'info',
+      heightAuto: false,
+      showCancelButton: false,
+      showConfirmButton: false,
+    });
+    this.comprasService.getEntradaMercanciaByID(id).subscribe((data) => {
+      if (data == undefined) {
+        this.errorMsg = data['Error'];
+        this.solicitud = null;
+        Swal.fire({
+          title: '',
+          text: 'Ha ocurrido un problema!',
+          icon: 'success',
+          timer: 1000,
+          heightAuto: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+      } else {
+        this.errorMsg = '';
+        var processedData = data;
+
+        this.solicitud = processedData;
+        // this.updateDisplayedColumns();
+        this.solicitud.numOrdenCompra = {
+          docNum: this.solicitud.numeroOrden,
+          docDate: null,
+        };
+        this.solicitud.proveedor = {
+          cardName: this.solicitud.cardName,
+          cardCode: this.solicitud.cardCode,
+        };
+        this.solicitud.numFactura = this.solicitud.numeroFactura
+        Swal.fire({
+          title: '',
+          text: 'Listo',
+          icon: 'success',
+          timer: 1000,
+          heightAuto: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+      }
+      this.isLoading = false;
+      console.log(data);
+      console.log(this.solicitud);
+    });
+  }
 
   getProveedores() {
     this.isLoading = true;
@@ -385,10 +446,10 @@ export class EntradaMercanciaComponent implements OnInit {
           showConfirmButton: false,
         }).then(
           () => {
-            this._router.navigate(['/entrada_mercancia']);
+            this._router.navigate(['/ingreso_compras']);
           },
           (dismiss: any) => {
-            this._router.navigate(['/entrada_mercancia']);
+            this._router.navigate(['/ingreso_compras']);
           }
         );
       },

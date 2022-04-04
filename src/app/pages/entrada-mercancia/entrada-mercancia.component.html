@@ -3,7 +3,7 @@
     <div class="flex flex-wrap">
       <div class="w-full">
         <h1>
-          {{ solicitud && false ? "" : "Nuevo" }} Ingreso de compras
+          {{ readMode ? "" : "Nuevo" }} Ingreso de compras <span>#{{solicitud.idEntradaMercancia}}</span>
         </h1>
       </div>
       <!-- <div class="w-full"><h4>Compras y Facturación</h4></div> -->
@@ -43,7 +43,7 @@
         <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-3/12 w-full">
           <span class="mx-1 mb-3">Fecha</span>
           <mat-form-field appearance="outline">
-            <input [(ngModel)]="solicitud.fecha" required [matDatepicker]="picker" matInput name="fecha" type="text"
+            <input [(ngModel)]="solicitud.fecha" required [matDatepicker]="picker" matInput name="fecha" type="text" [readonly]="readMode"
               class="appearance-none py-3 px-4 bg-transparent">
             <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
 
@@ -54,14 +54,14 @@
         <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
           <span class="mx-1 mb-3">Número Factura</span>
           <mat-form-field appearance="outline">
-            <input matInput name="numFactura" [(ngModel)]="solicitud.numFactura" required
+            <input matInput name="numFactura" [(ngModel)]="solicitud.numFactura" required [readonly]="readMode"
               class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
           </mat-form-field>
         </div>
         <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
           <span class="mx-1 mb-3">No. Orden de Compra</span>
           <mat-form-field appearance="outline">
-            <input required matInput name="numOrdenCompra" min="1" type="text"  [(ngModel)]="solicitud.numOrdenCompra" [matAutocomplete]="autoPO" (ngModelChange)="changeOrdenCompra($event)"
+            <input required [readonly]="readMode" matInput name="numOrdenCompra" min="1" type="text" [readonly]="readMode" [(ngModel)]="solicitud.numOrdenCompra" [matAutocomplete]="autoPO" (ngModelChange)="changeOrdenCompra($event)"
               (focus)="getPurchaseOrdersList()"
               class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" />
             <mat-autocomplete #autoPO="matAutocomplete" [displayWith]="displayPurchaseOrder"
@@ -105,9 +105,9 @@
               <div class="flex flex-row">
                 <mat-form-field appearance="outline" style="width: 100px">
                   <mat-label>Lote</mat-label>
-                  <input name="lote{{index}}" [(ngModel)]="item.lote" matInput type="text" required>
+                  <input name="lote{{index}}" [(ngModel)]="item.lote" matInput type="text" [readonly]="readMode" required>
                 </mat-form-field>
-                <div class="flex flex-col" style="padding-top:2px;height:64px;">
+                <div *ngIf="!readMode" class="flex flex-col" style="padding-top:2px;height:64px;">
                   <mat-icon class="removeButton" matTooltip="Elimina la linea actual" (click)="removeItem(item)">remove
                   </mat-icon>
                   <mat-icon class="addButton" matTooltip="Agrega una linea" (click)="duplicateItem(item)">add</mat-icon>
@@ -122,7 +122,7 @@
             <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 160px">
                 <mat-label>Vencimiento</mat-label>
-                <input name="fechaExpiracion{{index}}" [(ngModel)]="item.fechaExpiracion" matInput type="date" required>
+                <input name="fechaExpiracion{{index}}" [(ngModel)]="item.fechaExpiracion" matInput type="date" [readonly]="readMode" required>
               </mat-form-field>
 
             </mat-cell>
@@ -135,7 +135,7 @@
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
                 <input name="unidadesGravadas{{index}}"  [(ngModel)]="item.unidadesGravadas" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput
-                  min="0" matInput placeholder="0" type="number" required>
+                  min="0" matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
           </ng-container>
@@ -148,7 +148,7 @@
                   $&nbsp;
                 </span>
                 <input name="price{{index}}" [(ngModel)]="item.price" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput min="0.0"
-                  matInput placeholder="0" type="number" required>
+                  matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
           </ng-container>
@@ -169,7 +169,7 @@
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
                 <input name="unidadesBonificadas{{index}}" [(ngModel)]="item.unidadesBonificadas" (ngModelChange)="updateItemCalculatedValues(item,$event)"
-                  matInput min="0" matInput placeholder="0" type="number" required>
+                  matInput min="0" matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
           </ng-container>
@@ -182,7 +182,7 @@
                   (ngModelChange)="updateItemCalculatedValues(item,$event)"
 
                   matInput min="0" max="100" matInput placeholder="0"
-                  type="number" required>
+                  type="number" required [readonly]="readMode">
                 <mat-error *ngIf="descuento?.invalid">
                   <div *ngIf="descuento.errors?.required">El descuento es <br>requerido</div>
                 </mat-error>
@@ -235,7 +235,7 @@
                   $&nbsp;
                 </span>
                 <input name="costoReal{{index}}" [(ngModel)]="item.costoReal" (ngModelChange)="updateItemCalculatedValues(item,'costoReal')" matInput min="0.0"
-                  matInput placeholder="0" type="number" required>
+                  matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
           </ng-container>
@@ -246,7 +246,7 @@
                 <mat-label>%</mat-label>
 
                 <input name="rentabilidad{{index}}" [(ngModel)]="item.rentabilidad" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput
-                  min="0" max="100" matInput placeholder="0" type="number" required>
+                  min="0" max="100" matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
           </ng-container>
@@ -259,7 +259,7 @@
                   $&nbsp;
                 </span>
                 <input name="precioVenta{{index}}" readonly [(ngModel)]="item.precioVenta" matInput min="0.0" matInput placeholder="0" type="number"
-                  required>
+                  required >
               </mat-form-field>
             </mat-cell>
           </ng-container>
@@ -272,8 +272,8 @@
                 <span matPrefix class="money-input-prefix">
                   $&nbsp;
                 </span>
-                <input name="precioPublico{{index}}" [(ngModel)]="item.PrecioPublico" matInput min="0.0" matInput placeholder="0" type="number"
-                  required>
+                <input name="precioPublico{{index}}" [(ngModel)]="item.precioPublico" matInput min="0.0" matInput placeholder="0" type="number"
+                  required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
           </ng-container>
@@ -292,11 +292,11 @@
         <div style="position: relative">
           <mat-divider></mat-divider>
           <div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">
-            <a [disabled]="!heroForm.form.valid" (click)="guardarSolicitud()" mat-button mat-flat-button color="primary">
+            <a *ngIf="!readMode" [disabled]="!heroForm.form.valid" (click)="guardarSolicitud()" mat-button mat-flat-button color="primary">
               <mat-icon class="mat-18">save</mat-icon>
               Guardar
             </a>
-            <a mat-stroked-button color="primary" routerLink="/compras">
+            <a mat-stroked-button color="primary" routerLink="/ingreso_compras">
               <mat-icon class="mat-18">undo</mat-icon>
               Regresar
             </a>

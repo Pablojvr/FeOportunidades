@@ -8,7 +8,7 @@
       </div>
 
 
-      <form [formGroup]="comprasForm"  class="flex w-full flex-wrap">
+      <form [formGroup]="comprasForm" class="flex w-full flex-wrap">
         <div
           class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center justify-center align-middle md:w-9/12 w-full">
           <span class="mx-1 mb-3">Cliente</span>
@@ -59,6 +59,14 @@
         </div>
 
         <div class="flex flex-auto"></div>
+        <div class="flex w-full justify-end">
+          <div class="flex flex-column items-center align-items-end ml-1">
+            <button mat-flat-button color="primary" style="height: 4em; margin-bottom: 1em" (click)="addArticulo()">
+              Agregar Articulo
+              <mat-icon class="mat-18">add</mat-icon>
+            </button>
+          </div>
+        </div>
       </form>
       <div class="w-full rounded">
         <!-- <div *ngIf="dataSource.loading$ | async" class="spinner-container" class="w-min-full">
@@ -78,8 +86,8 @@
             <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
               <div style="min-width: 200px;">{{
-              item.itemDescription
-              }}</div>
+                item.itemDescription
+                }}</div>
             </mat-cell>
           </ng-container>
 
@@ -88,14 +96,8 @@
             <mat-header-cell *matHeaderCellDef>Lote</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
               <div class="flex flex-row">
-                <mat-form-field appearance="outline" style="width: 100px">
-                  <mat-label>Lote</mat-label>
-                  <input [(ngModel)]="item.lote" matInput type="text" required>
-                </mat-form-field>
-                <!-- <div class="flex flex-col" style="padding-top:2px;height:64px;">
-                  <mat-icon class="removeButton"  matTooltip="Elimina la linea actual" (click)="removeItem(item)">remove</mat-icon>
-                  <mat-icon class="addButton"   matTooltip="Agrega una linea" (click)="duplicateItem(item)">add</mat-icon>
-                </div> -->
+                {{item.batchNum}}
+
               </div>
             </mat-cell>
           </ng-container>
@@ -104,10 +106,9 @@
           <ng-container matColumnDef="vencimiento">
             <mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
-              <mat-form-field appearance="outline" style="width: 160px">
-                <mat-label>Vencimiento</mat-label>
-                <input [(ngModel)]="item.fechaExpiracion" matInput type="date" required>
-              </mat-form-field>
+
+              {{item.expDate | date:'shortDate'}}
+
 
             </mat-cell>
           </ng-container>
@@ -118,7 +119,7 @@
             <mat-cell *matCellDef="let item" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-                <input [(ngModel)]="item.unidadesGravadas" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
+                <input [(ngModel)]="item.quantity" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
                   matInput placeholder="0" type="number" required>
               </mat-form-field>
             </mat-cell>
@@ -126,101 +127,23 @@
           <ng-container matColumnDef="price">
             <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
-              <mat-form-field appearance="outline" style="width: 100px" class="money-input">
-                <mat-label>Precio</mat-label>
-                <span matPrefix class="money-input-prefix">
-                  $&nbsp;
-                </span>
-                <input [(ngModel)]="item.price" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0.0" matInput
-                  placeholder="0" type="number" required>
-              </mat-form-field>
+
+              $&nbsp;
+              {{item.price }}
             </mat-cell>
           </ng-container>
 
 
-          <ng-container matColumnDef="vgrav">
-            <mat-header-cell *matHeaderCellDef>V. Gravado</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
-              $
-              {{
-              item.valorGravado
-              }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="unidadesBonificadas">
-            <mat-header-cell *matHeaderCellDef>U.Bonificadas</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Unidades</mat-label>
-                <input [(ngModel)]="item.unidadesBonificadas" (ngModelChange)="updateItemCalculatedValues(item)" matInput
-                  min="0" matInput placeholder="0" type="number" required>
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
+
+
 
           <ng-container matColumnDef="totalGravado">
             <mat-header-cell *matHeaderCellDef>T.Gravado</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
               $
               {{
-              item.totalGravado
+              (item.price * item.quantity).toFixed(4)
               }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="tunidades">
-            <mat-header-cell *matHeaderCellDef>T. Unidades</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
-              {{
-              item.totalUnidades
-              }}
-            </mat-cell>
-          </ng-container>
-
-
-          <ng-container matColumnDef="costoreal">
-            <mat-header-cell *matHeaderCellDef>Costo Real</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
-              $ {{
-              item.costoReal
-              }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="rentabilidad">
-            <mat-header-cell *matHeaderCellDef>% Rentabilidad</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>%</mat-label>
-
-                <input [(ngModel)]="item.rentabilidad"  (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0" max="100" matInput placeholder="0" type="number"
-                  required>
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="precioVenta">
-            <mat-header-cell *matHeaderCellDef>P. Venta</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Precio</mat-label>
-                <span matPrefix class="money-input-prefix">
-                  $&nbsp;
-                </span>
-                <input readonly [(ngModel)]="item.precioVenta" matInput min="0.0" matInput placeholder="0" type="number"
-                  required>
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="preciopublico">
-            <mat-header-cell *matHeaderCellDef>P. Publico</mat-header-cell>
-            <mat-cell *matCellDef="let item" class="duration-cell">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Precio</mat-label>
-                <span matPrefix class="money-input-prefix">
-                  $&nbsp;
-                </span>
-                <input [(ngModel)]="item.PrecioPublico" matInput min="0.0" matInput placeholder="0" type="number"
-                  required>
-              </mat-form-field>
             </mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -228,7 +151,7 @@
           <tbody>
             <tr *matNoDataRow class="mat-row">
               <td class="mat-cell" style="vertical-align: middle" colspan="9999">
-                No se han encontrado registros
+                <b>Aún no se han agregado articulos para facturar</b>
               </td>
             </tr>
           </tbody>
@@ -240,7 +163,7 @@
           <div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">
             <a (click)="guardarSolicitud()" mat-button mat-flat-button color="primary">
               <mat-icon class="mat-18">save</mat-icon>
-              Guardar
+              Procesar
             </a>
             <a mat-stroked-button color="primary" routerLink="/compras">
               <mat-icon class="mat-18">undo</mat-icon>

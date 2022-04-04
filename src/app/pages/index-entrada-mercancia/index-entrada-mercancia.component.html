@@ -58,7 +58,7 @@
             mat-flat-button
             color="primary"
             style="height: 4em; margin-bottom: 1em"
-            routerLink="/entrada_mercancia/new"
+            routerLink="/ingreso_compras/new"
           >
             Nuevo Ingreso
             <mat-icon class="mat-18">add</mat-icon>
@@ -119,7 +119,7 @@
             <mat-cell class="duration-cell" *matCellDef="let item">
               <button
                 mat-icon-button
-                [routerLink]="['/entrada_mercancia/view', item.idEntradaMercancia]"
+                [routerLink]="['/ingreso_compras/view', item.idEntradaMercancia]"
               >
 
                 <mat-icon class="mat-18"

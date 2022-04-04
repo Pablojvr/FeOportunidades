@@ -1,3 +1,4 @@
+import { AgregarArticuloFacturaModalComponent } from './../../componets/agregar-articulo-factura-modal/agregar-articulo-factura-modal.component';
 import { FacturasService } from 'src/app/services/facturas.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -31,8 +32,8 @@ export class FacturasComponent implements OnInit {
   numOrdenCompra: number = 0;
   laboratory: string = '327573';
   fecha: string = '';
-  displayedColumns: any[] = [];
-  initialColumns = [
+
+  displayedColumns = [
     'codigo',
     'descripcion',
     'lote',
@@ -41,13 +42,10 @@ export class FacturasComponent implements OnInit {
     'price',
     'totalGravado',
   ];
-  middleColumns = ['M1', 'M2'];
-  onlyNewColums = [];
-  endColumns = [];
   filteredLabs: any;
   isLoading = false;
   errorMsg!: string;
-  solicitud: any = { documentLines: [{}] };
+  solicitud: any = { documentLines: [] };
   saving: any = false;
   saved: any = false;
   expandedElement: any | null;
@@ -297,24 +295,24 @@ export class FacturasComponent implements OnInit {
     }
   }
 
-  actualizarArticulo(item:any, number:number = 0){
-    if(item.itemCode && !isNaN(item.quantity)){
-      let stockUltimoLote = this.obtenerStockUltimoLotePorItemCode(item.itemCode,number);
-      let stockPendiente = 0;
-      if(stockUltimoLote.quantity < item.quantity){
-          stockPendiente =  item.quantity - stockUltimoLote.quantity;
-          item.quantity = stockUltimoLote.quantity;
-          item.bashCode = stockUltimoLote.bashCode;
-          let newItem = this.solicitud.documentLines.push({ itemCode:item.itemCode,itemDescription:item.itemDescription,quantity:stockPendiente,generated:true});
-          this.actualizarArticulo(newItem,number++);
-      }else{
-        item.bashCode = stockUltimoLote.bashCode;
-      }
-    }
+  addArticulo(){
+    let dialogRef = this.dialog.open(AgregarArticuloFacturaModalComponent, {
+      data: {
+        articulo: {},
+        then: () => {
+
+          dialogRef.close();
+        },
+      },
+      width: '600px',
+      maxWidth: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.solicitud.documentLines = [...this.solicitud.documentLines,...result];
+    });
   }
 
-  obtenerStockUltimoLotePorItemCode(itemCode:string,skip:number) : any{
-     return this.facturasService.obtenerStockUltimoLotePorItemCode(itemCode,skip);
-  }
 
 }

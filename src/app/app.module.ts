@@ -29,6 +29,7 @@ import { EntradaMercanciaComponent } from './pages/entrada-mercancia/entrada-mer
 import { IndexEntradaMercanciaComponent } from './pages/index-entrada-mercancia/index-entrada-mercancia.component';
 import { IndexFacturasComponent } from './pages/index-facturas/index-facturas.component';
 import { FacturasComponent } from './pages/facturas/facturas.component';
+import { AgregarArticuloFacturaModalComponent } from './componets/agregar-articulo-factura-modal/agregar-articulo-factura-modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +48,7 @@ import { FacturasComponent } from './pages/facturas/facturas.component';
     IndexEntradaMercanciaComponent,
     IndexFacturasComponent,
     FacturasComponent,
+    AgregarArticuloFacturaModalComponent,
 
 
   ],

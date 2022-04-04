@@ -7,11 +7,12 @@
           <span *ngIf="readOnly">#{{ item.DocNum }}</span>
           <div class="flex flex-column items-center align-items-end ml-1">
             <a
+            *ngIf="readOnly"
               mat-flat-button
               color="primary"
               style="height: 4em; margin-bottom: 1em"
               class="comprasBtn"
-              [routerLink]="['/entrada_mercancia/new',item.DocNum]"
+              [routerLink]="['/ingreso_compras/new',item.DocNum]"
               target="_blank"
             >
               Generar Ingreso de Compras
