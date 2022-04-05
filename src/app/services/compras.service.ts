@@ -124,6 +124,13 @@ export class ComprasService {
     );
   }
 
+  getItemsRentabilidad(itemCodes: string) {
+    return this.http.get<any>(
+      `${this.baseUrl}/Compras/GetItemsRentabilidad/?itemCode=${itemCodes}`,
+      {}
+    );
+  }
+
   saveSolicitudDeCompra(sol: any) {
     let solId = sol.idSolicitudCompra;
     if (!solId) {

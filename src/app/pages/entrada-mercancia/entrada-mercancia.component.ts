@@ -30,8 +30,8 @@ export class EntradaMercanciaComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
-  numOrdenCompra = new  BehaviorSubject<string>("");
-  proveedor = new  BehaviorSubject<string>("");
+  numOrdenCompra = new BehaviorSubject<string>('');
+  proveedor = new BehaviorSubject<string>('');
   dataSource: ComprasDataSource;
   fecha: string = '';
   readMode = true;
@@ -154,11 +154,11 @@ export class EntradaMercanciaComponent implements OnInit {
       });
   }
 
-  changeOrdenCompra(value:any){
-    this.numOrdenCompra.next(value)
+  changeOrdenCompra(value: any) {
+    this.numOrdenCompra.next(value);
   }
-  changeProveedor(value:any){
-    this.proveedor.next(value)
+  changeProveedor(value: any) {
+    this.proveedor.next(value);
   }
   displayFn(data: any): string {
     console.log(data);
@@ -194,15 +194,15 @@ export class EntradaMercanciaComponent implements OnInit {
 
   ngOnInit(): void {
     var id = this.route.snapshot.paramMap.get('id');
-    var idEntradaMercancia = this.route.snapshot.paramMap.get('idEntradaMercancia');
+    var idEntradaMercancia =
+      this.route.snapshot.paramMap.get('idEntradaMercancia');
     if (id) {
       this.readMode = false;
       this.getPurchaseOrderById(id);
-    }else
-    if(idEntradaMercancia){
+    } else if (idEntradaMercancia) {
       this.readMode = true;
       this.getEntradaMercancia(idEntradaMercancia);
-    }else{
+    } else {
       this.readMode = false;
     }
   }
@@ -232,30 +232,50 @@ export class EntradaMercanciaComponent implements OnInit {
       } else {
         this.errorMsg = '';
         var processedData = data.data.value[0];
-        processedData.documentLines.forEach(function (obj: any) {
-          obj.price = obj.unitPrice;
-          obj.rentabilidad = 12;
-        });
-        this.solicitud = processedData;
-        // this.updateDisplayedColumns();
-        this.solicitud.numOrdenCompra = {
-          docNum: this.solicitud.docNum,
-          docDate: this.solicitud.docDate,
-        };
-        this.solicitud.proveedor = {
-          cardName: this.solicitud.cardName,
-          cardCode: this.solicitud.cardCode,
-        };
-        this.solicitud.fecha = new Date();
 
-        Swal.fire({
-          title: '',
-          text: 'Listo',
-          icon: 'success',
-          timer: 1000,
-          heightAuto: false,
-          showCancelButton: false,
-          showConfirmButton: false,
+        var ids = processedData.documentLines
+          .map((x: any) => x.itemCode)
+          .join();
+
+        this.comprasService.getItemsRentabilidad(ids).subscribe((data2) => {
+          if (data.data != undefined) {
+            processedData.documentLines.forEach(function (obj: any) {
+              obj.price = obj.unitPrice;
+              let found = data2.data.value.find(
+                (element: any) => element.itemCode == obj.itemCode
+              );
+              if (found) {
+                obj.rentabilidad = found.u_EJJE_Rentabilidad;
+              }
+            });
+          } else {
+            processedData.documentLines.forEach(function (obj: any) {
+              obj.price = obj.unitPrice;
+              obj.rentabilidad = null;
+            });
+          }
+
+          this.solicitud = processedData;
+          // this.updateDisplayedColumns();
+          this.solicitud.numOrdenCompra = {
+            docNum: this.solicitud.docNum,
+            docDate: this.solicitud.docDate,
+          };
+          this.solicitud.proveedor = {
+            cardName: this.solicitud.cardName,
+            cardCode: this.solicitud.cardCode,
+          };
+          this.solicitud.fecha = new Date();
+
+          Swal.fire({
+            title: '',
+            text: 'Listo',
+            icon: 'success',
+            timer: 1000,
+            heightAuto: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         });
       }
       this.isLoading = false;
@@ -300,7 +320,7 @@ export class EntradaMercanciaComponent implements OnInit {
           cardName: this.solicitud.cardName,
           cardCode: this.solicitud.cardCode,
         };
-        this.solicitud.numFactura = this.solicitud.numeroFactura
+        this.solicitud.numFactura = this.solicitud.numeroFactura;
         Swal.fire({
           title: '',
           text: 'Listo',
@@ -350,8 +370,6 @@ export class EntradaMercanciaComponent implements OnInit {
         console.log(this.filteredLabs);
       });
   }
-
-
 
   editProveedor(item: any) {
     item.editing = false;
