@@ -166,7 +166,7 @@ export class PreviewFacturasComponent implements OnInit {
     this.ordenes.forEach((orden:any)=>{
 
       orden.documentLines = orden.documentLines.map((line:any)=>{
-
+        line.unitPrice = line.price;
         line.batchNumbers = [{quantity:line.quantity,batchNumber:line.batchNum}];
         return line;
       })
