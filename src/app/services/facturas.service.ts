@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Rol, Page } from '../pages/usuarios/usuarios-datasource';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FacturasService {
   public baseUrl = 'https://localhost:44398/api';
@@ -51,20 +51,52 @@ export class FacturasService {
     });
   }
 
-  guardarFactura(filter = '') {
-    return this.http.get<any>(`${this.baseUrl}/Facturas/`, {
+  getItems(filter = '') {
+    return this.http.get<any>(`${this.baseUrl}/Facturas/GetItemsList`, {
       params: new HttpParams()
         // .set('courseId', UserId.toString())
         .set('filter', filter),
     });
   }
 
-  obtenerStockUltimoLotePorItemCode(itemCode:string,skip:number) {
-    return this.http.get<any>(`${this.baseUrl}/Facturas/getBatchByItemCodeOrderByExpDate`, {
-      params: new HttpParams()
-        // .set('courseId', UserId.toString())
-        .set('itemCode', itemCode)
-        .set('skip', skip.toString()),
-    });
+  guardarFactura(sol: any) {
+    let solId = sol.idFactura;
+    if (!solId) {
+      return this.http.post(`${this.baseUrl}/Facturas`, sol);
+    } else {
+      return this.http.put(`${this.baseUrl}/Facturas/${solId}`, sol);
+    }
+  }
+
+  getFacturaByID(idFactura: any) {
+    return this.http.get(`${this.baseUrl}/Facturas/${idFactura}`);
+  }
+
+  saveInvoices(sol: any) {
+    return this.http.post(`${this.baseUrl}/Facturas/newInvoice`, sol);
+  }
+
+  obtenerStockUltimoLotePorItemCode(itemCode: string, skip: number) {
+    return this.http.get<any>(
+      `${this.baseUrl}/Facturas/getBatchByItemCodeOrderByExpDate`,
+      {
+        params: new HttpParams()
+          // .set('courseId', UserId.toString())
+          .set('itemCode', itemCode)
+          .set('skip', skip.toString()),
+      }
+    );
+  }
+
+  obtenerStockPorItemCode(itemCode: string, skip: number) {
+    return this.http.get<any>(
+      `${this.baseUrl}/Facturas/getItemStockByItemCode`,
+      {
+        params: new HttpParams()
+          // .set('courseId', UserId.toString())
+          .set('itemCode', itemCode)
+          .set('skip', skip.toString()),
+      }
+    );
   }
 }

@@ -41,6 +41,8 @@ export class FacturasComponent implements OnInit {
     'UnidadesGravadas',
     'price',
     'totalGravado',
+    'descuento',
+    'total'
   ];
   filteredLabs: any;
   isLoading = false;
@@ -60,10 +62,8 @@ export class FacturasComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.comprasForm = this._fb.group({
-      numFactura: [2, [Validators.required]],
       proveedor: [null, Validators.required],
-      numOrdenCompra: [null, Validators.required],
-      laboratory: [null, Validators.required],
+      serie: [null, Validators.required],
       fecha: [new Date(), Validators.required],
     });
 
@@ -162,15 +162,28 @@ export class FacturasComponent implements OnInit {
       showCancelButton: false,
       showConfirmButton: false,
     });
+    let totalFactura = this.solicitud.documentLines.reduce((a:any, b:any) => {
 
+      return a + b.price*b.quantity
+    }, 0);
+    if(!this.checkValidCredit(this.form.proveedor.value,totalFactura)){
+      Swal.fire({
+        title: 'Atencion',
+        text: 'Esta factura no puede realizarse dado que el monto de la misma excede el limite maximo de credito del socio de negocio',
+        icon: 'error',
+
+        heightAuto: false,
+        showCancelButton: false,
+        showConfirmButton: true,
+      })
+      return;
+    }
     var sol = Object.assign({}, this.solicitud);
     sol.fecha = this.form.fecha.value;
-    sol.NumeroFactura = this.form.numFactura.value;
+    debugger;
     sol.cardCode = this.form.proveedor.value.cardCode;
-    sol.NumeroOrden = this.form.numOrdenCompra.value.docNum;
-    sol.BaseEntry = this.solicitud.docEntry;
-    sol.DocNum = null;
-    sol.DocEntry = null;
+    sol.cardName = this.form.proveedor.value.cardName;
+    sol.cardName = this.form.serie.value;
     this.facturasService.guardarFactura(sol).subscribe({
       next: (_) => {
         this.saving = false;
@@ -214,43 +227,18 @@ export class FacturasComponent implements OnInit {
     console.log(this.solicitud);
   }
 
+  checkValidCredit(proveedor:any,total:any){
+    debugger;
+    return eval(proveedor.creditLimit) >= (eval(proveedor.currentAccountBalance) + total)
+  }
+
   updateItemCalculatedValues(item: any) {
-    console.log('HA CAMBIADO UN VALOR');
 
-    item.totalUnidades =
-      !isNaN(item.unidadesGravadas) && !isNaN(item.unidadesBonificadas)
-        ? item.unidadesGravadas + item.unidadesBonificadas
-        : 0;
-    item.valorGravado =
-      !isNaN(item.totalUnidades) && !isNaN(item.price)
-        ? (item.totalUnidades * item.price).toFixed(4)
-        : 0;
-    item.valorBonificado =
-      !isNaN(item.unidadesBonificadas) && !isNaN(item.price)
-        ? (item.unidadesBonificadas * item.price).toFixed(4)
-        : 0;
+    if (item.quantity != '' && item.quantity != null) {
+      item.quantity <= 0 ? (item.quantity = 1) : item.quantity;
+      item.quantity > item.stock ? (item.quantity = item.stock) : item.quantity;
+    }
 
-    item.totalGravado =
-      !isNaN(item.valorGravado) && !isNaN(item.valorBonificado)
-        ? (item.valorGravado - item.valorBonificado).toFixed(4)
-        : 0;
-    item.valorDescuento =
-      !isNaN(item.totalGravado) && !isNaN(item.descuento)
-        ? (item.totalGravado * (item.descuento / 100)).toFixed(4)
-        : 0;
-
-    item.costoReal =
-      !isNaN(item.unidadesGravadas) &&
-      !isNaN(item.valorDescuento) &&
-      !isNaN(item.price) &&
-      !isNaN(item.unidadesBonificadas)
-        ? ((item.totalGravado - item.valorDescuento)/ item.totalUnidades).toFixed(4)
-        : 0;
-
-    item.precioVenta =
-      !isNaN(item.costoReal) && !isNaN(item.rentabilidad)
-        ? (item.costoReal * (item.rentabilidad / 100 + 1)).toFixed(4)
-        : 0;
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);
@@ -267,8 +255,7 @@ export class FacturasComponent implements OnInit {
   }
 
   removeItem(item: any) {
-    var index = this.solicitud.documentLines.indexOf(item);
-    this.solicitud.documentLines.splice(index, 1);
+    this.solicitud.documentLines = this.solicitud.documentLines.filter((el:any)=>{ return el.itemCode != item.itemCode});
     this.table.renderRows();
   }
   private getServerErrorMessage(error: HttpErrorResponse): string {
@@ -296,9 +283,11 @@ export class FacturasComponent implements OnInit {
   }
 
   addArticulo(){
+    debugger;
     let dialogRef = this.dialog.open(AgregarArticuloFacturaModalComponent, {
       data: {
         articulo: {},
+        descuento: this.form.proveedor.value.u_EJJE_DescuentoCliente,
         then: () => {
 
           dialogRef.close();

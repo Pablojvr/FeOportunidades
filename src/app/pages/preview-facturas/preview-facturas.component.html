@@ -1,0 +1,153 @@
+<mat-card>
+  <mat-card-content>
+    <div class="flex flex-col">
+      <div *ngFor="let item of ordenes" class="mt-3">
+        <h2>
+          Detalle de Facturas
+          <span *ngIf="readOnly">#{{ item.DocNum }}</span>
+
+        </h2>
+        <p>Proveedor: {{ item.cardName }}</p>
+        <p>
+          Fecha:
+          <mat-form-field appearance="outline">
+            <mat-label>dd/mm/yyyy</mat-label>
+            <input
+              [matDatepicker]="picker"
+              [readonly]="readOnly"
+              matInput
+              type="text"
+              [(ngModel)]="item.docDate"
+              required
+            />
+
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+              *ngIf="!readOnly"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </p>
+
+        <mat-table
+          class="items-table mat-elevation-z8"
+          [dataSource]="item.documentLines"
+          matSort
+          matSortActive="id"
+          matSortDirection="asc"
+          matSortDisableClear
+        >
+        <ng-container matColumnDef="codigo">
+          <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
+          <mat-cell *matCellDef="let item">
+
+            <div style="min-width: 100px;">
+
+              {{
+              item.itemCode
+              }}</div>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="descripcion">
+          <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+          <mat-cell *matCellDef="let item" class="duration-cell">
+            <div style="min-width: 200px;">{{
+              item.itemDescription
+              }}</div>
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="lote">
+          <mat-header-cell *matHeaderCellDef>Lote</mat-header-cell>
+          <mat-cell *matCellDef="let item" class="duration-cell">
+            <div class="flex flex-row">
+              {{item.batchNum}}
+
+            </div>
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="vencimiento">
+          <mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
+          <mat-cell *matCellDef="let item" class="duration-cell">
+
+            {{item.expDate | date:'shortDate'}}
+
+
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="UnidadesGravadas">
+          <mat-header-cell *matHeaderCellDef>U.Gravadas</mat-header-cell>
+          <mat-cell *matCellDef="let item" class="duration-cell">
+
+              {{item.quantity}}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="price">
+          <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
+          <mat-cell *matCellDef="let item" class="duration-cell">
+
+            $&nbsp;
+            {{item.price }}
+          </mat-cell>
+        </ng-container>
+
+
+
+
+
+        <ng-container matColumnDef="totalGravado">
+          <mat-header-cell *matHeaderCellDef>T.Gravado</mat-header-cell>
+          <mat-cell *matCellDef="let item" class="duration-cell">
+            $
+            {{
+            (item.price * item.quantity).toFixed(4)
+            }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="descuento">
+          <mat-header-cell *matHeaderCellDef>% Desc.</mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <div>{{item.discountPercent}}%</div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="total">
+          <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <div> $ {{(item.price * item.quantity*(1-(item.discountPercent/100))).toFixed(4)}}</div>
+          </mat-cell>
+        </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" style="vertical-align: middle" colspan="9999">
+              No se han encontrado registros
+            </td>
+          </tr>
+        </mat-table>
+
+
+        <mat-divider></mat-divider>
+      </div>
+
+      <div class="mt-3" style="text-align: center">
+        <a
+          *ngIf="solicitud && solicitud.estadoFacturaFK == 1"
+          mat-button
+          mat-flat-button
+          color="warn"
+          (click)="generarFacturas()"
+        >
+          Generar Facturas
+        </a>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

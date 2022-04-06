@@ -27,10 +27,10 @@ export class IndexFacturasComponent implements OnInit {
   dataSource: FacturasDataSource;
   displayedColumns: any[] = [
     'codigo',
-    'correlativo',
+    // 'correlativo',
     'fecha',
     'proveedor',
-    // 'estado',
+    'estado',
     'acciones',
   ];
 

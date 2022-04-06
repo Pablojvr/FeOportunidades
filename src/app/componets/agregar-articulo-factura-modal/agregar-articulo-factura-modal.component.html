@@ -3,15 +3,27 @@
 </h2>
 <mat-dialog-content class="mat-typography">
   <form class="flex w-full flex-wrap justify-items-stretch" #newArticuloForm="ngForm">
-    <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-6/12">
+    <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center w-full">
 
       <mat-form-field appearance="outline">
-        <mat-label> Código</mat-label>
-        <input matInput name="numFactura" [(ngModel)]="data.itemCode" required
+        <mat-label> Código - Nombre</mat-label>
+        <input matInput name="numFactura" (focus)="getItems()" [matAutocomplete]="auto" [(ngModel)]="data.item"  (ngModelChange)="changeItems($event)" required
           class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
-      </mat-form-field>
+          <mat-icon matSuffix class="mat-18">store</mat-icon>
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+            <ng-container *ngIf="!isLoading">
+              <mat-option *ngFor="let item of filteredItems" [value]="item">
+                <span>
+                  <b>{{ item.itemCode }} - {{ item.itemName }}</b>
+                </span>
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+
+        </mat-form-field>
     </div>
-    <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-3/12">
+    <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-6/12">
 
       <mat-form-field appearance="outline">
         <mat-label>Cantidad</mat-label>
@@ -19,18 +31,23 @@
           class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
       </mat-form-field>
     </div>
-    <div class="flex-auto">
+    <div class="flex md:w-6/12 items-right" style="padding-bottom: 1.34375em;">
 
-    <button   mat-flat-button color="secondary" cdkFocusInitial (click)="agregarArticulo()">
-      Procesar
-    </button>
+      <button bat-button mat-flat-button color="secondary" cdkFocusInitial style="background: #198d19;
+      color: white;" (click)="agregarArticulo()">
+        Procesar
+      </button>
+
+
     </div>
-    <mat-table [dataSource]="listadoLotes" #table class="items-table mat-elevation-z8 w-full" matSort
-      matSortActive="id" matSortDirection="asc" matSortDisableClear>
+
+    <div class="w-full"><p style="color:red">{{errorMsg}}</p></div>
+    <mat-table [dataSource]="listadoLotes" #table class="items-table mat-elevation-z8 w-full" matSort matSortActive="id"
+      matSortDirection="asc" matSortDisableClear>
       <ng-container matColumnDef="lote">
         <mat-header-cell *matHeaderCellDef>Lote</mat-header-cell>
         <mat-cell *matCellDef="let item">
-          <div >{{
+          <div>{{
             item.batchNum
             }}</div>
         </mat-cell>
@@ -38,19 +55,25 @@
       <ng-container matColumnDef="vencimiento">
         <mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
         <mat-cell *matCellDef="let item">
-          <div >{{item.expDate | date:'shortDate'}}</div>
+          <div>{{item.expDate | date:'shortDate'}}</div>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="precio">
         <mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
         <mat-cell *matCellDef="let item">
-          <div >$ {{item.price}}</div>
+          <div>$ {{item.price}}</div>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="seleccionado">
         <mat-header-cell *matHeaderCellDef>Seleccionado</mat-header-cell>
         <mat-cell *matCellDef="let item">
-          <div >{{item.quantity}}</div>
+          <div>{{item.quantity}}</div>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="stock">
+        <mat-header-cell *matHeaderCellDef>Disponible</mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          <div>{{item.stock}}</div>
         </mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -69,7 +92,8 @@
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancelar</button>
 
-  <button [disabled]="listadoLotes.length==0" mat-flat-button color="primary" cdkFocusInitial [mat-dialog-close]="listadoLotes">
-    Guardar
+  <button [disabled]="listadoLotes.length==0" mat-flat-button color="primary" cdkFocusInitial
+    [mat-dialog-close]="listadoLotes">
+    Agregar
   </button>
 </mat-dialog-actions>

@@ -1,3 +1,4 @@
+import { PreviewFacturasComponent } from './../pages/preview-facturas/preview-facturas.component';
 import { FacturasComponent } from './../pages/facturas/facturas.component';
 import { IndexFacturasComponent } from './../pages/index-facturas/index-facturas.component';
 import { IndexEntradaMercanciaComponent } from './../pages/index-entrada-mercancia/index-entrada-mercancia.component';
@@ -95,6 +96,10 @@ const routes: Routes = [
       {
         path: 'new',
         component: FacturasComponent,
+      },
+      {
+        path: ':idFactura',
+        component: PreviewFacturasComponent,
       },
     ],
     canActivate: [AuthGuard],
