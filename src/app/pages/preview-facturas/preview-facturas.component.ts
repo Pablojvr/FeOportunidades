@@ -9,10 +9,9 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-preview-facturas',
   templateUrl: './preview-facturas.component.html',
-  styleUrls: ['./preview-facturas.component.css']
+  styleUrls: ['./preview-facturas.component.css'],
 })
 export class PreviewFacturasComponent implements OnInit {
-
   solicitud!: any;
   readOnly: boolean = false;
   ordenes: Array<any> = [];
@@ -25,8 +24,7 @@ export class PreviewFacturasComponent implements OnInit {
     'price',
     'totalGravado',
     'descuento',
-    'total'
-
+    'total',
   ];
   saving: boolean = false;
   saved: boolean = false;
@@ -38,25 +36,26 @@ export class PreviewFacturasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    var idOrden = this.route.snapshot.paramMap.get('idOrdenCompra');
+    var idOrden = this.route.snapshot.paramMap.get('idFacturas');
     if (idOrden) {
       this.readOnly = true;
-      // this.facturasService.getOrdenesCompraByID(idOrden).subscribe((data) => {
-      //   if (data == undefined) {
-      //   } else {
-      //     let tempOrdenes = data.data.value.map((item: any) => {
-      //       let newItem = this.capitalizeName(item);
-      //       newItem.DocumentLines = newItem.DocumentLines.map((item2: any) => {
-      //         return this.capitalizeName(item2);
-      //       });
-      //       return newItem;
-      //     });
-      //     console.log(tempOrdenes);
-      //     this.ordenes = tempOrdenes;
-      //   }
-      //   console.log(data);
-      //   console.log(this.solicitud);
-      // });
+      this.facturasService.getFacturasByID(idOrden).subscribe((data) => {
+        if (data == undefined) {
+        } else {
+          let tempOrdenes = data.data.value.map((item: any) => {
+            // let newItem = this.capitalizeName(item);
+            item.documentLines = item.documentLines.map((item2: any) => {
+              item2.price = item2.unitPrice;
+              return item2;
+            });
+            return item;
+          });
+          console.log(tempOrdenes);
+          this.ordenes = tempOrdenes;
+        }
+        console.log(data);
+        console.log(this.solicitud);
+      });
     }
     var idSolicitud = this.route.snapshot.paramMap.get('idFactura');
     if (idSolicitud) {
@@ -141,16 +140,25 @@ export class PreviewFacturasComponent implements OnInit {
     }, {});
   }
 
-  genInvoicesByChunkSize(xs: any,chunkSize = 10) {
-  let lines = xs.documentLines;
-  let invoices = [];
-  for (let i = 0; i < lines.length; i += chunkSize) {
+  genInvoicesByChunkSize(xs: any, chunkSize = 10) {
+    let lines = xs.documentLines;
+    let invoices = [];
+    for (let i = 0; i < lines.length; i += chunkSize) {
       let chunk = lines.slice(i, i + chunkSize);
-      let newInvoice = Object.assign({docDate:xs.fecha},xs);
+      let newInvoice = Object.assign(
+        {
+          docDate: xs.fecha,
+          additionalID: xs.nrc,
+          notes: xs.giro,
+          u_EJJE_NitSocioNegocio: xs.nit,
+          // u_EJJE_TipoDocumento: xs.serie,
+        },
+        xs
+      );
       newInvoice.documentLines = chunk;
       invoices.push(newInvoice);
       // do whatever
-  }
+    }
     return invoices;
   }
 
@@ -163,14 +171,14 @@ export class PreviewFacturasComponent implements OnInit {
       showCancelButton: false,
       showConfirmButton: false,
     });
-    this.ordenes.forEach((orden:any)=>{
-
-      orden.documentLines = orden.documentLines.map((line:any)=>{
+    this.ordenes.forEach((orden: any) => {
+      orden.documentLines = orden.documentLines.map((line: any) => {
         line.unitPrice = line.price;
-        line.batchNumbers = [{quantity:line.quantity,batchNumber:line.batchNum}];
+        line.batchNumbers = [
+          { quantity: line.quantity, batchNumber: line.batchNum },
+        ];
         return line;
-      })
-
+      });
     });
     this.facturasService
       .saveInvoices({
@@ -218,5 +226,4 @@ export class PreviewFacturasComponent implements OnInit {
       });
     console.log(this.ordenes);
   }
-
 }

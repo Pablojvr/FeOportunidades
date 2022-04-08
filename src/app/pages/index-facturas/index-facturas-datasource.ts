@@ -57,12 +57,12 @@ export class FacturasDataSource extends DataSource<Object> {
       });
   }
 
-  removeSolicitud(data: any) {
+  removeFacturas(data: any) {
     const roomArr: any[] = this.facturaSubject.getValue();
 
     roomArr.forEach((item, index) => {
       if (item === data) {
-        roomArr.splice(index, 1);
+        item.estado = {IdEstadoFactura:3,NombreEstadoFactura:"Anulada"}
       }
     });
 

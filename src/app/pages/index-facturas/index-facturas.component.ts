@@ -96,6 +96,53 @@ export class IndexFacturasComponent implements OnInit {
       )
       .subscribe();
   }
+
+  anularFacturas(item:any){
+    Swal.fire({
+      title: '¿Esta seguro?',
+      text: 'Todas las facturas en sap seran anuladas',
+      icon: 'question',
+      heightAuto: false,
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then(
+      (result) => {
+        if (!result.isConfirmed) return;
+        this.facturasService.anularFacturasByID(item).subscribe({
+          next: (_) => {
+            this.dataSource.removeFacturas(item);
+            Swal.fire({
+              title: '',
+              text: 'Se ha anulado correctamente todas las facturas',
+              icon: 'success',
+              timer: 2000,
+              heightAuto: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          },
+          error: (error) => {
+            let errorMsg: string;
+            if (error.error instanceof ErrorEvent) {
+              errorMsg = `Error: ${error.error.message}`;
+            } else {
+              errorMsg = this.getServerErrorMessage(error);
+            }
+
+            Swal.fire({
+              title: '',
+              text: errorMsg,
+              icon: 'error',
+              heightAuto: false,
+            });
+          },
+        });
+      },
+      () => {}
+    );
+  }
   private getServerErrorMessage(error: HttpErrorResponse): string {
     console.log(error);
     switch (error.status) {

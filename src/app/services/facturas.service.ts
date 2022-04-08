@@ -13,6 +13,20 @@ export class FacturasService {
     return this.http.get<Rol[]>(`${this.baseUrl}/Rols`, {});
   }
 
+  getFacturasByID(id: any) {
+    return this.http.get<any>(
+      `${this.baseUrl}/Facturas/GetInvoicesByFacturaId/?id=${id}`,
+      {}
+    );
+  }
+
+  anularFacturasByID(item: any) {
+
+    return this.http.get<any>(
+      `${this.baseUrl}/Facturas/cancelInvoices/?id=${item.idFactura}`,
+      {}
+    );
+  }
   getPaginatedFacturas(
     filter = '',
     sortOrder = 'asc',

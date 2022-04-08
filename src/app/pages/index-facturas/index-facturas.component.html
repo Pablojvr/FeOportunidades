@@ -127,6 +127,16 @@
                 >
               </button>
 
+              <button
+                mat-icon-button
+                (click)="anularFacturas(item)"
+              >
+
+                <mat-icon class="mat-18"
+                  >delete</mat-icon
+                >
+              </button>
+
             </mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

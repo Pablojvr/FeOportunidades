@@ -101,6 +101,10 @@ const routes: Routes = [
         path: ':idFactura',
         component: PreviewFacturasComponent,
       },
+      {
+        path: 'view/:idFacturas',
+        component: PreviewFacturasComponent,
+      },
     ],
     canActivate: [AuthGuard],
   },

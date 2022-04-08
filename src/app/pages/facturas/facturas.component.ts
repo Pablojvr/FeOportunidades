@@ -183,7 +183,12 @@ export class FacturasComponent implements OnInit {
     debugger;
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardName;
-    sol.cardName = this.form.serie.value;
+    sol.nrc = this.form.proveedor.value.additionalID;
+    sol.nit = this.form.proveedor.value.U_EJJE_NitSocioNegocio;
+    sol.tipoDocumento = this.form.proveedor.value.U_EJJE_TipoDocumento;
+    sol.giro = this.form.proveedor.value.notes;
+    // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
+    sol.serie = this.form.serie.value;
     this.facturasService.guardarFactura(sol).subscribe({
       next: (_) => {
         this.saving = false;

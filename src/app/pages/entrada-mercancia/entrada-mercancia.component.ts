@@ -450,6 +450,10 @@ export class EntradaMercanciaComponent implements OnInit {
     sol.BaseEntry = this.solicitud.docEntry;
     sol.DocNum = null;
     sol.DocEntry = null;
+    sol.documentLines = sol.documentLines.map((line:any)=>{
+      line.line = line.baseLine;
+      return line;
+    })
     this.comprasService.saveEntradaMercancia(sol).subscribe({
       next: (_) => {
         this.saving = false;
