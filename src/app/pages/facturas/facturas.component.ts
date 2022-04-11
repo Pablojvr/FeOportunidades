@@ -184,8 +184,8 @@ export class FacturasComponent implements OnInit {
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardName;
     sol.nrc = this.form.proveedor.value.additionalID;
-    sol.nit = this.form.proveedor.value.U_EJJE_NitSocioNegocio;
-    sol.tipoDocumento = this.form.proveedor.value.U_EJJE_TipoDocumento;
+    sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
+    sol.tipoDocumento = this.form.proveedor.value.u_EJJE_TipoDocumento;
     sol.giro = this.form.proveedor.value.notes;
     // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
     sol.serie = this.form.serie.value;
@@ -233,7 +233,7 @@ export class FacturasComponent implements OnInit {
   }
 
   checkValidCredit(proveedor:any,total:any){
-    debugger;
+
     return eval(proveedor.creditLimit) >= (eval(proveedor.currentAccountBalance) + total)
   }
 
@@ -288,7 +288,7 @@ export class FacturasComponent implements OnInit {
   }
 
   addArticulo(){
-    debugger;
+
     let dialogRef = this.dialog.open(AgregarArticuloFacturaModalComponent, {
       data: {
         articulo: {},
