@@ -153,6 +153,7 @@ export class OrdenCompraComponent implements OnInit {
         hash[key] = {
           CardCode: o.cardCode,
           CardName: o.cardName,
+          U_EJJE_CorDes:"DES-ORD-SOL-"+this.solicitud.idSolicitudCompra,
           DocDate: moment().format(),
           DocumentLines: [],
         };

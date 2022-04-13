@@ -151,6 +151,7 @@ export class PreviewFacturasComponent implements OnInit {
           additionalID: xs.nrc,
           notes: xs.giro,
           u_EJJE_NitSocioNegocio: xs.nit,
+          U_EJJE_CorDes:"DES-FAC-"+this.solicitud.idFactura
           // u_EJJE_TipoDocumento: xs.serie,
         },
         xs
