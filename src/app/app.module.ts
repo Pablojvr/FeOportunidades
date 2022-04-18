@@ -31,6 +31,8 @@ import { IndexFacturasComponent } from './pages/index-facturas/index-facturas.co
 import { FacturasComponent } from './pages/facturas/facturas.component';
 import { AgregarArticuloFacturaModalComponent } from './componets/agregar-articulo-factura-modal/agregar-articulo-factura-modal.component';
 import { PreviewFacturasComponent } from './pages/preview-facturas/preview-facturas.component';
+import { IndexDevolucionesComponent } from './pages/index-devoluciones/index-devoluciones.component';
+import { DevolucionesComponent } from './pages/devoluciones/devoluciones.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +53,8 @@ import { PreviewFacturasComponent } from './pages/preview-facturas/preview-factu
     FacturasComponent,
     AgregarArticuloFacturaModalComponent,
     PreviewFacturasComponent,
+    IndexDevolucionesComponent,
+    DevolucionesComponent,
 
 
   ],
