@@ -16,7 +16,7 @@ export class NavigationComponent implements OnInit {
   @Input() toggleNav!: boolean;
   constructor() {}
 
-  menuItems: any[] = [
+  allItems: any[] = [
     {
       text: 'Home',
       icon: 'home',
@@ -38,6 +38,7 @@ export class NavigationComponent implements OnInit {
       ],
     },
     {
+      permission: "compras",
       text: 'Compras',
       icon: 'shopping_bag',
       url: null,
@@ -56,6 +57,7 @@ export class NavigationComponent implements OnInit {
       ],
     },
     {
+      permission: "facturacion",
       text: 'Facturas',
       icon: 'receipt',
       url: null,
@@ -73,7 +75,28 @@ export class NavigationComponent implements OnInit {
         // },
       ],
     },
+    {
+      permission: "devoluciones",
+      text: 'Devoluciones',
+      icon: 'receipt',
+      url: null,
+      menu: [
+        {
+          text: 'Devoluciones',
+          icon: 'receipt',
+          url: '/devoluciones',
+          show: false,
+        },
+        // {
+        //   text: 'Ingresos de Compra',
+        //   icon: 'post_add',
+        //   url: '/entrada_mercancia',
+        // },
+      ],
+    },
   ];
+
+  menuItems :any= [];
 
   public getScreenWidth: any;
   public getScreenHeight: any;
@@ -83,8 +106,18 @@ export class NavigationComponent implements OnInit {
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
     this.setScreenSize(this.getScreenWidth);
-  }
 
+    this.filterMenuItems();
+  }
+  filterMenuItems(){
+    var user = localStorage.getItem('loggedInUser')
+      ? JSON.parse(localStorage.getItem('loggedInUser') ?? '{}')
+      : null;
+
+    this.menuItems = this.allItems.filter(
+      item => { return !item.permission || user.rol[item.permission]==false }
+    )
+  }
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;

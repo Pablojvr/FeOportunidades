@@ -45,6 +45,7 @@ const routes: Routes = [
       { path: 'edit/:id', component: ComprasComponent },
     ],
     canActivate: [AuthGuard],
+    data: { permission: ["compras"] }
   },
 
   {
@@ -61,6 +62,7 @@ const routes: Routes = [
       },
     ],
     canActivate: [AuthGuard],
+    data: { permission: ["compras"] }
   },
   {
     path: 'ingreso_compras',
@@ -84,6 +86,7 @@ const routes: Routes = [
       },
     ],
     canActivate: [AuthGuard],
+    data: { permission: ["compras"] }
   },
   {
     path: 'facturas',
@@ -107,6 +110,7 @@ const routes: Routes = [
       },
     ],
     canActivate: [AuthGuard],
+    data: { permission: ["facturacion"] }
   },
   {
     path: '**',

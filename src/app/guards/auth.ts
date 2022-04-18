@@ -23,7 +23,20 @@ export class AuthGuard implements CanActivate {
         queryParams: { returnUrl: state.url },
       });
       return false;
+    } else {
+      debugger;
+      var  hasPermission = route.data.permission && typeof user.rol[route.data.permission[0]] != undefined;
+      var  checkPermission = route.data.permission && user.rol[route.data.permission[0]]==false;
+
+      if (route.data.permission && !hasPermission && !checkPermission) {
+        // role not authorised so redirect to home page
+        this.router.navigate(['/']);
+        return false;
+      }
+
+      // authorised so return true
+      return true;
     }
-    return true;
+
   }
 }
