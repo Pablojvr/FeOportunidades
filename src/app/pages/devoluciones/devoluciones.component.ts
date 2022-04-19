@@ -1,3 +1,4 @@
+import { AgregarArticuloDevolucionModalComponent } from './../../componets/agregar-articulo-devolucion-modal/agregar-articulo-devolucion-modal.component';
 import { FacturasService } from 'src/app/services/facturas.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -35,12 +36,11 @@ export class DevolucionesComponent implements OnInit {
     'codigo',
     'descripcion',
     'lote',
-    'vencimiento',
-    'UnidadesGravadas',
+    'cantDevuelta',
+    'cantFacturada',
     'price',
-    'totalGravado',
-    'descuento',
-    'total'
+    'numeroFactura',
+    'saldo'
   ];
   filteredLabs: any;
   isLoading = false;
@@ -103,7 +103,7 @@ export class DevolucionesComponent implements OnInit {
   }
   displayFn(data: any): string {
     console.log(data);
-    return data ? data.cardName : '';
+    return data ? `${data.cardName} (${data.cardCode})` : '';
   }
 
   displayPurchaseOrder(data: any): string {
@@ -287,7 +287,7 @@ export class DevolucionesComponent implements OnInit {
 
   addArticulo(){
 
-    let dialogRef = this.dialog.open(AgregarArticuloFacturaModalComponent, {
+    let dialogRef = this.dialog.open(AgregarArticuloDevolucionModalComponent, {
       data: {
         articulo: {},
         descuento: this.form.proveedor.value.u_EJJE_DescuentoCliente,

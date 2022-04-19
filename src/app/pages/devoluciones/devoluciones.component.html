@@ -3,7 +3,7 @@
     <div class="flex flex-wrap">
       <div class="w-full">
         <h1>
-          {{ solicitud && false ? "" : "Nuevo" }} Devolucion
+          {{ solicitud && false ? "" : "Nueva" }} Devolución
         </h1>
       </div>
 
@@ -25,13 +25,13 @@
           /> -->
             <input matInput formControlName="proveedor" type="text" [matAutocomplete]="auto" (focus)="getProveedores()"
               class="appearance-none py-3 px-4 bg-transparent" />
-            <mat-icon matSuffix class="mat-18">store</mat-icon>
+            <mat-icon matSuffix class="mat-18">person</mat-icon>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
               <ng-container *ngIf="!isLoading">
                 <mat-option *ngFor="let lab of filteredLabs" [value]="lab">
                   <span>
-                    <b>{{ lab.cardName }}</b>
+                    <b>{{ lab.cardName }} ({{ lab.cardCode }})</b>
                   </span>
                 </mat-option>
               </ng-container>
@@ -49,18 +49,6 @@
 
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-        </div>
-        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
-          <span class="mx-1 mb-3">Tipo Doc.</span>
-          <mat-form-field appearance="outline">
-
-             <mat-select formControlName="serie" >
-              <mat-option value="" selected></mat-option>
-              <mat-option value="42">CCF</mat-option>
-              <mat-option value="43" >CFO</mat-option>
-            </mat-select>
-          </mat-form-field>
-
         </div>
 
         <div class="flex flex-auto"></div>
@@ -113,25 +101,28 @@
           </ng-container>
 
 
-          <ng-container matColumnDef="vencimiento">
-            <mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
+          <ng-container matColumnDef="cantDevuelta">
+            <mat-header-cell *matHeaderCellDef>Cant. Devuelta</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
-
-              {{item.expDate | date:'shortDate'}}
-
+              <mat-form-field appearance="outline" style="width: 100px">
+                <mat-label>Unidades</mat-label>
+                <input [(ngModel)]="item.qdevolucion" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
+                  matInput placeholder="0" type="number" required>
+                  <mat-hint>{{"Max:"+item.quantity}}</mat-hint>
+              </mat-form-field>
 
             </mat-cell>
           </ng-container>
 
 
-          <ng-container matColumnDef="UnidadesGravadas">
-            <mat-header-cell *matHeaderCellDef>U.Gravadas</mat-header-cell>
+          <ng-container matColumnDef="cantFacturada">
+            <mat-header-cell *matHeaderCellDef>Cant. Facturada</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-                <input [(ngModel)]="item.quantity" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
-                  matInput placeholder="0" type="number" required>
-                  <mat-hint>{{"Max:"+item.stock}}</mat-hint>
+                <input [value]="item.quantity"  matInput min="0"
+                  matInput placeholder="0" type="number" required readonly="true">
+
               </mat-form-field>
             </mat-cell>
           </ng-container>
@@ -148,8 +139,8 @@
 
 
 
-          <ng-container matColumnDef="totalGravado">
-            <mat-header-cell *matHeaderCellDef>T.Gravado</mat-header-cell>
+          <ng-container matColumnDef="numeroFactura">
+            <mat-header-cell *matHeaderCellDef>No. Factura</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
               $
               {{
@@ -158,15 +149,10 @@
             </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="descuento">
-            <mat-header-cell *matHeaderCellDef>% Desc.</mat-header-cell>
-            <mat-cell *matCellDef="let item">
-              <div>{{item.discountPercent}}%</div>
-            </mat-cell>
-          </ng-container>
 
-          <ng-container matColumnDef="total">
-            <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+
+          <ng-container matColumnDef="saldo">
+            <mat-header-cell *matHeaderCellDef>Saldo</mat-header-cell>
             <mat-cell *matCellDef="let item">
               <div> $ {{(item.price * item.quantity*(1-(item.discountPercent/100))).toFixed(4)}}</div>
             </mat-cell>
@@ -176,7 +162,7 @@
           <tbody>
             <tr *matNoDataRow class="mat-row">
               <td class="mat-cell" style="vertical-align: middle" colspan="9999">
-                <b>Aún no se han agregado articulos para facturar</b>
+                <b>Aún no se han agregado articulos</b>
               </td>
             </tr>
           </tbody>

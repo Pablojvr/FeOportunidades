@@ -33,6 +33,7 @@ import { AgregarArticuloFacturaModalComponent } from './componets/agregar-articu
 import { PreviewFacturasComponent } from './pages/preview-facturas/preview-facturas.component';
 import { IndexDevolucionesComponent } from './pages/index-devoluciones/index-devoluciones.component';
 import { DevolucionesComponent } from './pages/devoluciones/devoluciones.component';
+import { AgregarArticuloDevolucionModalComponent } from './componets/agregar-articulo-devolucion-modal/agregar-articulo-devolucion-modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,6 +56,7 @@ import { DevolucionesComponent } from './pages/devoluciones/devoluciones.compone
     PreviewFacturasComponent,
     IndexDevolucionesComponent,
     DevolucionesComponent,
+    AgregarArticuloDevolucionModalComponent,
 
 
   ],

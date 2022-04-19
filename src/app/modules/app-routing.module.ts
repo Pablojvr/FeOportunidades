@@ -1,3 +1,5 @@
+import { DevolucionesComponent } from './../pages/devoluciones/devoluciones.component';
+import { IndexDevolucionesComponent } from './../pages/index-devoluciones/index-devoluciones.component';
 import { PreviewFacturasComponent } from './../pages/preview-facturas/preview-facturas.component';
 import { FacturasComponent } from './../pages/facturas/facturas.component';
 import { IndexFacturasComponent } from './../pages/index-facturas/index-facturas.component';
@@ -45,7 +47,7 @@ const routes: Routes = [
       { path: 'edit/:id', component: ComprasComponent },
     ],
     canActivate: [AuthGuard],
-    data: { permission: ["compras"] }
+    data: { permission: ['compras'] },
   },
 
   {
@@ -62,7 +64,7 @@ const routes: Routes = [
       },
     ],
     canActivate: [AuthGuard],
-    data: { permission: ["compras"] }
+    data: { permission: ['compras'] },
   },
   {
     path: 'ingreso_compras',
@@ -86,7 +88,7 @@ const routes: Routes = [
       },
     ],
     canActivate: [AuthGuard],
-    data: { permission: ["compras"] }
+    data: { permission: ['compras'] },
   },
   {
     path: 'facturas',
@@ -110,7 +112,21 @@ const routes: Routes = [
       },
     ],
     canActivate: [AuthGuard],
-    data: { permission: ["facturacion"] }
+    data: { permission: ['facturacion'] },
+  },
+  {
+    path: 'devoluciones',
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        component: IndexDevolucionesComponent,
+      },
+      {
+        path: 'new',
+        component: DevolucionesComponent,
+      },
+    ],
   },
   {
     path: '**',
