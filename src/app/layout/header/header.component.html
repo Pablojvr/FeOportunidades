@@ -20,7 +20,7 @@
       <span>Account</span>
     </a> -->
 
-    <a mat-menu-item [routerLink]="['/login']">
+    <a mat-menu-item (click)="cerrarSession()">
       <mat-icon>exit_to_app</mat-icon>
       <span>Cerrar sessión</span>
     </a>
