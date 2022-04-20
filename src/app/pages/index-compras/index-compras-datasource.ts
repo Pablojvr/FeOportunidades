@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { Observable, merge, BehaviorSubject, of } from 'rxjs';
 import Swal from 'sweetalert2';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Data source for the Usuarios view. This class should
@@ -45,7 +46,7 @@ export class ListadoComprasDataSource extends DataSource<Object> {
         catchError((error) => {
           Swal.fire({
             title: 'Ha ocurrido un problema!',
-            text: error.message ?? '',
+            text: getServerErrorMessage(error) ?? '',
             icon: 'error',
             heightAuto: false,
           });
@@ -80,4 +81,29 @@ function compare(
   isAsc: boolean
 ): number {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
+
+export function getServerErrorMessage(error: HttpErrorResponse): string {
+  console.log("EL ERROR ES",error);
+
+  switch (error.status) {
+    case 400: {
+      return `${error.error}`;
+    }
+    case 404: {
+      return `No existe: ${error.message}`;
+    }
+    case 403: {
+      return `Acceso denegado: ${error.message}`;
+    }
+    case 500: {
+      return `Internal Server Error: ${error.message}`;
+    }
+    case 0: {
+      return 'No se puede conectar al servidor';
+    }
+    default: {
+      return `Error desconocido`;
+    }
+  }
 }

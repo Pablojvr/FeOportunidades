@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { Observable, merge, BehaviorSubject, of } from 'rxjs';
 import Swal from 'sweetalert2';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 
 export interface Page {
   totalItems: number;
@@ -64,7 +65,7 @@ export class UsuariosDataSource extends DataSource<Usuario> {
         catchError((error) => {
           Swal.fire({
             title: 'Ha ocurrido un problema!',
-            text: error.message ?? '',
+            text: getServerErrorMessage(error) ?? '',
             icon: 'error',
             heightAuto: false,
           });

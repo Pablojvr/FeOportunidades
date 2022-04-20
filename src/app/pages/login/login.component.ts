@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -44,7 +45,7 @@ export class LoginComponent implements OnInit {
           if (error.error instanceof ErrorEvent) {
             errorMsg = `Error: ${error.error.message}`;
           } else {
-            errorMsg = this.getServerErrorMessage(error);
+            errorMsg = getServerErrorMessage(error);
           }
 
           Swal.fire({
@@ -58,24 +59,5 @@ export class LoginComponent implements OnInit {
         },
       });
   }
-  private getServerErrorMessage(error: HttpErrorResponse): string {
-    console.log(error);
-    switch (error.status) {
-      case 400: {
-        return `${error.error}`;
-      }
-      case 404: {
-        return `Not Found: ${error.message}`;
-      }
-      case 403: {
-        return `Access Denied: ${error.message}`;
-      }
-      case 500: {
-        return `Internal Server Error: ${error.message}`;
-      }
-      default: {
-        return `Unknown Server Error`;
-      }
-    }
-  }
+
 }

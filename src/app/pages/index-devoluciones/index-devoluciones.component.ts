@@ -10,16 +10,15 @@ import { ActivatedRoute } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { ComprasService } from 'src/app/services/compras.service';
 import Swal from 'sweetalert2';
-import { ListadoComprasDataSource } from '../index-compras/index-compras-datasource';
+import { getServerErrorMessage, ListadoComprasDataSource } from '../index-compras/index-compras-datasource';
 import { Usuario } from '../usuarios/usuarios-datasource';
 
 @Component({
   selector: 'app-index-devoluciones',
   templateUrl: './index-devoluciones.component.html',
-  styleUrls: ['./index-devoluciones.component.css']
+  styleUrls: ['./index-devoluciones.component.css'],
 })
 export class IndexDevolucionesComponent implements OnInit {
-
   devolucionesForm!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -118,7 +117,7 @@ export class IndexDevolucionesComponent implements OnInit {
             if (error.error instanceof ErrorEvent) {
               errorMsg = `Error: ${error.error.message}`;
             } else {
-              errorMsg = this.getServerErrorMessage(error);
+              errorMsg = getServerErrorMessage(error);
             }
 
             Swal.fire({
@@ -143,26 +142,7 @@ export class IndexDevolucionesComponent implements OnInit {
       )
       .subscribe();
   }
-  private getServerErrorMessage(error: HttpErrorResponse): string {
-    console.log(error);
-    switch (error.status) {
-      case 400: {
-        return `${error.error}`;
-      }
-      case 404: {
-        return `Not Found: ${error.message}`;
-      }
-      case 403: {
-        return `Access Denied: ${error.message}`;
-      }
-      case 500: {
-        return `Internal Server Error: ${error.message}`;
-      }
-      default: {
-        return `Unknown Server Error`;
-      }
-    }
-  }
+
   printSolicitud(item: any) {
     Swal.fire({
       title: 'Generar Archivo PDF',
@@ -173,7 +153,7 @@ export class IndexDevolucionesComponent implements OnInit {
       confirmButtonText: 'Descargar',
       cancelButtonText: 'Cancelar',
       html:
-      '<label> Meses historico:</label><br>' +
+        '<label> Meses historico:</label><br>' +
         '<input id="swal-input1" class="swal2-input" type="number" max="6" min="1" value="2"><br>' +
         '<label> Meses aprovisionamiento:</label><br>' +
         '<input id="swal-input2" class="swal2-input" type="number" max="6" min="1" value="2"><br>',
@@ -209,7 +189,7 @@ export class IndexDevolucionesComponent implements OnInit {
               if (error.error instanceof ErrorEvent) {
                 errorMsg = `Error: ${error.error.message}`;
               } else {
-                errorMsg = this.getServerErrorMessage(error);
+                errorMsg = getServerErrorMessage(error);
               }
 
               Swal.fire({
@@ -224,5 +204,4 @@ export class IndexDevolucionesComponent implements OnInit {
       () => {}
     );
   }
-
 }

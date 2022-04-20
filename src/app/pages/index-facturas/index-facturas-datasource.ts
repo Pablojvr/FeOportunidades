@@ -3,6 +3,7 @@ import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { Observable, merge, BehaviorSubject, of } from 'rxjs';
 import Swal from 'sweetalert2';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 
 /**
  * Data source for the Usuarios view. This class should
@@ -42,7 +43,7 @@ export class FacturasDataSource extends DataSource<Object> {
         catchError((error) => {
           Swal.fire({
             title: 'Ha ocurrido un problema!',
-            text: error.message ?? '',
+            text: getServerErrorMessage(error) ?? '',
             icon: 'error',
             heightAuto: false,
           });

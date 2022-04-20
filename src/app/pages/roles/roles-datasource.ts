@@ -5,6 +5,7 @@ import { catchError, finalize } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 import { Rol } from '../usuarios/usuarios-datasource';
 import Swal from 'sweetalert2';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 export interface Page {
   totalItems: number;
   page: number;
@@ -37,7 +38,7 @@ export class RolesDataSource extends DataSource<Rol> {
         catchError((error) => {
           Swal.fire({
             title: 'Ha ocurrido un problema!',
-            text: error.message ?? '',
+            text: getServerErrorMessage(error) ?? '',
             icon: 'error',
             heightAuto: false,
           });

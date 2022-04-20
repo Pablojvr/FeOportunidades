@@ -18,6 +18,7 @@ import { ComprasDataSource } from './compras-datasource';
 import * as moment from 'moment';
 import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 
 @Component({
   selector: 'app-compras',
@@ -343,7 +344,7 @@ export class ComprasComponent implements OnInit {
         if (error.error instanceof ErrorEvent) {
           errorMsg = `Error: ${error.error.message}`;
         } else {
-          errorMsg = this.getServerErrorMessage(error);
+          errorMsg = getServerErrorMessage(error);
         }
 
         Swal.fire({
@@ -360,28 +361,5 @@ export class ComprasComponent implements OnInit {
     console.log(solicitud);
   }
 
-  generarOrdenCompras() {}
-  private getServerErrorMessage(error: HttpErrorResponse): string {
-    console.log(error);
-    switch (error.status) {
-      case 400: {
-        return `${error.error}`;
-      }
-      case 404: {
-        return `Not Found: ${error.error}`;
-      }
-      case 403: {
-        return `Access Denied: ${error.error}`;
-      }
-      case 500: {
-        return `Internal Server Error: ${error.error}`;
-      }
-      case 0: {
-        return `client-side or network error occurred: ${error.error}`;
-      }
-      default: {
-        return `Unknown Server Error`;
-      }
-    }
-  }
+
 }

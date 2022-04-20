@@ -19,6 +19,7 @@ import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { ComprasService } from 'src/app/services/compras.service';
 import Swal from 'sweetalert2';
 import { ComprasDataSource } from '../compras/compras-datasource';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 
 @Component({
   selector: 'app-entrada-mercancia',
@@ -480,7 +481,7 @@ export class EntradaMercanciaComponent implements OnInit {
         if (error.error instanceof ErrorEvent) {
           errorMsg = `Error: ${error.error.message}`;
         } else {
-          errorMsg = this.getServerErrorMessage(error);
+          errorMsg = getServerErrorMessage(error);
         }
 
         Swal.fire({
@@ -580,27 +581,6 @@ export class EntradaMercanciaComponent implements OnInit {
     this.solicitud.documentLines.splice(index, 1);
     this.table.renderRows();
   }
-  private getServerErrorMessage(error: HttpErrorResponse): string {
-    console.log(error);
-    switch (error.status) {
-      case 400: {
-        return `${error.error}`;
-      }
-      case 404: {
-        return `Not Found: ${error.error}`;
-      }
-      case 403: {
-        return `Access Denied: ${error.error}`;
-      }
-      case 500: {
-        return `Internal Server Error: ${error.error}`;
-      }
-      case 0: {
-        return `client-side or network error occurred: ${error.error}`;
-      }
-      default: {
-        return `Unknown Server Error`;
-      }
-    }
-  }
+
+
 }

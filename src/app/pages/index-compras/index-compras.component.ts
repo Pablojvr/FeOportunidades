@@ -14,7 +14,7 @@ import { Usuario, UsuariosDataSource } from '../usuarios/usuarios-datasource';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import { ListadoComprasDataSource } from './index-compras-datasource';
+import { getServerErrorMessage, ListadoComprasDataSource } from './index-compras-datasource';
 import * as moment from 'moment';
 import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
@@ -124,7 +124,7 @@ export class IndexComprasComponent implements OnInit {
             if (error.error instanceof ErrorEvent) {
               errorMsg = `Error: ${error.error.message}`;
             } else {
-              errorMsg = this.getServerErrorMessage(error);
+              errorMsg = getServerErrorMessage(error);
             }
 
             Swal.fire({
@@ -149,26 +149,7 @@ export class IndexComprasComponent implements OnInit {
       )
       .subscribe();
   }
-  private getServerErrorMessage(error: HttpErrorResponse): string {
-    console.log(error);
-    switch (error.status) {
-      case 400: {
-        return `${error.error}`;
-      }
-      case 404: {
-        return `Not Found: ${error.message}`;
-      }
-      case 403: {
-        return `Access Denied: ${error.message}`;
-      }
-      case 500: {
-        return `Internal Server Error: ${error.message}`;
-      }
-      default: {
-        return `Unknown Server Error`;
-      }
-    }
-  }
+
   printSolicitud(item: any) {
     Swal.fire({
       title: 'Generar Archivo PDF',
@@ -215,7 +196,7 @@ export class IndexComprasComponent implements OnInit {
               if (error.error instanceof ErrorEvent) {
                 errorMsg = `Error: ${error.error.message}`;
               } else {
-                errorMsg = this.getServerErrorMessage(error);
+                errorMsg = getServerErrorMessage(error);
               }
 
               Swal.fire({

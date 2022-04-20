@@ -7,6 +7,7 @@ import { catchError, finalize, map } from 'rxjs/operators';
 import { Observable, merge, BehaviorSubject, of } from 'rxjs';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 
 /**
  * Data source for the Usuarios view. This class should
@@ -46,7 +47,7 @@ export class ComprasDataSource extends DataSource<Object> {
         catchError((error) => {
           Swal.fire({
             title: 'Ha ocurrido un problema!',
-            text: this.getServerErrorMessage(error),
+            text: getServerErrorMessage(error),
             icon: 'error',
             heightAuto: false,
           });
@@ -63,29 +64,7 @@ export class ComprasDataSource extends DataSource<Object> {
         }
       });
   }
-  private getServerErrorMessage(error: HttpErrorResponse): string {
-    console.log(error);
-    switch (error.status) {
-      case 400: {
-        return `${error.error}`;
-      }
-      case 404: {
-        return `Not Found: ${error.error}`;
-      }
-      case 403: {
-        return `Access Denied: ${error.error}`;
-      }
-      case 500: {
-        return `Internal Server Error: ${error.error}`;
-      }
-      case 0: {
-        return `client-side or network error occurred: ${error.error}`;
-      }
-      default: {
-        return `Unknown Server Error`;
-      }
-    }
-  }
+
 }
 
 /** Simple sort comparator for example ID/Name columns (for client-side sorting). */

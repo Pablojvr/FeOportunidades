@@ -23,6 +23,7 @@ export class LayoutComponent {
   public showNavigation: boolean = false;
   public route!: any;
 
+
   constructor(private router: Router, private authService: AuthService) {
     router.events
       .pipe(filter((event) => event instanceof NavigationEnd))

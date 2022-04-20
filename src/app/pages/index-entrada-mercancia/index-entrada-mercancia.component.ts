@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { ComprasService } from 'src/app/services/compras.service';
 import Swal from 'sweetalert2';
-import { ListadoComprasDataSource } from '../index-compras/index-compras-datasource';
+import { getServerErrorMessage, ListadoComprasDataSource } from '../index-compras/index-compras-datasource';
 import { Usuario } from '../usuarios/usuarios-datasource';
 import { EntradaMercanciaDataSource } from './index-entrada-mercancia-datasource';
 
@@ -118,7 +118,7 @@ export class IndexEntradaMercanciaComponent implements OnInit {
             if (error.error instanceof ErrorEvent) {
               errorMsg = `Error: ${error.error.message}`;
             } else {
-              errorMsg = this.getServerErrorMessage(error);
+              errorMsg = getServerErrorMessage(error);
             }
 
             Swal.fire({
@@ -144,24 +144,5 @@ export class IndexEntradaMercanciaComponent implements OnInit {
       )
       .subscribe();
   }
-  private getServerErrorMessage(error: HttpErrorResponse): string {
-    console.log(error);
-    switch (error.status) {
-      case 400: {
-        return `${error.error}`;
-      }
-      case 404: {
-        return `Not Found: ${error.message}`;
-      }
-      case 403: {
-        return `Access Denied: ${error.message}`;
-      }
-      case 500: {
-        return `Internal Server Error: ${error.message}`;
-      }
-      default: {
-        return `Unknown Server Error`;
-      }
-    }
-  }
+
 }

@@ -14,6 +14,8 @@ import {
 export class NavigationComponent implements OnInit {
   @ViewChild('snav') sideBar!: NavigationComponent;
   @Input() toggleNav!: boolean;
+  @Input() isExpanded!: boolean;
+
   constructor() {}
 
   allItems: any[] = [
@@ -78,12 +80,12 @@ export class NavigationComponent implements OnInit {
     {
       permission: "devoluciones",
       text: 'Devoluciones',
-      icon: 'receipt',
+      icon: 'assignment_return',
       url: null,
       menu: [
         {
           text: 'Devoluciones',
-          icon: 'receipt',
+          icon: 'assignment_return',
           url: '/devoluciones',
           show: false,
         },

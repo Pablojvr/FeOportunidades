@@ -7,6 +7,7 @@ import { catchError, finalize, map } from 'rxjs/operators';
 import { Observable, merge, BehaviorSubject, of } from 'rxjs';
 import Swal from 'sweetalert2';
 import { DevolucionesService } from 'src/app/services/devoluciones.service';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 
 /**
  * Data source for the Usuarios view. This class should
@@ -46,7 +47,7 @@ export class ListadoDevolucionesDataSource extends DataSource<Object> {
         catchError((error) => {
           Swal.fire({
             title: 'Ha ocurrido un problema!',
-            text: error.message ?? '',
+            text: getServerErrorMessage(error) ?? '',
             icon: 'error',
             heightAuto: false,
           });
