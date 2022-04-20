@@ -13,6 +13,7 @@ import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { ComprasService } from 'src/app/services/compras.service';
 import Swal from 'sweetalert2';
 import { AgregarArticuloFacturaModalComponent } from 'src/app/componets/agregar-articulo-factura-modal/agregar-articulo-factura-modal.component';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 @Component({
   selector: 'app-devoluciones',
   templateUrl: './devoluciones.component.html',
@@ -178,7 +179,7 @@ export class DevolucionesComponent implements OnInit {
     }
     var sol = Object.assign({}, this.solicitud);
     sol.fecha = this.form.fecha.value;
-    debugger;
+
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardName;
     sol.nrc = this.form.proveedor.value.additionalID;
@@ -213,7 +214,7 @@ export class DevolucionesComponent implements OnInit {
         if (error.error instanceof ErrorEvent) {
           errorMsg = `Error: ${error.error.message}`;
         } else {
-          errorMsg = this.getServerErrorMessage(error);
+          errorMsg = getServerErrorMessage(error);
         }
 
         Swal.fire({
@@ -261,29 +262,7 @@ export class DevolucionesComponent implements OnInit {
     this.solicitud.documentLines = this.solicitud.documentLines.filter((el:any)=>{ return el.itemCode != item.itemCode});
     this.table.renderRows();
   }
-  private getServerErrorMessage(error: HttpErrorResponse): string {
-    console.log(error);
-    switch (error.status) {
-      case 400: {
-        return `${error.error}`;
-      }
-      case 404: {
-        return `Not Found: ${error.error}`;
-      }
-      case 403: {
-        return `Access Denied: ${error.error}`;
-      }
-      case 500: {
-        return `Internal Server Error: ${error.error}`;
-      }
-      case 0: {
-        return `client-side or network error occurred: ${error.error}`;
-      }
-      default: {
-        return `Unknown Server Error`;
-      }
-    }
-  }
+
 
   addArticulo(){
 

@@ -28,7 +28,7 @@ export class AgregarArticuloDevolucionModalComponent implements OnInit {
   }
 
   displayFn(item: any) {
-    // debugger;
+
     return item ? `${item.itemCode} - ${item.itemName}`  : '';
   }
   onConfirm() {
@@ -88,7 +88,7 @@ export class AgregarArticuloDevolucionModalComponent implements OnInit {
       this.facturasService
         .obtenerStockPorItemCode(this.data.item.itemCode, 0)
         .subscribe((data) => {
-          debugger;
+
           this.listadoLotes = [];
           this.errorMsg = "";
           if (data == undefined || data.length == 0) {

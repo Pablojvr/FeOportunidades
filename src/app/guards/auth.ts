@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
       });
       return false;
     } else {
-      debugger;
+
       var  hasPermission = route.data.permission && typeof user.rol[route.data.permission[0]] != undefined;
       var  checkPermission = route.data.permission && user.rol[route.data.permission[0]]==false;
 
