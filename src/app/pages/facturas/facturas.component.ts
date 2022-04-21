@@ -106,7 +106,7 @@ export class FacturasComponent implements OnInit {
   }
   displayFn(data: any): string {
     console.log(data);
-    return data ? data.cardName : '';
+    return data ? `${data.cardName} (${data.cardCode})` : '';
   }
 
   displayPurchaseOrder(data: any): string {
@@ -117,7 +117,11 @@ export class FacturasComponent implements OnInit {
     return data ? data.docNum : '';
   }
 
-
+  updateSerie(){
+    debugger
+    let value = this.form.proveedor.value;
+    this.form.serie.setValue(value.u_EJJE_TipoDocumento);
+  }
 
 
   ngOnInit(): void {

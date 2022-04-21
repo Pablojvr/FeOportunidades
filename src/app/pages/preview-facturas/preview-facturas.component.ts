@@ -20,7 +20,7 @@ export class PreviewFacturasComponent implements OnInit {
     'codigo',
     'descripcion',
     'lote',
-    'vencimiento',
+    // 'vencimiento',
     'UnidadesGravadas',
     'price',
     'totalGravado',
@@ -203,10 +203,10 @@ export class PreviewFacturasComponent implements OnInit {
             showConfirmButton: false,
           }).then(
             () => {
-              this._router.navigate(['/compras']);
+              this._router.navigate(['/facturas']);
             },
             (dismiss: any) => {
-              this._router.navigate(['/compras']);
+              this._router.navigate(['/facturas']);
             }
           );
         },
