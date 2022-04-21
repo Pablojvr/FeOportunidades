@@ -557,6 +557,7 @@ export class EntradaMercanciaComponent implements OnInit {
       baseEntry,
       baseType,
       taxCode,
+      rentabilidad,
       price,
     } = item;
     var newObj = Object.assign(
@@ -568,6 +569,7 @@ export class EntradaMercanciaComponent implements OnInit {
         baseEntry,
         baseType,
         taxCode,
+        rentabilidad,
         price,
       }
     );
