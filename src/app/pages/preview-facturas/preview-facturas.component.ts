@@ -150,7 +150,9 @@ export class PreviewFacturasComponent implements OnInit {
         {
           docDate: xs.fecha,
           additionalID: xs.nrc,
+          series: this.getSeries(xs.serie),
           notes: xs.giro,
+          u_EJJE_TipoDocumento:xs.serie,
           u_EJJE_NitSocioNegocio: xs.nit,
           U_EJJE_CorDes:"DES-FAC-"+this.solicitud.idFactura
           // u_EJJE_TipoDocumento: xs.serie,
@@ -227,5 +229,14 @@ export class PreviewFacturasComponent implements OnInit {
         },
       });
     console.log(this.ordenes);
+  }
+  getSeries(serie:any){
+    let series:any = {
+      "CCF" : 42,
+       "COF" : 43,
+      "TIC" :154,
+      "EXP" : 44,
+    }
+    return series[serie]??42;
   }
 }
