@@ -1,5 +1,4 @@
-import { RolesService } from './../../services/roles.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -8,10 +7,10 @@ import { ActivatedRoute } from '@angular/router';
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ConfirmacionModalComponent } from 'src/app/componets/confirmacion-modal/confirmacion-modal.component';
-import { UserService } from 'src/app/services/user.service';
-import { Rol } from '../usuarios/usuarios-datasource';
-import { RolesDataSource } from './roles-datasource';
 import { EditarRolModalComponent } from 'src/app/componets/editar-rol-modal/editar-rol-modal.component';
+import { Rol } from '../usuarios/usuarios-datasource';
+import { RolesService } from './../../services/roles.service';
+import { RolesDataSource } from './roles-datasource';
 
 @Component({
   selector: 'app-roles',
