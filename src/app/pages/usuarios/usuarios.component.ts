@@ -1,16 +1,15 @@
-import { ConfirmacionModalComponent } from './../../componets/confirmacion-modal/confirmacion-modal.component';
-import { EditarUsuarioModalComponent } from './../../componets/editar-usuario-modal/editar-usuario-modal.component';
-import { ActivatedRoute } from '@angular/router';
-import { UsuariosDataSource } from './usuarios-datasource';
-import { UserService } from './../../services/user.service';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Usuario } from './usuarios-datasource';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { fromEvent, merge } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatTable } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { merge } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { ConfirmacionModalComponent } from './../../componets/confirmacion-modal/confirmacion-modal.component';
+import { EditarUsuarioModalComponent } from './../../componets/editar-usuario-modal/editar-usuario-modal.component';
+import { UserService } from './../../services/user.service';
+import { Usuario, UsuariosDataSource } from './usuarios-datasource';
 
 @Component({
   selector: 'app-usuarios',

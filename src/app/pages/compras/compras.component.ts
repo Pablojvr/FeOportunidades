@@ -1,24 +1,20 @@
-import Swal from 'sweetalert2';
-import { ComprasService } from './../../services/compras.service';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  FormBuilder, FormGroup,
+  Validators
+} from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { Usuario, UsuariosDataSource } from '../usuarios/usuarios-datasource';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-import { ComprasDataSource } from './compras-datasource';
 import * as moment from 'moment';
-import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
+import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
+import { Usuario } from '../usuarios/usuarios-datasource';
+import { ComprasService } from './../../services/compras.service';
+import { ComprasDataSource } from './compras-datasource';
 
 @Component({
   selector: 'app-compras',

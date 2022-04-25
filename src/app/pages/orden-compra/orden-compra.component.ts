@@ -1,12 +1,10 @@
-import { map } from 'rxjs/operators';
-import { ComprasService } from './../../services/compras.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import Swal from 'sweetalert2';
-import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
+import Swal from 'sweetalert2';
 import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
+import { ComprasService } from './../../services/compras.service';
 
 @Component({
   selector: 'app-orden-compra',
