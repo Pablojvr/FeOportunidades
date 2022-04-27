@@ -7,21 +7,22 @@
 
       <mat-form-field appearance="outline">
         <mat-label> Código - Nombre</mat-label>
-        <input matInput name="numFactura" (focus)="getItems()" [matAutocomplete]="auto" [(ngModel)]="data.item"  (ngModelChange)="changeItems($event)" required
+        <input matInput name="numFactura" (focus)="getItems()" [matAutocomplete]="auto" [(ngModel)]="data.item"
+          (ngModelChange)="changeItems($event)" required
           class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
-          <mat-icon matSuffix class="mat-18">store</mat-icon>
-          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
-            <ng-container *ngIf="!isLoading">
-              <mat-option *ngFor="let item of filteredItems" [value]="item">
-                <span>
-                  <b>{{ item.itemCode }} - {{ item.itemName }}</b>
-                </span>
-              </mat-option>
-            </ng-container>
-          </mat-autocomplete>
+        <mat-icon matSuffix class="mat-18">store</mat-icon>
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+          <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let item of filteredItems" [value]="item">
+              <span>
+                <b>{{ item.itemCode }} - {{ item.itemName }}</b>
+              </span>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
 
-        </mat-form-field>
+      </mat-form-field>
     </div>
     <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-6/12">
 
@@ -41,7 +42,9 @@
 
     </div>
 
-    <div class="w-full"><p style="color:red">{{errorMsg}}</p></div>
+    <div class="w-full">
+      <p style="color:red">{{errorMsg}}</p>
+    </div>
     <mat-table [dataSource]="listadoLotes" #table class="items-table mat-elevation-z8 w-full" matSort matSortActive="id"
       matSortDirection="asc" matSortDisableClear>
       <ng-container matColumnDef="lote">
@@ -66,8 +69,14 @@
       </ng-container>
       <ng-container matColumnDef="seleccionado">
         <mat-header-cell *matHeaderCellDef>Seleccionado</mat-header-cell>
-        <mat-cell *matCellDef="let item">
-          <div>{{item.quantity}}</div>
+        <mat-cell *matCellDef="let item;let index">
+
+          <mat-form-field *ngIf="user.rol.supervisorFacturacion===false">
+            <input [(ngModel)]="item.quantity" [ngModelOptions]="{standalone: true}" matInput min="0"
+                  matInput  type="number" required >
+          </mat-form-field>
+
+          <div *ngIf="user.rol.supervisorFacturacion!=false">{{item.quantity}}</div>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="stock">

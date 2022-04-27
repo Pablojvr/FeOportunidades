@@ -50,6 +50,9 @@ export class FacturasComponent implements OnInit {
   expandedElement: any | null;
   isLoadingPO: boolean = false;
   filteredPO!: any[];
+  creditoDisponible: any;
+  limiteCredito: any;
+  user: any;
 
   constructor(
     private _router: Router,
@@ -117,10 +120,15 @@ export class FacturasComponent implements OnInit {
     debugger
     let value = this.form.proveedor.value;
     this.form.serie.setValue(value.u_EJJE_TipoDocumento);
+    this.creditoDisponible = value.currentAccountBalance;
+    this.limiteCredito = value.creditLimit;
   }
 
 
   ngOnInit(): void {
+    this.user = JSON.parse(
+      localStorage.getItem('loggedInUser') ?? '{}'
+    )
     var id = this.route.snapshot.paramMap.get('id');
 
   }
@@ -169,8 +177,8 @@ export class FacturasComponent implements OnInit {
     }, 0);
     if(!this.checkValidCredit(this.form.proveedor.value,totalFactura)){
       Swal.fire({
-        title: 'Atencion',
-        text: 'Esta factura no puede realizarse dado que el monto de la misma excede el limite maximo de credito del socio de negocio',
+        title: 'Atención',
+        html: 'El monto de esta factura excede el limite maximo de credito del socio de negocio, si continua se guardara como un borrador y tendra que solicitar autorizacion para emitirla.',
         icon: 'error',
 
         heightAuto: false,
@@ -282,7 +290,8 @@ export class FacturasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.solicitud.documentLines = [...this.solicitud.documentLines,...result];
+      var filteredResults = result.filter((item:any)=>!!item.quantity);
+      this.solicitud.documentLines = [...this.solicitud.documentLines,...filteredResults];
     });
   }
 

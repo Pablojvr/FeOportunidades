@@ -5,6 +5,9 @@
   "projects": {
     "FrontEndCofarsa": {
       "projectType": "application",
+      "i18n": {
+        "sourceLocale": "es-419"
+      },
       "schematics": {
         "@schematics/angular:application": {
           "strict": true

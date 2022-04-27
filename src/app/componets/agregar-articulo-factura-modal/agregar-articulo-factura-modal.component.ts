@@ -6,11 +6,9 @@ import {
   debounceTime,
   finalize,
   switchMap,
-  tap,
+  tap
 } from 'rxjs/operators';
 import { FacturasService } from 'src/app/services/facturas.service';
-import { RolesService } from 'src/app/services/roles.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-agregar-articulo-factura-modal',
@@ -25,12 +23,16 @@ export class AgregarArticuloFacturaModalComponent implements OnInit {
   itemCode = new BehaviorSubject<string>('');
   @Output() addElements = new EventEmitter<any>();
   displayedColumns = ['lote', 'vencimiento', 'precio', 'seleccionado','stock'];
+  user: any;
   constructor(
     private facturasService: FacturasService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
+    this.user = JSON.parse(
+      localStorage.getItem('loggedInUser') ?? '{}'
+    )
     this.suscribeInputs();
   }
 
@@ -42,6 +44,7 @@ export class AgregarArticuloFacturaModalComponent implements OnInit {
     this.addElements.emit(this.listadoLotes);
     this.data.then();
   }
+
   getItems() {
     this.isLoading = true;
     this.facturasService.getItems('').subscribe((data: any) => {
@@ -151,7 +154,8 @@ export class AgregarArticuloFacturaModalComponent implements OnInit {
           this.listadoLotes.push(newItem);
           stockPendiente = stockPendiente - newItem.quantity;
           i++;
-        } while (stockPendiente > 0);
+          debugger;
+        } while (stockPendiente > 0 || (this.user.rol.supervisorFacturacion===false && i<data.length));
       });
   }
 }
