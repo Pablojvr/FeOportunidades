@@ -106,9 +106,9 @@
             <mat-cell *matCellDef="let item" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-                <input [(ngModel)]="item.qdevolucion" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
+                <input [(ngModel)]="item.quantity" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
                   matInput placeholder="0" type="number" required>
-                  <mat-hint>{{"Max:"+item.quantity}}</mat-hint>
+                  <mat-hint>{{"Max:"+item.cantidadFacturada}}</mat-hint>
               </mat-form-field>
 
             </mat-cell>
@@ -120,7 +120,7 @@
             <mat-cell *matCellDef="let item" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-                <input [value]="item.quantity"  matInput min="0"
+                <input [value]="item.cantidadFacturada"  matInput min="0"
                   matInput placeholder="0" type="number" required readonly="true">
 
               </mat-form-field>
@@ -142,9 +142,8 @@
           <ng-container matColumnDef="numeroFactura">
             <mat-header-cell *matHeaderCellDef>No. Factura</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
-              $
               {{
-              (item.price * item.quantity).toFixed(4)
+              item.NumFactura
               }}
             </mat-cell>
           </ng-container>
@@ -172,7 +171,7 @@
         <div style="position: relative">
           <mat-divider></mat-divider>
           <div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">
-            <a (click)="guardarSolicitud()" mat-button mat-flat-button color="primary">
+            <a (click)="guardarDevolucion()" mat-button mat-flat-button color="primary">
               <mat-icon class="mat-18">save</mat-icon>
               Procesar
             </a>

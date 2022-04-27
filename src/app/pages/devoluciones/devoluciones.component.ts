@@ -6,10 +6,12 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
+import { DevolucionesService } from 'src/app/services/devoluciones.service';
 import { FacturasService } from 'src/app/services/facturas.service';
 import Swal from 'sweetalert2';
 import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 import { AgregarArticuloDevolucionModalComponent } from './../../componets/agregar-articulo-devolucion-modal/agregar-articulo-devolucion-modal.component';
+
 @Component({
   selector: 'app-devoluciones',
   templateUrl: './devoluciones.component.html',
@@ -52,6 +54,7 @@ export class DevolucionesComponent implements OnInit {
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
+    private devolucionesService: DevolucionesService,
     private facturasService: FacturasService,
     private route: ActivatedRoute,
     private dialog: MatDialog
@@ -148,7 +151,7 @@ export class DevolucionesComponent implements OnInit {
 
 
 
-  guardarSolicitud() {
+  guardarDevolucion() {
     Swal.fire({
       title: '',
       text: 'Guardando...',
@@ -157,34 +160,12 @@ export class DevolucionesComponent implements OnInit {
       showCancelButton: false,
       showConfirmButton: false,
     });
-    let totalFactura = this.solicitud.documentLines.reduce((a:any, b:any) => {
 
-      return a + b.price*b.quantity
-    }, 0);
-    if(!this.checkValidCredit(this.form.proveedor.value,totalFactura)){
-      Swal.fire({
-        title: 'Atencion',
-        text: 'Esta factura no puede realizarse dado que el monto de la misma excede el limite maximo de credito del socio de negocio',
-        icon: 'error',
-
-        heightAuto: false,
-        showCancelButton: false,
-        showConfirmButton: true,
-      })
-      return;
-    }
     var sol = Object.assign({}, this.solicitud);
     sol.fecha = this.form.fecha.value;
-
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardName;
-    sol.nrc = this.form.proveedor.value.additionalID;
-    sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
-    sol.tipoDocumento = this.form.proveedor.value.u_EJJE_TipoDocumento;
-    sol.giro = this.form.proveedor.value.notes;
-    // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
-    sol.serie = this.form.serie.value;
-    this.facturasService.guardarFactura(sol).subscribe({
+    this.devolucionesService.guardarDevolucion(sol).subscribe({
       next: (_) => {
         this.saving = false;
         this.saved = true;

@@ -24,4 +24,13 @@ export class DevolucionesService {
         .set('pageSize', pageSize.toString()),
     });
   }
+
+  guardarDevolucion(devolucion: any) {
+    let devolucionId = devolucion.idDevoluciones;
+    if (!devolucionId) {
+      return this.http.post(`${this.baseUrl}/Devoluciones`, devolucion);
+    } else {
+      return this.http.put(`${this.baseUrl}/Devoluciones/${devolucionId}`, devolucion);
+    }
+  }
 }
