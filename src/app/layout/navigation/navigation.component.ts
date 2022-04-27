@@ -1,9 +1,6 @@
 import {
-  Component,
-  OnInit,
-  HostListener,
-  Input,
-  ViewChild,
+  Component, HostListener,
+  Input, OnInit, ViewChild
 } from '@angular/core';
 
 @Component({
@@ -25,6 +22,7 @@ export class NavigationComponent implements OnInit {
       url: '/home',
     },
     {
+      permission: "administrar",
       text: 'Administracion',
       icon: 'settings',
       url: null,

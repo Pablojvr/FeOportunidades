@@ -25,6 +25,18 @@
         >Devoluciones</mat-slide-toggle
       >
     </div>
+    <div class="flex flex-row justify-evenly">
+
+
+      <mat-slide-toggle [(ngModel)]="data.editedRol.supervisorFacturacion" color="primary"
+        >Sup. Facturas</mat-slide-toggle
+      >
+      <mat-slide-toggle
+        [(ngModel)]="data.editedRol.supervisorDevoluciones"
+        color="primary"
+        >Sup. Devoluciones</mat-slide-toggle
+      >
+    </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
