@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Rol, Page } from '../pages/usuarios/usuarios-datasource';
+import { Page, Rol } from '../pages/usuarios/usuarios-datasource';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +24,22 @@ export class FacturasService {
 
     return this.http.get<any>(
       `${this.baseUrl}/Facturas/cancelInvoices/?id=${item.idFactura}`,
+      {}
+    );
+  }
+
+  generarNotaCreditoFactura(notaCredito: any,idFactura:any) {
+
+    return this.http.post<any>(
+      `${this.baseUrl}/Facturas/notaCredito/?id=${idFactura}`,
+      notaCredito
+    );
+  }
+
+  totalFacturasEnMora(cardCode: any) {
+
+    return this.http.get<any>(
+      `${this.baseUrl}/Facturas/totalExpiredInvoices?cardCode=${cardCode}`,
       {}
     );
   }

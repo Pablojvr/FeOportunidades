@@ -1,9 +1,9 @@
-import { FacturasService } from './../../services/facturas.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { catchError, finalize, map } from 'rxjs/operators';
-import { Observable, merge, BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
+import { FacturasService } from './../../services/facturas.service';
 
 /**
  * Data source for the Usuarios view. This class should
@@ -63,6 +63,7 @@ export class FacturasDataSource extends DataSource<Object> {
 
     roomArr.forEach((item, index) => {
       if (item === data) {
+        debugger;
         item.estado = {IdEstadoFactura:3,NombreEstadoFactura:"Anulada"}
       }
     });

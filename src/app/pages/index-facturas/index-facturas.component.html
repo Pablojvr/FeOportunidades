@@ -129,11 +129,23 @@
 
               <button
                 mat-icon-button
+                *ngIf="user.rol.supervisorFacturacion===false && item.estadoFacturaFK == 3"
                 (click)="anularFacturas(item)"
               >
 
                 <mat-icon class="mat-18"
                   >delete</mat-icon
+                >
+              </button>
+
+              <button
+                mat-icon-button
+                *ngIf="item.estadoFacturaFK == 4"
+                (click)="generarNotaCreditoFacturas(item)"
+              >
+
+                <mat-icon class="mat-18"
+                  >note_add</mat-icon
                 >
               </button>
 

@@ -35,6 +35,7 @@ export class IndexFacturasComponent implements OnInit {
 
   isLoading = false;
   errorMsg!: string;
+  user: any;
 
   constructor(
     private datePipe: DatePipe,
@@ -52,6 +53,7 @@ export class IndexFacturasComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
     this.dataSource.getPaginatedFacturas('', '', 0, 10);
   }
   get form() {
@@ -115,6 +117,53 @@ export class IndexFacturasComponent implements OnInit {
             Swal.fire({
               title: '',
               text: 'Se ha anulado correctamente todas las facturas',
+              icon: 'success',
+              timer: 2000,
+              heightAuto: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          },
+          error: (error) => {
+            let errorMsg: string;
+            if (error.error instanceof ErrorEvent) {
+              errorMsg = `Error: ${error.error.message}`;
+            } else {
+              errorMsg = getServerErrorMessage(error);
+            }
+
+            Swal.fire({
+              title: '',
+              text: errorMsg,
+              icon: 'error',
+              heightAuto: false,
+            });
+          },
+        });
+      },
+      () => {}
+    );
+  }
+
+  generarNotaCreditoFacturas(item:any){
+    Swal.fire({
+      title: '¿Esta seguro?',
+      text: 'Se generara una nota de credito para esta factura',
+      icon: 'question',
+      heightAuto: false,
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then(
+      (result) => {
+        if (!result.isConfirmed) return;
+        this.facturasService.generarNotaCreditoFactura({},item.idFactura).subscribe({
+          next: (_) => {
+            this.dataSource.removeFacturas(item);
+            Swal.fire({
+              title: '',
+              text: 'La nota de credito se ha creado correctamente',
               icon: 'success',
               timer: 2000,
               heightAuto: false,
