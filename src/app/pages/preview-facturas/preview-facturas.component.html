@@ -147,7 +147,19 @@
         >
           Generar Facturas
         </a>
+
+        <a
+        style="margin-left:10px"
+        *ngIf="solicitud && solicitud.estadoFacturaFK == 1 && user.rol.supervisorFacturacion==false"
+        mat-button
+        mat-flat-button
+        color="primary"
+        (click)="aprobarFacturas()"
+      >
+        Aprobar Factura
+      </a>
       </div>
+
     </div>
   </mat-card-content>
 </mat-card>

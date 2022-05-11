@@ -33,4 +33,15 @@ export class DevolucionesService {
       return this.http.put(`${this.baseUrl}/Devoluciones/${devolucionId}`, devolucion);
     }
   }
+
+  getItemsFacturadosByItemCodeBatchNumAndCardCode(itemCode:any, batchNum:any,  cardCode:any){
+    return this.http.get<Page[]>(`${this.baseUrl}/Devoluciones/getItemsFacturadosByItemCodeBatchNumAndCardCode`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('itemCode', itemCode)
+        .set('batchNum', batchNum)
+        .set('cardCode', cardCode)
+
+    });
+  }
 }

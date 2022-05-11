@@ -125,6 +125,16 @@
             </mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="index">
+            <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
+            <mat-cell *matCellDef="let item; let i = index" class="duration-cell" style="width: 50px;">
+
+              {{i + 1}}
+
+
+            </mat-cell>
+          </ng-container>
+
 
           <ng-container matColumnDef="UnidadesGravadas">
             <mat-header-cell *matHeaderCellDef>U.Gravadas</mat-header-cell>

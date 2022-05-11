@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
+import { AuthService } from 'src/app/services/auth.service';
 import { FacturasService } from 'src/app/services/facturas.service';
 import Swal from 'sweetalert2';
 import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
@@ -30,6 +31,7 @@ export class FacturasComponent implements OnInit {
   fecha: string = '';
 
   displayedColumns = [
+    'index',
     'codigo',
     'descripcion',
     'lote',
@@ -55,13 +57,15 @@ export class FacturasComponent implements OnInit {
   totalFactura: any = 0;
   totalFacturasVencidas: any;
   isLoadingFacturasMora: boolean = false;
+  overrideAdministrador: boolean = false;
 
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
     private facturasService: FacturasService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService :AuthService,
   ) {
     this.comprasForm = this._fb.group({
       proveedor: [null, Validators.required],
@@ -116,7 +120,7 @@ export class FacturasComponent implements OnInit {
   }
 
   updateSerie() {
-    debugger;
+
     let value = this.form.proveedor.value;
     this.checkFacturasVencidas(value.cardCode);
     this.form.serie.setValue(value.u_EJJE_TipoDocumento);
@@ -205,13 +209,16 @@ export class FacturasComponent implements OnInit {
     }
   }
   checkFacturasVencidas(cardCode: any) {
+
     this.isLoadingFacturasMora = true;
     this.facturasService.totalFacturasEnMora(cardCode).subscribe({
       next: (value: any) => {
+        debugger;
         this.totalFacturasVencidas = value.data;
         this.isLoadingFacturasMora = false;
       },
       error: (error) => {
+        debugger;
         this.totalFacturasVencidas = null;
         this.isLoadingFacturasMora = false;
         let errorMsg: string;
@@ -306,7 +313,60 @@ export class FacturasComponent implements OnInit {
       eval(proveedor.currentAccountBalance) + total
     );
   }
+  manualOverrideAdministrador(){
+    Swal.fire({
+      title: 'Generar Archivo PDF',
+      icon: 'question',
+      heightAuto: false,
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Descargar',
+      cancelButtonText: 'Cancelar',
+      html:
+      '<label> Usuario:</label><br>' +
+        '<input id="swal-input1" class="swal2-input" type="text" max="6" min="1" value="2"><br>' +
+        '<label> Contraseña:</label><br>' +
+        '<input id="swal-input2" class="swal2-input" type="password" max="6" min="1" value="2"><br>',
+      focusConfirm: false,
+      preConfirm: () => {
+        let el1: any = document.getElementById('swal-input1');
+        let el2: any = document.getElementById('swal-input2');
+        return [el1.value, el2.value];
+      },
+    }).then(
+      (result: any) => {
+        console.log(result);
+        if (!result.isConfirmed) return;
+        this.authService
+          .checkUser(
+            result.value[0],
+            result.value[1]
+          )
+          .subscribe({
+            next: (data) => {
+              this.overrideAdministrador = true;
+            },
+            error: (error) => {
+              let errorMsg: string;
+              if (error.error instanceof ErrorEvent) {
+                errorMsg = `Error: ${error.error.message}`;
+              } else {
+                errorMsg = getServerErrorMessage(error);
+              }
 
+              Swal.fire({
+                title: '',
+                text: errorMsg,
+                icon: 'error',
+                heightAuto: false,
+              });
+            },
+          });
+      },
+      () => {}
+    );
+
+  }
   updateItemCalculatedValues(item: any) {
     if (item.quantity != '' && item.quantity != null) {
       item.quantity <= 0 ? (item.quantity = 1) : item.quantity;
@@ -352,6 +412,7 @@ export class FacturasComponent implements OnInit {
       data: {
         articulo: {},
         descuento: this.form.proveedor.value.u_EJJE_DescuentoCliente,
+        overrideAdministrador: this.overrideAdministrador,
         then: () => {
           dialogRef.close();
         },

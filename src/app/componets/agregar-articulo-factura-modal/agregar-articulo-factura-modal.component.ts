@@ -8,7 +8,10 @@ import {
   switchMap,
   tap
 } from 'rxjs/operators';
+import { getServerErrorMessage } from 'src/app/pages/index-compras/index-compras-datasource';
+import { AuthService } from 'src/app/services/auth.service';
 import { FacturasService } from 'src/app/services/facturas.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-agregar-articulo-factura-modal',
@@ -24,8 +27,10 @@ export class AgregarArticuloFacturaModalComponent implements OnInit {
   @Output() addElements = new EventEmitter<any>();
   displayedColumns = ['lote', 'vencimiento', 'precio', 'seleccionado','stock'];
   user: any;
+  overrideAdministrador: boolean = false;
   constructor(
     private facturasService: FacturasService,
+    private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -45,6 +50,62 @@ export class AgregarArticuloFacturaModalComponent implements OnInit {
     this.data.then();
   }
 
+  manualOverrideAdministrador(){
+    Swal.fire({
+      title: 'Ingresa las credenciales de supervisor',
+      icon: 'question',
+      heightAuto: false,
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Ingresar',
+      cancelButtonText: 'Cancelar',
+      html:
+      '<label> Usuario:</label><br>' +
+        '<input id="swal-input1" class="swal2-input" type="text"  value=""><br>' +
+        '<label> Contraseña:</label><br>' +
+        '<input id="swal-input2" class="swal2-input" type="password" value=""><br>',
+      focusConfirm: false,
+      preConfirm: () => {
+        let el1: any = document.getElementById('swal-input1');
+        let el2: any = document.getElementById('swal-input2');
+        return [el1.value, el2.value];
+      },
+    }).then(
+      (result: any) => {
+        console.log(result);
+        if (!result.isConfirmed) return;
+        this.authService
+          .checkUser(
+            result.value[0],
+            result.value[1]
+          )
+          .subscribe({
+            next: (data) => {
+              this.overrideAdministrador = true;
+              this.agregarArticulo();
+            },
+            error: (error) => {
+              console.log(error);
+              let errorMsg: string;
+              if (error.error instanceof ErrorEvent) {
+                errorMsg = `Error: ${error.error.message}`;
+              } else {
+                errorMsg = getServerErrorMessage(error);
+              }
+
+              Swal.fire({
+                title: '',
+                text: errorMsg,
+                icon: 'error',
+                heightAuto: false,
+              });
+            },
+          });
+      },
+      () => {}
+    );
+
+  }
   getItems() {
     this.isLoading = true;
     this.facturasService.getItems('').subscribe((data: any) => {
@@ -155,7 +216,7 @@ export class AgregarArticuloFacturaModalComponent implements OnInit {
           stockPendiente = stockPendiente - newItem.quantity;
           i++;
           debugger;
-        } while (stockPendiente > 0 || (this.user.rol.supervisorFacturacion===false && i<data.length));
+        } while (stockPendiente > 0 || ((this.user.rol.supervisorFacturacion===false || this.overrideAdministrador) && i<data.length));
       });
   }
 }

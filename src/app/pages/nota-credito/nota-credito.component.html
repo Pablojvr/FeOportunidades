@@ -1,0 +1,123 @@
+<mat-card>
+  <mat-card-content>
+    <div class="flex flex-col" *ngIf="factura">
+      <div  class="mt-3">
+        <h2>
+          Nueva Nota Credito
+          <span *ngIf="readOnly">#{{ factura.DocNum }}</span>
+          <div class="flex flex-column facturas-center align-facturas-end ml-1">
+
+            </div>
+        </h2>
+        <p>Cliente: {{ factura.CardName }}</p>
+        <p>
+          Fecha:
+          <mat-form-field appearance="outline">
+            <mat-label>dd/mm/yyyy</mat-label>
+            <input
+              [matDatepicker]="picker"
+              [readonly]="readOnly"
+              matInput
+              type="text"
+              [(ngModel)]="factura.DocDate"
+              required
+            />
+
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+              *ngIf="!readOnly"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </p>
+
+        <mat-table
+          class="facturas-table mat-elevation-z8"
+          [dataSource]="factura.DocumentLines"
+          matSort
+          matSortActive="id"
+          matSortDirection="asc"
+          matSortDisableClear
+        >
+          <ng-container matColumnDef="codigo">
+            <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
+            <mat-cell *matCellDef="let factura">{{
+              factura.ItemCode
+            }}</mat-cell> </ng-container
+          >
+          <ng-container matColumnDef="descripcion">
+            <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let factura">{{
+              factura.ItemName?factura.ItemName:factura.ItemDescription
+            }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="unidades">
+            <mat-header-cell *matHeaderCellDef>Unidades</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let factura">
+              <mat-form-field appearance="outline" style="width: 100px">
+                <mat-label>Unidades</mat-label>
+              <input [(ngModel)]="factura.Quantity" (ngModelChange)="updateItemCalculatedValues(factura)" matInput min="0"
+                  matInput placeholder="0" type="number" required [readonly]="readOnly">
+                <mat-hint>{{"Max:"+factura.QuantityFacturada}}</mat-hint>
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="lote">
+            <mat-header-cell *matHeaderCellDef>Lote</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let factura">
+             {{factura.BatchNum}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="comprado">
+            <mat-header-cell *matHeaderCellDef>Unidades Facturadas</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let factura">
+              {{ factura.QuantityFacturada }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="punit">
+            <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let factura">
+              {{ factura.UnitPrice }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="total">
+            <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let factura"
+              >${{
+                factura.Quantity ? factura.UnitPrice * factura.Quantity : 0
+              }}</mat-cell
+            >
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" style="vertical-align: middle" colspan="9999">
+              No se han encontrado registros
+            </td>
+          </tr>
+        </mat-table>
+
+        <mat-divider></mat-divider>
+      </div>
+
+      <div class="mt-3" style="text-align: center">
+        <a
+          *ngIf="solicitud && solicitud.estadoFacturaFK == 3"
+          mat-button
+          mat-flat-button
+          color="warn"
+          (click)="generarOrdenesDeCompra()"
+        >
+          Generar Ordenes de Compras
+        </a>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

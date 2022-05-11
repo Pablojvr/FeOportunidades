@@ -26,8 +26,8 @@
     <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-6/12">
 
       <mat-form-field appearance="outline">
-        <mat-label>Cantidad</mat-label>
-        <input matInput name="numFactura" [(ngModel)]="data.quantity" required
+        <mat-label>Lote</mat-label>
+        <input matInput name="numFactura" [(ngModel)]="data.batchNum" required
           class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
       </mat-form-field>
     </div>
@@ -62,13 +62,36 @@
       <ng-container matColumnDef="facturado">
         <mat-header-cell *matHeaderCellDef>Cant. Facturada</mat-header-cell>
         <mat-cell *matCellDef="let item">
-          <div>{{item.quantity}}</div>
+          <div>{{item.cantidadFacturada}}</div>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="devuelto">
+        <mat-header-cell *matHeaderCellDef>Cant. Devuelta</mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          <div>{{item.devuelta}}</div>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="factura">
         <mat-header-cell *matHeaderCellDef>Num. Factura</mat-header-cell>
         <mat-cell *matCellDef="let item">
           <div>{{item.numFactura}}</div>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          <div>{{item.fechaFactura}}</div>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          <a  (click)="actualizarLotesSeleccionados(item)">
+              <p  *ngIf="!item.selected"><mat-icon class="mat-18">add</mat-icon> Agregar</p>
+              <p  *ngIf="item.selected"><mat-icon class="mat-18">remove</mat-icon> Quitar</p>
+
+          </a>
+
         </mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

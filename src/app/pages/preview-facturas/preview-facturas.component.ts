@@ -28,6 +28,7 @@ export class PreviewFacturasComponent implements OnInit {
   ];
   saving: boolean = false;
   saved: boolean = false;
+  user: any;
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
@@ -36,6 +37,7 @@ export class PreviewFacturasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
     var idOrden = this.route.snapshot.paramMap.get('idFacturas');
     if (idOrden) {
       this.readOnly = true;
@@ -188,6 +190,63 @@ export class PreviewFacturasComponent implements OnInit {
         orders: this.ordenes,
         idFactura: this.solicitud.idFactura,
       })
+      .subscribe({
+        next: (_) => {
+          this.saving = false;
+          this.saved = true;
+          Swal.fire({
+            title: 'Guardado',
+            text: 'Se ha guardado correctamente...',
+            icon: 'success',
+            timer: 2000,
+            heightAuto: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+          }).then(
+            () => {
+              this._router.navigate(['/facturas']);
+            },
+            (dismiss: any) => {
+              this._router.navigate(['/facturas']);
+            }
+          );
+        },
+        error: (error) => {
+          let errorMsg: string;
+          if (error.error instanceof ErrorEvent) {
+            errorMsg = `Error: ${error.error.message}`;
+          } else {
+            errorMsg = getServerErrorMessage(error);
+          }
+
+          Swal.fire({
+            title: '',
+            text: errorMsg,
+            icon: 'error',
+            heightAuto: false,
+          });
+          this.saving = false;
+          this.saved = false;
+        },
+      });
+    console.log(this.ordenes);
+  }
+
+
+  aprobarFacturas() {
+    Swal.fire({
+      title: '',
+      text: 'Guardando...',
+      icon: 'info',
+      heightAuto: false,
+      showCancelButton: false,
+      showConfirmButton: false,
+    });
+
+    this.facturasService
+      .aprobarFacturas(
+        this.solicitud.idFactura
+      )
       .subscribe({
         next: (_) => {
           this.saving = false;

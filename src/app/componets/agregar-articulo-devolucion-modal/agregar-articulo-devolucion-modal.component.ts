@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BehaviorSubject, of } from 'rxjs';
-import { debounceTime, tap, switchMap, finalize, catchError } from 'rxjs/operators';
-import { FacturasService } from 'src/app/services/facturas.service';
+import { BehaviorSubject } from 'rxjs';
+import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
+import { DevolucionesService } from 'src/app/services/devoluciones.service';
+import { FacturasService } from './../../services/facturas.service';
 
 @Component({
   selector: 'app-agregar-articulo-devolucion-modal',
@@ -12,13 +13,18 @@ import { FacturasService } from 'src/app/services/facturas.service';
 export class AgregarArticuloDevolucionModalComponent implements OnInit {
 
   listadoLotes: Array<any> = [];
+  lotesSeleccionados: Array<any> = [];
+
   errorMsg = '';
   filteredItems: Array<any> = [];
   isLoading = false;
   itemCode = new BehaviorSubject<string>('');
   @Output() addElements = new EventEmitter<any>();
-  displayedColumns = ['lote', 'precio', 'facturado','factura'];
+  displayedColumns = ['fecha','lote', 'precio', 'facturado','devuelto','factura','acciones'];
+  batchNum: any;
+  cardCode: any;
   constructor(
+    private devolucionesService: DevolucionesService,
     private facturasService: FacturasService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -34,6 +40,11 @@ export class AgregarArticuloDevolucionModalComponent implements OnInit {
   onConfirm() {
     this.addElements.emit(this.listadoLotes);
     this.data.then();
+  }
+
+  actualizarLotesSeleccionados(item:any){
+    item.selected = !item.selected;
+    this.lotesSeleccionados = this.listadoLotes.filter(item=>item.selected);
   }
   getItems() {
     this.isLoading = true;
@@ -84,68 +95,26 @@ export class AgregarArticuloDevolucionModalComponent implements OnInit {
       });
   }
   agregarArticulo(number: number = 0) {
-    if (this.data.item && this.data.item.itemCode && !isNaN(this.data.quantity)) {
-      this.facturasService
-        .obtenerStockPorItemCode(this.data.item.itemCode, 0)
+    if (this.data.item && this.data.item.itemCode && !isNaN(this.data.batchNum)) {
+      this.devolucionesService
+        .getItemsFacturadosByItemCodeBatchNumAndCardCode(this.data.item.itemCode,this.data.batchNum,this.data.cardCode)
         .subscribe((data) => {
 
           this.listadoLotes = [];
           this.errorMsg = "";
-          if (data == undefined || data.length == 0) {
+          if (data == undefined || data == null || data.length == 0  ) {
             this.errorMsg =
-              'Este codigo no pertenece a ningun articulo en inventario';
+              'No se han vendido articulos de este lote al cliente seleccionado';
             return;
+          } else {
+            var mappedData = data.map((item:any)=>{return {selected:false,batchNum:item.U_EJJE_Lote, price:item.U_EJJE_PrecioUnitario,cantidadFacturada:item.U_EJJE_CantidadFacturada,devuelta:item.U_EJJE_CantidadDevuelta,itemDescription:item.Name, itemCode:item.U_EJJE_CodigoProducto,numFactura:item.U_EJJE_NumeroFactura+"",fechaFactura:item.U_EJJE_FechaFactura}})
+            this.listadoLotes = mappedData;
           }
-          if (data[0].Stock < this.data.quantity) {
-            this.errorMsg = 'No hay suficiente existencia de este articulo';
-            return;
-          }
-          let stockUltimoLote = this.obtenerStockUltimoLotePorItemCode(
-            this.data.item.itemCode,
-            number,
-            this.data.quantity
-          );
+
         });
     }
   }
 
-  obtenerStockUltimoLotePorItemCode(
-    itemCode: string,
-    skip: number,
-    quantity: any
-  ): any {
-    return this.facturasService
-      .obtenerStockUltimoLotePorItemCode(itemCode, skip)
-      .pipe(catchError(() => of([])))
-      .subscribe((data: any) => {
-        this.listadoLotes = [];
-        let stockPendiente = quantity;
-        let i = 0;
-        let newItem;
-        do {
-          let lote = Object.assign({}, data[i]);
-          newItem = {
-            itemCode: lote.ItemCode,
-            itemDescription: lote.ItemName,
-            batchNum: lote.BatchNum,
-            expDate: lote.ExpDate,
-            price: lote.PrecioVenta,
-            stock:lote.Quantity,
-            discountPercent:this.data.descuento,
-            vatCode:'IVACOM',
-            quantity: 0,
-          };
-          if (lote.Quantity - stockPendiente > 0) {
-            newItem.quantity = stockPendiente;
-          } else {
-            newItem.quantity = lote.Quantity;
-          }
 
-          this.listadoLotes.push(newItem);
-          stockPendiente = stockPendiente - newItem.quantity;
-          i++;
-        } while (stockPendiente > 0);
-      });
-  }
 
 }

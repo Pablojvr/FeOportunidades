@@ -91,7 +91,7 @@
           </ng-container>
           <ng-container matColumnDef="correlativo">
             <mat-header-cell *matHeaderCellDef mat-sort-header
-              >Num Solicitud</mat-header-cell
+              >Num Doc</mat-header-cell
             >
             <mat-cell *matCellDef="let item">{{ item.docNum }}</mat-cell>
           </ng-container>
@@ -104,14 +104,14 @@
           <ng-container matColumnDef="proveedor">
             <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
-              {{ item.groupName }}
+              {{ item.cardName }}
             </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="estado">
             <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
-              <div>{{ item.estado.nombreEstadoSolicitud }}</div>
+              <div>{{ item.estado.nombreEstadoDevolucion }}</div>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="acciones">
@@ -119,11 +119,9 @@
             <mat-cell class="duration-cell" *matCellDef="let item">
               <button
                 mat-icon-button
-                [routerLink]="['/compras/edit', item.idSolicitudCompra]"
+                [routerLink]="['/compras/edit', item.idDevolucion]"
               >
-                <mat-icon class="mat-18" *ngIf="item.estadoSolicitudFK == 1"
-                  >edit</mat-icon
-                >
+
                 <mat-icon class="mat-18" *ngIf="item.estadoSolicitudFK != 1"
                   >visibility</mat-icon
                 >
@@ -131,18 +129,11 @@
               </button>
               <button
               mat-icon-button
-
               *ngIf="item.estadoSolicitudFK > 0"
             >
               <mat-icon class="mat-18">print</mat-icon>
             </button>
-              <button
-                mat-icon-button
-                [routerLink]="['/orden_compras', item.idSolicitudCompra]"
-                *ngIf="item.estadoSolicitudFK > 2"
-              >
-                <mat-icon class="mat-18">shopping_bag</mat-icon>
-              </button>
+
               <button
                 mat-icon-button
                 *ngIf="item.estadoSolicitudFK == 1"

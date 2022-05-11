@@ -28,9 +28,11 @@ export class IndexFacturasComponent implements OnInit {
     'codigo',
     // 'correlativo',
     'fecha',
+    'tipo',
     'proveedor',
     'estado',
     'acciones',
+
   ];
 
   isLoading = false;

@@ -1,17 +1,16 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Page, Rol } from '../pages/usuarios/usuarios-datasource';
+import { Page } from '../pages/usuarios/usuarios-datasource';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FacturasService {
+
   public baseUrl = 'https://localhost:44398/api';
   constructor(private http: HttpClient) {}
 
-  getRoles(filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 10) {
-    return this.http.get<Rol[]>(`${this.baseUrl}/Rols`, {});
-  }
+
 
   getFacturasByID(id: any) {
     return this.http.get<any>(
@@ -59,18 +58,26 @@ export class FacturasService {
     });
   }
 
-  saveRol(user: any) {
-    let userId = user.idRol;
-    if (!userId) {
-      return this.http.post(`${this.baseUrl}/Facturas`, user);
-    } else {
-      return this.http.put(`${this.baseUrl}/Facturas/${userId}`, user);
-    }
+  getPaginatedNotasCredito(
+    filter = '',
+    sortOrder = 'asc',
+    pageNumber = 0,
+    pageSize = 10
+  ) {
+    return this.http.get<Page[]>(`${this.baseUrl}/Facturas`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('filter', filter)
+        .set('sortOrder', sortOrder)
+        .set('pageNumber', pageNumber.toString())
+        .set('pageSize', pageSize.toString()),
+    });
   }
 
-  deleteRol(user: any) {
-    let userId = user.idRol;
-    return this.http.delete(`${this.baseUrl}/Facturas/${userId}`, user);
+  saveNotaCredito(sol:any){
+
+      return this.http.post(`${this.baseUrl}/Facturas`, sol);
+
   }
 
   getClientes(filter = '') {
@@ -127,6 +134,13 @@ export class FacturasService {
           .set('itemCode', itemCode)
           .set('skip', skip.toString()),
       }
+    );
+  }
+
+  aprobarFacturas( idFactura: any) {
+    return this.http.get<any>(
+      `${this.baseUrl}/Facturas/aprobarFacturas/?id=${idFactura}`,
+      {}
     );
   }
 }

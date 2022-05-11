@@ -165,6 +165,7 @@ export class DevolucionesComponent implements OnInit {
     sol.fecha = this.form.fecha.value;
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardName;
+    sol.estadoDevolucionFK = 2;
     this.devolucionesService.guardarDevolucion(sol).subscribe({
       next: (_) => {
         this.saving = false;
@@ -179,10 +180,10 @@ export class DevolucionesComponent implements OnInit {
           showConfirmButton: false,
         }).then(
           () => {
-            this._router.navigate(['/entrada_mercancia']);
+            this._router.navigate(['/devoluciones']);
           },
           (dismiss: any) => {
-            this._router.navigate(['/entrada_mercancia']);
+            this._router.navigate(['/devoluciones']);
           }
         );
       },
@@ -214,12 +215,24 @@ export class DevolucionesComponent implements OnInit {
   }
 
   updateItemCalculatedValues(item: any) {
-
+    console.log(item.quantity);
     if (item.quantity != '' && item.quantity != null) {
       item.quantity <= 0 ? (item.quantity = 1) : item.quantity;
-      item.quantity > item.stock ? (item.quantity = item.stock) : item.quantity;
+      eval(item.quantity) > (item.cantidadFacturada - item.devuelta) ? item.quantity = (item.cantidadFacturada - item.devuelta) : item.quantity;
+
     }
 
+  }
+
+  keyPressNumbers(event:any) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    } else {
+      return true;
+    }
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);
@@ -245,14 +258,13 @@ export class DevolucionesComponent implements OnInit {
 
     let dialogRef = this.dialog.open(AgregarArticuloDevolucionModalComponent, {
       data: {
-        articulo: {},
-        descuento: this.form.proveedor.value.u_EJJE_DescuentoCliente,
-        then: () => {
 
+        cardCode: this.form.proveedor.value.cardCode,
+        then: () => {
           dialogRef.close();
         },
       },
-      width: '600px',
+      width: '700px',
       maxWidth: '600px',
     });
 

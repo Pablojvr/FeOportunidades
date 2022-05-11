@@ -1,22 +1,22 @@
-import { DevolucionesComponent } from './../pages/devoluciones/devoluciones.component';
-import { IndexDevolucionesComponent } from './../pages/index-devoluciones/index-devoluciones.component';
-import { PreviewFacturasComponent } from './../pages/preview-facturas/preview-facturas.component';
-import { FacturasComponent } from './../pages/facturas/facturas.component';
-import { IndexFacturasComponent } from './../pages/index-facturas/index-facturas.component';
-import { IndexEntradaMercanciaComponent } from './../pages/index-entrada-mercancia/index-entrada-mercancia.component';
-import { EntradaMercanciaComponent } from './../pages/entrada-mercancia/entrada-mercancia.component';
-import { OrdenCompraComponent } from './../pages/orden-compra/orden-compra.component';
-import { IndexComprasComponent } from './../pages/index-compras/index-compras.component';
-import { ComprasComponent } from './../pages/compras/compras.component';
-import { RolesComponent } from './../pages/roles/roles.component';
-import { LayoutComponent } from './../layout/layout.component';
-import { UsuariosComponent } from './../pages/usuarios/usuarios.component';
-import { NotfoundComponent } from './../pages/notfound/notfound.component';
-import { LoginComponent } from './../pages/login/login.component';
-import { IndexComponent } from './../pages/index/index.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../guards/auth';
+import { LayoutComponent } from './../layout/layout.component';
+import { ComprasComponent } from './../pages/compras/compras.component';
+import { DevolucionesComponent } from './../pages/devoluciones/devoluciones.component';
+import { EntradaMercanciaComponent } from './../pages/entrada-mercancia/entrada-mercancia.component';
+import { FacturasComponent } from './../pages/facturas/facturas.component';
+import { IndexComprasComponent } from './../pages/index-compras/index-compras.component';
+import { IndexDevolucionesComponent } from './../pages/index-devoluciones/index-devoluciones.component';
+import { IndexEntradaMercanciaComponent } from './../pages/index-entrada-mercancia/index-entrada-mercancia.component';
+import { IndexFacturasComponent } from './../pages/index-facturas/index-facturas.component';
+import { IndexComponent } from './../pages/index/index.component';
+import { LoginComponent } from './../pages/login/login.component';
+import { NotaCreditoComponent } from './../pages/nota-credito/nota-credito.component';
+import { OrdenCompraComponent } from './../pages/orden-compra/orden-compra.component';
+import { PreviewFacturasComponent } from './../pages/preview-facturas/preview-facturas.component';
+import { RolesComponent } from './../pages/roles/roles.component';
+import { UsuariosComponent } from './../pages/usuarios/usuarios.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -90,6 +90,20 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { permission: ['compras'] },
   },
+  {
+    path: 'notas_credito',
+    component: LayoutComponent,
+    children: [
+      {
+        path: 'new/:idFactura',
+        component: NotaCreditoComponent,
+      },
+      {
+        path: ':idNotaCredito',
+        component: NotaCreditoComponent,
+      },
+    ]
+    },
   {
     path: 'facturas',
     component: LayoutComponent,

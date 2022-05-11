@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -25,6 +25,14 @@ export class AuthService {
                 return response;
             }));
     }
+
+
+    checkUser(username: string, password: string) {
+      return this.http.post(`${this.baseUrl}/Auth/check`, { username, password })
+          .pipe(map(response=> {
+              return response;
+          }));
+  }
 
     logoutUser() {
         localStorage.removeItem('loggedInUser');

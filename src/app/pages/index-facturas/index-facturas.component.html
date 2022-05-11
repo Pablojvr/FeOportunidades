@@ -107,6 +107,12 @@
               {{ item.cardName }}
             </mat-cell>
           </ng-container>
+          <ng-container matColumnDef="tipo">
+            <mat-header-cell *matHeaderCellDef>Tipo Factura</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              {{ item.tipoDocumento }}
+            </mat-cell>
+          </ng-container>
 
           <ng-container matColumnDef="estado">
             <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
@@ -140,8 +146,8 @@
 
               <button
                 mat-icon-button
-                *ngIf="item.estadoFacturaFK == 4"
-                (click)="generarNotaCreditoFacturas(item)"
+                *ngIf="item.estadoFacturaFK == 3"
+                [routerLink]="['/notas_credito/new/', item.idFactura]"
               >
 
                 <mat-icon class="mat-18"

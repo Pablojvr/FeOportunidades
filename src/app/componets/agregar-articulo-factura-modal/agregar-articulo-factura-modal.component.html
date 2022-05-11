@@ -39,6 +39,11 @@
         Procesar
       </button>
 
+      <button bat-button mat-flat-button color="secondary" cdkFocusInitial style="background: #b9491d;
+      color: white;" (click)="manualOverrideAdministrador()">
+        Editar
+      </button>
+
 
     </div>
 
@@ -71,12 +76,12 @@
         <mat-header-cell *matHeaderCellDef>Seleccionado</mat-header-cell>
         <mat-cell *matCellDef="let item;let index">
 
-          <mat-form-field *ngIf="user.rol.supervisorFacturacion===false">
+          <mat-form-field *ngIf="user.rol.supervisorFacturacion===false  || overrideAdministrador">
             <input [(ngModel)]="item.quantity" [ngModelOptions]="{standalone: true}" matInput min="0"
                   matInput  type="number" required >
           </mat-form-field>
 
-          <div *ngIf="user.rol.supervisorFacturacion!=false">{{item.quantity}}</div>
+          <div *ngIf="user.rol.supervisorFacturacion!=false &&  overrideAdministrador==false">{{item.quantity}}</div>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="stock">
