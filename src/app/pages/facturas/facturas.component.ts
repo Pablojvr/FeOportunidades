@@ -423,9 +423,13 @@ export class FacturasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
-      var filteredResults = result.filter((item: any) => !!item.quantity);
+      debugger;
+      var filteredResults = result.items.filter((item: any) => !!item.quantity);
+
       this.solicitud.documentLines = [
-        ...this.solicitud.documentLines,
+        ...this.solicitud.documentLines.filter((item: any) => {
+          debugger;
+          return item.itemCode!=result.itemCode}),
         ...filteredResults,
       ];
       this.updateTotal();
