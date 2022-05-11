@@ -25,6 +25,10 @@ export class DevolucionesService {
     });
   }
 
+  getDevolucionesByID(id: any) {
+    return this.http.get<any>(`${this.baseUrl}/Devoluciones/${id}`, {});
+  }
+
   guardarDevolucion(devolucion: any) {
     let devolucionId = devolucion.idDevoluciones;
     if (!devolucionId) {

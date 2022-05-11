@@ -50,6 +50,7 @@ export class DevolucionesComponent implements OnInit {
   expandedElement: any | null;
   isLoadingPO: boolean = false;
   filteredPO!: any[];
+  readOnly: boolean = false;
 
   constructor(
     private _router: Router,
@@ -61,7 +62,6 @@ export class DevolucionesComponent implements OnInit {
   ) {
     this.devolucionesForm = this._fb.group({
       proveedor: [null, Validators.required],
-      serie: [null, Validators.required],
       fecha: [new Date(), Validators.required],
     });
 
@@ -118,7 +118,32 @@ export class DevolucionesComponent implements OnInit {
 
 
   ngOnInit(): void {
-    var id = this.route.snapshot.paramMap.get('id');
+    var id = this.route.snapshot.paramMap.get('idDevolucion');
+    if(id){
+      this.readOnly = true;
+      this.devolucionesService.getDevolucionesByID(id).subscribe((data) => {
+        if (data == undefined) {
+          this.errorMsg = data['Error'];
+          this.solicitud = null;
+        } else {
+          this.errorMsg = '';
+          this.solicitud = data;
+
+          this.devolucionesForm.setValue({
+            proveedor: {
+              cardName: this.solicitud.cardName,
+              cardCode: this.solicitud.cardCode,
+            },
+            fecha: this.solicitud.fecha,
+          });
+
+        }
+        this
+        this.isLoading = false;
+        console.log(data);
+        console.log(this.solicitud);
+      });
+    }
 
   }
 

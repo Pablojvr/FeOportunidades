@@ -133,6 +133,10 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       {
+        path: ':idDevolucion',
+        component: DevolucionesComponent,
+      },
+      {
         path: '',
         component: IndexDevolucionesComponent,
       },

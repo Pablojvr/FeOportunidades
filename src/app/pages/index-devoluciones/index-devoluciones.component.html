@@ -119,7 +119,7 @@
             <mat-cell class="duration-cell" *matCellDef="let item">
               <button
                 mat-icon-button
-                [routerLink]="['/compras/edit', item.idDevolucion]"
+                [routerLink]="['/devoluciones/', item.idDevolucion]"
               >
 
                 <mat-icon class="mat-18" *ngIf="item.estadoSolicitudFK != 1"
