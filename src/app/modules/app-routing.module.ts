@@ -132,16 +132,17 @@ const routes: Routes = [
     path: 'devoluciones',
     component: LayoutComponent,
     children: [
-      {
-        path: ':idDevolucion',
-        component: DevolucionesComponent,
-      },
+
       {
         path: '',
         component: IndexDevolucionesComponent,
       },
       {
         path: 'new',
+        component: DevolucionesComponent,
+      },
+      {
+        path: ':idDevolucion',
         component: DevolucionesComponent,
       },
     ],

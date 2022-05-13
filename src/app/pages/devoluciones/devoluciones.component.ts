@@ -120,6 +120,8 @@ export class DevolucionesComponent implements OnInit {
   ngOnInit(): void {
     var id = this.route.snapshot.paramMap.get('idDevolucion');
     if(id){
+      console.log("Entro")
+      console.log(id)
       this.readOnly = true;
       this.devolucionesService.getDevolucionesByID(id).subscribe((data) => {
         if (data == undefined) {

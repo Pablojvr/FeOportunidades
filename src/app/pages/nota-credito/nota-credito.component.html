@@ -42,9 +42,14 @@
         >
           <ng-container matColumnDef="codigo">
             <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
-            <mat-cell *matCellDef="let factura">{{
-              factura.ItemCode
-            }}</mat-cell> </ng-container
+            <mat-cell *matCellDef="let factura"><div style="min-width: 100px;">
+              <button mat-icon-button style="color:red" (click)="removeItem(factura) ">
+                <mat-icon class="mat-18" style="color:red">delete</mat-icon>
+              </button>
+              {{
+              factura.itemCode
+              }}
+            </div></mat-cell> </ng-container
           >
           <ng-container matColumnDef="descripcion">
             <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
@@ -109,13 +114,13 @@
 
       <div class="mt-3" style="text-align: center">
         <a
-          *ngIf="solicitud && solicitud.estadoFacturaFK == 3"
+          *ngIf="solicitud && solicitud.estadoFacturaFK == 3 && factura.DocumentLines.length>0"
           mat-button
           mat-flat-button
           color="warn"
-          (click)="generarOrdenesDeCompra()"
+          (click)="generarNotaCredito()"
         >
-          Generar Ordenes de Compras
+          Procesar Nota de Credito
         </a>
       </div>
     </div>

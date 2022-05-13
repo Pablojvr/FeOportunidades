@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatTable } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { FacturasService } from 'src/app/services/facturas.service';
@@ -28,6 +29,7 @@ export class NotaCreditoComponent implements OnInit {
   saved: boolean = false;
   totalFactura: any;
   factura: any;
+  @ViewChild(MatTable) table!: MatTable<any>;
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
@@ -152,9 +154,10 @@ export class NotaCreditoComponent implements OnInit {
         hash[key] = {
           CardCode: o.cardCode,
           CardName: o.cardName,
-          U_EJJE_CorDes: 'DES-ORD-SOL-' + this.solicitud.idSolicitudCompra,
+          U_EJJE_CorDes: 'CreditNote-SOL-' + this.solicitud.idSolicitudCompra,
           DocDate: moment().format(),
           DocumentLines: [],
+          U_EJJE_TipoDocumento:"NCF",
         };
         grouped.push(hash[key]);
       }
@@ -175,7 +178,13 @@ export class NotaCreditoComponent implements OnInit {
     return grouped;
   }
 
-  generarOrdenesDeCompra() {
+  removeItem(item:any){
+      let index = this.factura.DocumentLines.indexOf(item);
+      this.factura.DocumentLines.splice(index,1);
+      this.table.renderRows();
+  }
+
+  generarNotaCredito() {
     Swal.fire({
       title: '',
       text: 'Guardando...',
@@ -184,9 +193,22 @@ export class NotaCreditoComponent implements OnInit {
       showCancelButton: false,
       showConfirmButton: false,
     });
+
+    var facturas0 = this.factura.DocumentLines.filter((item:any)=>!item.Quantity).length;
+    if (facturas0>0){
+      Swal.fire({
+        title: '',
+        text: 'Datos invalidos, no se puede generar una nota de credito donde las cantidades de alguna linea sean 0',
+        icon: 'error',
+        heightAuto: false,
+        showCancelButton: false,
+        showConfirmButton: true,
+      });
+    return ;
+    }
     this.facturasService
       .saveNotaCredito({
-        orders: this.ordenes,
+        orders: this.factura,
         idSolicitudCompra: this.solicitud.idSolicitudCompra,
       })
       .subscribe({
