@@ -203,7 +203,7 @@ export class AgregarArticuloFacturaModalComponent implements OnInit {
             price: lote.PrecioVenta,
             stock:lote.Quantity,
             discountPercent:this.data.descuento,
-            vatCode:'IVACOM',
+            taxCode:this.data.taxCode,
             quantity: 0,
           };
           if (lote.Quantity - stockPendiente > 0) {
@@ -215,7 +215,7 @@ export class AgregarArticuloFacturaModalComponent implements OnInit {
           this.listadoLotes.push(newItem);
           stockPendiente = stockPendiente - newItem.quantity;
           i++;
-          debugger;
+          // debugger;
         } while (stockPendiente > 0 || ((this.user.rol.supervisorFacturacion===false || this.overrideAdministrador) && i<data.length));
       });
   }

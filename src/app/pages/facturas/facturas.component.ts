@@ -123,9 +123,16 @@ export class FacturasComponent implements OnInit {
 
     let value = this.form.proveedor.value;
     this.checkFacturasVencidas(value.cardCode);
-    this.form.serie.setValue(value.u_EJJE_TipoDocumento);
+    this.form.serie.setValue(value.u_EJJE_TipoDoc);
     this.creditoDisponible = value.currentAccountBalance;
     this.limiteCredito = value.creditLimit;
+  }
+
+  updateTaxCode(){
+    console.log("updatingTaxCode")
+    this.solicitud.documentLines = this.solicitud.documentLines.map((element:any) => {
+      return Object.assign(element,{taxCode: this.getTaxCode(this.form.proveedor.value.u_EJJE_TipoDoc)})
+    });
   }
 
   ngOnInit(): void {
@@ -162,7 +169,7 @@ export class FacturasComponent implements OnInit {
       showCancelButton: false,
       showConfirmButton: false,
     });
-
+    debugger;
     if (!this.checkValidCredit(this.form.proveedor.value, this.totalFactura)) {
       Swal.fire({
         title: 'Atención',
@@ -213,12 +220,12 @@ export class FacturasComponent implements OnInit {
     this.isLoadingFacturasMora = true;
     this.facturasService.totalFacturasEnMora(cardCode).subscribe({
       next: (value: any) => {
-        debugger;
+        // debugger;
         this.totalFacturasVencidas = value.data;
         this.isLoadingFacturasMora = false;
       },
       error: (error) => {
-        debugger;
+        // debugger;
         this.totalFacturasVencidas = null;
         this.isLoadingFacturasMora = false;
         let errorMsg: string;
@@ -247,11 +254,12 @@ export class FacturasComponent implements OnInit {
     sol.cardName = this.form.proveedor.value.cardName;
     sol.nrc = this.form.proveedor.value.additionalID;
     sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
-    sol.tipoDocumento = this.form.proveedor.value.u_EJJE_TipoDocumento;
+    sol.tipoDocumento = this.form.proveedor.value.u_EJJE_TipoDoc;
     sol.giro = this.form.proveedor.value.notes;
     sol.estadoFacturaFK = valid ? 2 : 1;
     // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
     sol.serie = this.form.serie.value;
+    this.updateTaxCode();
     this.facturasService.guardarFactura(sol).subscribe({
       next: (value: any) => {
         this.saving = false;
@@ -308,9 +316,11 @@ export class FacturasComponent implements OnInit {
   }
 
   checkValidCredit(proveedor: any, total: any) {
+    console.log(  eval(proveedor.creditLimit)
+   ,  eval(proveedor.currentAccountBalance) + eval(total))
     return (
       eval(proveedor.creditLimit) >=
-      eval(proveedor.currentAccountBalance) + total
+      eval(proveedor.currentAccountBalance) + eval(total)
     );
   }
   manualOverrideAdministrador(){
@@ -379,7 +389,7 @@ export class FacturasComponent implements OnInit {
   updateTotal() {
     this.totalFactura = this.solicitud.documentLines.reduce(
       (a: any, b: any) => {
-        return a + b.price * b.quantity;
+        return (a + b.price * b.quantity*(1-(b.discountPercent/100))).toFixed(4);
       },
       0
     );
@@ -411,7 +421,8 @@ export class FacturasComponent implements OnInit {
     let dialogRef = this.dialog.open(AgregarArticuloFacturaModalComponent, {
       data: {
         articulo: {},
-        descuento: this.form.proveedor.value.u_EJJE_DescuentoCliente,
+        taxCode: this.getTaxCode(this.form.proveedor.value.u_EJJE_TipoDoc),
+        descuento: this.form.proveedor.value.u_EJJE_Descuento,
         overrideAdministrador: this.overrideAdministrador,
         then: () => {
           dialogRef.close();
@@ -423,16 +434,26 @@ export class FacturasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
-      debugger;
+      // debugger;
       var filteredResults = result.items.filter((item: any) => !!item.quantity);
 
       this.solicitud.documentLines = [
         ...this.solicitud.documentLines.filter((item: any) => {
-          debugger;
+          // debugger;
           return item.itemCode!=result.itemCode}),
         ...filteredResults,
       ];
       this.updateTotal();
     });
+  }
+
+  getTaxCode(TipoDocumento:any){
+    let series:any = {
+      "CCF" : 'IVACRF',
+       "COF" : 'IVACOF',
+      "TIC" :'IVACOF',
+      "EXP" : 'IVAEXP',
+    }
+    return series[TipoDocumento]??'';
   }
 }

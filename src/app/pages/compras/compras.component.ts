@@ -241,7 +241,7 @@ export class ComprasComponent implements OnInit {
         var index = listadoActiculosDataSource.indexOf(found);
         listadoActiculosDataSource[index] = Object.assign(found, {
           COMPRAR: item.amount,
-          PUNIT: parseInt(item.price),
+          PUNIT: parseFloat(item.price),
           PROVEEDOR: item.cardName,
           CARDCODE: item.cardCode,
           VATCODE: item.vatCode,

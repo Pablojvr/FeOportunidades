@@ -152,8 +152,10 @@ export class PreviewFacturasComponent implements OnInit {
           docDate: xs.fecha,
           additionalID: xs.nrc,
           series: this.getSeries(xs.serie),
-          notes: xs.giro,
-          u_EJJE_TipoDocumento:xs.serie,
+          u_EJJE_RazonSocial:xs.cardName,
+          u_EJJE_NombreSocioNegocio:xs.cardName,
+          u_EJJE_Giro:xs.giro,
+          u_EJJE_TipoDocumento: this.getTipoDocumento(xs.serie),
           u_EJJE_NitSocioNegocio: xs.nit,
           U_EJJE_CorDes:"DES-FAC-"+this.solicitud.idFactura
           // u_EJJE_TipoDocumento: xs.serie,
@@ -296,5 +298,14 @@ export class PreviewFacturasComponent implements OnInit {
       "EXP" : 44,
     }
     return series[serie]??42;
+  }
+  getTipoDocumento(serie:any){
+    let series:any = {
+      "CCF" : "CRF",
+       "COF" : "COF",
+      "TIC" :"TIC",
+      "EXP" : "FAE",
+    }
+    return series[serie]??"CRF";
   }
 }

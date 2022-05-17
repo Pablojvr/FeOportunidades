@@ -170,7 +170,7 @@ export class NotaCreditoComponent implements OnInit {
           BaseType: '1470000113',
           BaseEntry: DocEntry,
           BaseLine: `${o['line']}`,
-          TaxCode: o['vatCode'],
+          TaxCode: o['taxCode'],
         });
       });
     });
@@ -208,8 +208,8 @@ export class NotaCreditoComponent implements OnInit {
     }
     this.facturasService
       .saveNotaCredito({
-        orders: this.factura,
-        idSolicitudCompra: this.solicitud.idSolicitudCompra,
+        notaCredito: this.factura,
+        idFactura: this.solicitud.idFactura,
       })
       .subscribe({
         next: (_) => {
