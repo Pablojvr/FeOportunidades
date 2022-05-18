@@ -135,6 +135,13 @@ export class FacturasComponent implements OnInit {
     });
   }
 
+  updateLineNum(){
+    console.log("updatingLineNum")
+    this.solicitud.documentLines = this.solicitud.documentLines.map((element:any,index:any) => {
+      return Object.assign(element,{line:index})
+    });
+  }
+
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
     var id = this.route.snapshot.paramMap.get('id');
@@ -260,6 +267,7 @@ export class FacturasComponent implements OnInit {
     // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
     sol.serie = this.form.serie.value;
     this.updateTaxCode();
+    this.updateLineNum();
     this.facturasService.guardarFactura(sol).subscribe({
       next: (value: any) => {
         this.saving = false;

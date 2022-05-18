@@ -66,6 +66,15 @@ export class NotaCreditoComponent implements OnInit {
           var capitalizedData = Object.assign({
             CardCode: data.cardCode,
             CardName: data.cardName,
+            docDate: data.fecha,
+            additionalID: data.nrc,
+            series: this.getSeries(data.serie),
+            u_EJJE_RazonSocial: data.cardName,
+            u_EJJE_NombreSocioNegocio: data.cardName,
+            u_EJJE_Giro: data.giro,
+            u_EJJE_TipoDocumento: 'NCF',
+            u_EJJE_NitSocioNegocio: data.nit,
+            u_EJJE_NumeroDocumento: data.numeroDocumento,
             U_EJJE_CorDes: 'FACT-' + data.idFactura,
             DocDate: moment().format(),
             DocumentLines: [],
@@ -75,12 +84,14 @@ export class NotaCreditoComponent implements OnInit {
               ItemCode: o['itemCode'],
               ItemName: o['itemDescription'],
               QuantityFacturada: o['quantity'],
+              QuantityDevuelta: o['quantityDevuelta'],
+              SinDevolver: o['quantity'] - o['quantityDevuelta'],
               UnitPrice: o['price'],
-              BaseType: '1470000113', // ESTO ESTA PENDIENTE DE VIERIFICAR CUAL ES EL IDENTIFICADOR
-              BaseEntry: data.DocEntry,
+              BaseType: '13',
+              BaseEntry: data.docEntry,
               BaseLine: `${o['line']}`,
-              TaxCode: 'IVACOM',
-              BatchNum:o['batchNum'],
+              TaxCode: o['taxCode'],
+              BatchNum: o['batchNum'],
             };
           });
           this.factura = capitalizedData;
@@ -157,7 +168,7 @@ export class NotaCreditoComponent implements OnInit {
           U_EJJE_CorDes: 'CreditNote-SOL-' + this.solicitud.idSolicitudCompra,
           DocDate: moment().format(),
           DocumentLines: [],
-          U_EJJE_TipoDocumento:"NCF",
+          U_EJJE_TipoDocumento: 'NCF',
         };
         grouped.push(hash[key]);
       }
@@ -178,10 +189,10 @@ export class NotaCreditoComponent implements OnInit {
     return grouped;
   }
 
-  removeItem(item:any){
-      let index = this.factura.DocumentLines.indexOf(item);
-      this.factura.DocumentLines.splice(index,1);
-      this.table.renderRows();
+  removeItem(item: any) {
+    let index = this.factura.DocumentLines.indexOf(item);
+    this.factura.DocumentLines.splice(index, 1);
+    this.table.renderRows();
   }
 
   generarNotaCredito() {
@@ -194,8 +205,10 @@ export class NotaCreditoComponent implements OnInit {
       showConfirmButton: false,
     });
 
-    var facturas0 = this.factura.DocumentLines.filter((item:any)=>!item.Quantity).length;
-    if (facturas0>0){
+    var facturas0 = this.factura.DocumentLines.filter(
+      (item: any) => !item.Quantity
+    ).length;
+    if (facturas0 > 0) {
       Swal.fire({
         title: '',
         text: 'Datos invalidos, no se puede generar una nota de credito donde las cantidades de alguna linea sean 0',
@@ -204,8 +217,16 @@ export class NotaCreditoComponent implements OnInit {
         showCancelButton: false,
         showConfirmButton: true,
       });
-    return ;
+      return;
     }
+
+    this.factura.DocumentLines = this.factura.DocumentLines.map((line: any) => {
+      line.batchNumbers = [
+        { Quantity: line.Quantity, BatchNumber: line.BatchNum },
+      ];
+      return line;
+    });
+
     this.facturasService
       .saveNotaCredito({
         notaCredito: this.factura,
@@ -225,10 +246,10 @@ export class NotaCreditoComponent implements OnInit {
             showConfirmButton: false,
           }).then(
             () => {
-              this._router.navigate(['/compras']);
+              this._router.navigate(['/facturas']);
             },
             (dismiss: any) => {
-              this._router.navigate(['/compras']);
+              this._router.navigate(['/facturas']);
             }
           );
         },
@@ -254,9 +275,20 @@ export class NotaCreditoComponent implements OnInit {
   }
 
   updateItemCalculatedValues(item: any) {
-    if (item.quantity != '' && item.quantity != null) {
-      item.quantity <= 0 ? (item.quantity = 1) : item.quantity;
-      item.quantity > item.stock ? (item.quantity = item.stock) : item.quantity;
+    console.log(item.Quantity);
+    debugger;
+    if (item.Quantity != '' && item.Quantity != null) {
+      console.log(
+        'Entro',
+        eval(item.Quantity) <= 0,
+        eval(item.Quantity) > eval(item.SinDevolver)
+      );
+      if (eval(item.Quantity) <= 0) {
+        item.Quantity = 1;
+      } else if (eval(item.Quantity) > eval(item.SinDevolver)) {
+        item.Quantity = item.SinDevolver;
+      }
+
     }
 
     this.updateTotal();
@@ -269,5 +301,32 @@ export class NotaCreditoComponent implements OnInit {
       },
       0
     );
+  }
+  getSeries(serie: any) {
+    let series: any = {
+      CCF: 42,
+      COF: 43,
+      TIC: 154,
+      EXP: 44,
+    };
+    return series[serie] ?? 42;
+  }
+  getTipoDocumento(serie: any) {
+    let series: any = {
+      CCF: 'CRF',
+      COF: 'COF',
+      TIC: 'TIC',
+      EXP: 'FAE',
+    };
+    return series[serie] ?? 'CRF';
+  }
+  getTaxCode(TipoDocumento: any) {
+    let series: any = {
+      CCF: 'IVACRF',
+      COF: 'IVACOF',
+      TIC: 'IVACOF',
+      EXP: 'IVAEXP',
+    };
+    return series[TipoDocumento] ?? '';
   }
 }

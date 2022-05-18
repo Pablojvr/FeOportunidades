@@ -63,9 +63,9 @@
             <mat-cell class="duration-cell" *matCellDef="let factura">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-              <input [(ngModel)]="factura.Quantity" (ngModelChange)="updateItemCalculatedValues(factura)" matInput min="0"
+              <input [(ngModel)]="factura.Quantity" (ngModelChange)="updateItemCalculatedValues(factura)" matInput min="0" [max]="factura.SinDevolver"
                   matInput placeholder="0" type="number" required [readonly]="readOnly">
-                <mat-hint>{{"Max:"+factura.QuantityFacturada}}</mat-hint>
+                <mat-hint>{{"Max:"+ factura.SinDevolver}}</mat-hint>
               </mat-form-field>
             </mat-cell>
           </ng-container>

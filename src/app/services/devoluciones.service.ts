@@ -30,12 +30,9 @@ export class DevolucionesService {
   }
 
   guardarDevolucion(devolucion: any) {
-    let devolucionId = devolucion.idDevoluciones;
-    if (!devolucionId) {
+
       return this.http.post(`${this.baseUrl}/Devoluciones`, devolucion);
-    } else {
-      return this.http.put(`${this.baseUrl}/Devoluciones/${devolucionId}`, devolucion);
-    }
+
   }
 
   getItemsFacturadosByItemCodeBatchNumAndCardCode(itemCode:any, batchNum:any,  cardCode:any){

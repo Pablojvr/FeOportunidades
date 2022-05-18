@@ -76,7 +76,7 @@ export class FacturasService {
 
   saveNotaCredito(sol:any){
 
-      return this.http.post(`${this.baseUrl}/Facturas`, sol);
+      return this.http.post(`${this.baseUrl}/Facturas/newCreditNote`, sol);
 
   }
 

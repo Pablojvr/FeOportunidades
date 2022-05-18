@@ -192,7 +192,11 @@ export class DevolucionesComponent implements OnInit {
     sol.fecha = this.form.fecha.value;
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardName;
-    sol.estadoDevolucionFK = 2;
+    sol.nrc = this.form.proveedor.value.additionalID;
+    sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
+    // sol.tipoDocumento = this.form.proveedor.value.u_EJJE_TipoDoc;
+    sol.giro = this.form.proveedor.value.notes;
+    sol.estadoDevolucionFK = 1;
     this.devolucionesService.guardarDevolucion(sol).subscribe({
       next: (_) => {
         this.saving = false;
