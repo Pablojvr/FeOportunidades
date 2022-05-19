@@ -79,7 +79,7 @@ export class NotaCreditoComponent implements OnInit {
             DocDate: moment().format(),
             DocumentLines: [],
           });
-          capitalizedData.DocumentLines = data.documentLines.map((o: any) => {
+          capitalizedData.DocumentLines = data.documentLines.filter((o:any)=>{return (o.quantity - o.quantityDevuelta) > 0} ).map((o: any) => {
             return {
               ItemCode: o['itemCode'],
               ItemName: o['itemDescription'],

@@ -80,7 +80,7 @@
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
         <mat-cell *matCellDef="let item">
-          <div>{{item.fechaFactura}}</div>
+          <div>{{item.fechaFactura | date:'shortDate'}}</div>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="acciones">

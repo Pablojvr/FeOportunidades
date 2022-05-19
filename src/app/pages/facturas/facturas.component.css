@@ -97,3 +97,14 @@ tr.example-element-row:not(.example-expanded-row):active {
   border-radius:  2px 2px 0 0 ;
 }
 
+
+.bordeInput {
+  margin: 4px 16px;
+  border-style: solid;
+  border-width: 2px;
+  text-align: center;
+  padding: 7px;
+  border-radius: 5px;
+  border-color: black;
+  min-width: 50px;
+}
