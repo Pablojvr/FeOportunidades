@@ -397,9 +397,10 @@ export class FacturasComponent implements OnInit {
   updateTotal() {
     this.totalFactura = this.solicitud.documentLines.reduce(
       (a: any, b: any) => {
-        return (a + b.price * b.quantity*(1-(b.discountPercent/100))).toFixed(4);
+        console.log( a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100)))
+        return a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100));
       },
-      0
+      0.0
     );
   }
   duplicateItem(item: any) {
