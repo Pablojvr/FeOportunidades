@@ -1,12 +1,9 @@
-import { ComprasService } from './../../services/compras.service';
-import { UserService } from '../../services/user.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { catchError, finalize, map } from 'rxjs/operators';
-import { Observable, merge, BehaviorSubject, of } from 'rxjs';
-import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import Swal from 'sweetalert2';
+import { ComprasService } from './../../services/compras.service';
 
 /**
  * Data source for the Usuarios view. This class should
@@ -88,7 +85,7 @@ export function getServerErrorMessage(error: HttpErrorResponse): string {
 
   switch (error.status) {
     case 400: {
-      return `${error.error}`;
+      return typeof error.error == 'object'?`${error.error?.message}`:`${error.error}`;
     }
     case 404: {
       return `No existe: ${error.message}`;
