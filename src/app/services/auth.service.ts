@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    public baseUrl = "https://localhost:44398/api";
+    public baseUrl = environment.apiURL;
     private loggedUserSubject: BehaviorSubject<any>;
     public loggedInUser: Observable<any>;
 

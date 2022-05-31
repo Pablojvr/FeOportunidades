@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { Page } from '../pages/usuarios/usuarios-datasource';
 
 @Injectable({
@@ -7,7 +8,7 @@ import { Page } from '../pages/usuarios/usuarios-datasource';
 })
 export class FacturasService {
 
-  public baseUrl = 'https://localhost:44398/api';
+  public baseUrl = environment.apiURL;
   constructor(private http: HttpClient) {}
 
 

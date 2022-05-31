@@ -401,7 +401,7 @@ export class FacturasComponent implements OnInit {
         return a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100));
       },
       0.0
-    );
+    ).toFixed(2);
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);

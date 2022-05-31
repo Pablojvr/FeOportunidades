@@ -1,12 +1,13 @@
-import { Page, Usuario } from './../pages/usuarios/usuarios-datasource';
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { Page } from './../pages/usuarios/usuarios-datasource';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  public baseUrl = 'https://localhost:44398/api';
+  public baseUrl = environment.apiURL;
   constructor(private http: HttpClient) {}
 
   getUsers(filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 10) {
