@@ -131,7 +131,7 @@ export class FacturasComponent implements OnInit {
   updateTaxCode(){
     console.log("updatingTaxCode")
     this.solicitud.documentLines = this.solicitud.documentLines.map((element:any) => {
-      return Object.assign(element,{taxCode: this.getTaxCode(this.form.proveedor.value.u_EJJE_TipoDoc)})
+      return Object.assign(element,{taxCode: this.getTaxCode(this.form.serie.value)})
     });
   }
 
