@@ -254,20 +254,20 @@ export class FacturasComponent implements OnInit {
     });
   }
   facturar(valid: boolean) {
+    this.updateTaxCode();
+    this.updateLineNum();
     var sol = Object.assign({}, this.solicitud);
     sol.fecha = this.form.fecha.value;
-
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardName;
     sol.nrc = this.form.proveedor.value.additionalID;
     sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
-    sol.tipoDocumento = this.form.proveedor.value.u_EJJE_TipoDoc;
+    sol.tipoDocumento = this.form.serie.value;
     sol.giro = this.form.proveedor.value.notes;
     sol.estadoFacturaFK = valid ? 2 : 1;
     // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
     sol.serie = this.form.serie.value;
-    this.updateTaxCode();
-    this.updateLineNum();
+
     this.facturasService.guardarFactura(sol).subscribe({
       next: (value: any) => {
         this.saving = false;
