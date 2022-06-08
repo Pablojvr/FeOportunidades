@@ -151,7 +151,7 @@ export class PreviewFacturasComponent implements OnInit {
         {
           docDate: xs.fecha,
           additionalID: xs.nrc,
-          series: this.getSeries(xs.serie),
+          series: this.getSeries(xs.serie)+"",
           u_EJJE_RazonSocial:xs.cardName,
           u_EJJE_NombreSocioNegocio:xs.cardName,
           u_EJJE_Giro:xs.giro,
