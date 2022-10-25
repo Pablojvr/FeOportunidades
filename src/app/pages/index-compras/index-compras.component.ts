@@ -36,6 +36,7 @@ export class IndexComprasComponent implements OnInit {
 
   isLoading = false;
   errorMsg!: string;
+  ListadoEstados: Array<any> = [];
 
   constructor(
     private datePipe: DatePipe,
@@ -47,13 +48,20 @@ export class IndexComprasComponent implements OnInit {
     this.comprasForm = this._fb.group({
       fechaIni: [null],
       fechaFin: [null],
+      estado: -1,
     });
     this.dataSource = new ListadoComprasDataSource(this.comprasService);
     // this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.laboratory);
   }
 
   ngOnInit(): void {
-    this.dataSource.getPaginatedSolicitudDeCompra('', '', 0, 10);
+    this.dataSource.getPaginatedSolicitudDeCompra('', '',-1, 0, 10);
+    this.comprasService.getEstados().toPromise().then(data=>{
+
+        this.ListadoEstados = data;
+        this.ListadoEstados.push({idEstadoSolicitud:-1,nombreEstadoSolicitud:"Todos"})
+      }
+    )
   }
   get form() {
     return this.comprasForm.controls;
@@ -82,6 +90,7 @@ export class IndexComprasComponent implements OnInit {
     this.dataSource.getPaginatedSolicitudDeCompra(
       fechaIni,
       fechaFin,
+      this.form.estado.value,
       this.paginator.pageIndex,
       this.paginator.pageSize
     );

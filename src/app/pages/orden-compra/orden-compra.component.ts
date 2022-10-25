@@ -18,9 +18,9 @@ export class OrdenCompraComponent implements OnInit {
   displayedColumns: any = [
     'codigo',
     'descripcion',
-
     'comprado',
     'punit',
+    'ubonif',
     'total',
     'comentario',
   ];
@@ -146,6 +146,7 @@ export class OrdenCompraComponent implements OnInit {
           BaseEntry: DocEntry,
           BaseLine: `${o['line']}`,
           TaxCode: o['vatCode'],
+          U_EJJE_UBonificada: 0,
         });
       });
     });
@@ -207,5 +208,55 @@ export class OrdenCompraComponent implements OnInit {
         },
       });
     console.log(this.ordenes);
+  }
+
+  printSolicitud(item: any) {
+    Swal.fire({
+      title: 'Generar Archivo PDF',
+      icon: 'question',
+      heightAuto: false,
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Descargar',
+      cancelButtonText: 'Cancelar',
+      focusConfirm: false,
+    }).then(
+      (result: any) => {
+        console.log(result);
+        if (!result.isConfirmed) return;
+        this.comprasService
+          .printOrdenCompra(
+            item.DocNum
+          )
+          .subscribe({
+            next: (data) => {
+              console.log(data);
+              var link = document.createElement('a');
+              document.body.appendChild(link);
+              link.setAttribute('type', 'hidden');
+              link.href = 'data:text/plain;base64,' + data;
+              link.download = `SolicitudCompraNum${item.idSolicitudCompra}.pdf`;
+              link.click();
+              document.body.removeChild(link);
+            },
+            error: (error) => {
+              let errorMsg: string;
+              if (error.error instanceof ErrorEvent) {
+                errorMsg = `Error: ${error.error.message}`;
+              } else {
+                errorMsg = getServerErrorMessage(error);
+              }
+
+              Swal.fire({
+                title: '',
+                text: errorMsg,
+                icon: 'error',
+                heightAuto: false,
+              });
+            },
+          });
+      },
+      () => {}
+    );
   }
 }

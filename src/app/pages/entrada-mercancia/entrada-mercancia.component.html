@@ -8,7 +8,7 @@
       </div>
       <!-- <div class="w-full"><h4>Compras y Facturación</h4></div> -->
 
-      <form class="flex w-full flex-wrap" #heroForm="ngForm">
+      <form class="flex w-full flex-wrap" #heroForm="ngForm" novalidate onsubmit="">
       <div class="flex w-full flex-wrap">
         <div
           class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center justify-center align-middle md:w-9/12 w-full">
@@ -83,8 +83,8 @@
         <div *ngIf="dataSource.loading$ | async" class="spinner-container" class="w-min-full">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
-        <mat-table [dataSource]="solicitud.documentLines" #table class="items-table mat-elevation-z8" matSort
-          matSortActive="id" matSortDirection="asc" matSortDisableClear>
+        <mat-table [dataSource]="solicitud.documentLines" #table class="items-table mat-elevation-z8"
+          >
           <ng-container matColumnDef="codigo">
             <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
             <mat-cell *matCellDef="let item;let index=index">{{ item.itemCode }}</mat-cell>
@@ -292,7 +292,7 @@
         <div style="position: relative">
           <mat-divider></mat-divider>
           <div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">
-            <a *ngIf="!readMode" [disabled]="!heroForm.form.valid" (click)="guardarSolicitud()" mat-button mat-flat-button color="primary">
+            <a *ngIf="!readMode"  (click)="guardarSolicitud()" mat-button mat-flat-button color="primary">
               <mat-icon class="mat-18">save</mat-icon>
               Guardar
             </a>

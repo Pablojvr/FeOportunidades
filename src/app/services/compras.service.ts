@@ -46,6 +46,13 @@ export class ComprasService {
     });
   }
 
+  printOrdenCompra(idSolicitud = 1) {
+    return this.http.get<any>(`${this.baseUrl}/SolicitudCompras/printOrdenCompra`, {
+      params: new HttpParams()
+        .set('idSolicitud', idSolicitud.toString())
+    });
+  }
+
   getVendorsByItemCode(itemCode = '') {
     return this.http.get<any>(`${this.baseUrl}/Compras/getVendorsByItemCode`, {
       params: new HttpParams()
@@ -74,6 +81,7 @@ export class ComprasService {
   getPaginatedSolicitudDeCompra(
     fechaIni = '',
     fechaFin = '',
+    estado = 1,
     pageNumber = 0,
     pageSize = 10
   ) {
@@ -82,6 +90,7 @@ export class ComprasService {
         // .set('courseId', UserId.toString())
         .set('fechaIni', fechaIni)
         .set('fechaFin', fechaFin)
+        .set('estado', estado.toString())
         .set('pageNumber', pageNumber.toString())
         .set('pageSize', pageSize.toString()),
     });
@@ -159,5 +168,12 @@ export class ComprasService {
 
   saveOrdenesDeCompra(sol: any) {
     return this.http.post(`${this.baseUrl}/Compras/newPurchaseOrder`, sol);
+  }
+
+  getEstados() {
+    return this.http.get<any>(
+      `${this.baseUrl}/SolicitudCompras/Estados/ALL`,
+      {}
+    );
   }
 }

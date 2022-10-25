@@ -41,6 +41,12 @@
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
+
+        </p>
+        <p>
+          <button mat-icon-button (click)="printSolicitud(item)" *ngIf="readOnly">
+            <mat-icon class="mat-18">print</mat-icon>
+          </button>
         </p>
 
         <mat-table
@@ -74,15 +80,29 @@
           <ng-container matColumnDef="punit">
             <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
-              {{ item.UnitPrice }}
+              {{ item.UnitPrice | number : '1.2-2' }}
             </mat-cell>
           </ng-container>
-
+          <ng-container matColumnDef="ubonif">
+            <mat-header-cell *matHeaderCellDef>Unidades Bonificadas</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              <mat-form-field  *ngIf="!readOnly" appearance="outline" style="width: 50%">
+                <mat-label>U. Bonif</mat-label>
+                <input
+                  matInput
+                  [(ngModel)]="item.U_EJJE_UBonificada"
+                >
+              </mat-form-field>
+              <span *ngIf="readOnly">{{
+                item.U_EJJE_UBonificada?item.U_EJJE_UBonificada:0
+              }}</span>
+            </mat-cell>
+          </ng-container>
           <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item"
               >${{
-                item.Quantity ? item.UnitPrice * item.Quantity : 0
+                item.Quantity ? item.UnitPrice * item.Quantity : 0 | number : '1.2-2'
               }}</mat-cell
             >
           </ng-container>

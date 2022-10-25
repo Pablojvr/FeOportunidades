@@ -2,7 +2,7 @@ import {
   Component, OnInit,
   ViewChild
 } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -25,6 +25,7 @@ export class EntradaMercanciaComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
+  @ViewChild('heroForm')  form! : NgForm;
   numOrdenCompra = new BehaviorSubject<string>('');
   proveedor = new BehaviorSubject<string>('');
   dataSource: ComprasDataSource;
@@ -227,14 +228,22 @@ export class EntradaMercanciaComponent implements OnInit {
       } else {
         this.errorMsg = '';
         var processedData = data.data.value[0];
+        debugger;
+        var orderedLines = processedData.documentLines.sort((a:any,b:any) => {
 
+          return a.itemDescription.localeCompare(b.itemDescription)
+        });
         var ids = processedData.documentLines
           .map((x: any) => x.itemCode)
           .join();
 
         this.comprasService.getItemsRentabilidad(ids).subscribe((data2) => {
           if (data.data != undefined) {
-            processedData.documentLines.forEach(function (obj: any) {
+            processedData.documentLines.forEach( (obj: any) =>{
+              obj.unidadesGravadas = obj.quantity;
+              obj.unidadesBonificadas = obj.u_EJJE_UBonificada;
+
+
               obj.price = obj.unitPrice;
               let found = data2.data.value.find(
                 (element: any) => element.itemCode == obj.itemCode
@@ -242,6 +251,7 @@ export class EntradaMercanciaComponent implements OnInit {
               if (found) {
                 obj.rentabilidad = found.u_EJJE_Rentabilidad;
               }
+              this.updateItemCalculatedValues(obj,null);
             });
           } else {
             processedData.documentLines.forEach(function (obj: any) {
@@ -428,6 +438,18 @@ export class EntradaMercanciaComponent implements OnInit {
   // }
 
   guardarSolicitud() {
+    this.form.form.updateValueAndValidity();
+    if(!this.form.form.valid){
+      Swal.fire({
+        title: 'Informacion incompleta',
+        text: 'Debe llenar todos los campos',
+        icon: 'info',
+        heightAuto: false,
+        showCancelButton: false,
+        showConfirmButton: false,
+      });
+      return;
+    }
     Swal.fire({
       title: '',
       text: 'Guardando...',
@@ -443,10 +465,11 @@ export class EntradaMercanciaComponent implements OnInit {
     sol.cardCode = this.solicitud.proveedor.cardCode;
     sol.NumeroOrden = this.solicitud.numOrdenCompra.docNum;
     sol.BaseEntry = this.solicitud.docEntry;
+    sol.BaseDocNum = this.solicitud.docNum;
     sol.DocNum = null;
     sol.DocEntry = null;
     sol.documentLines = sol.documentLines.map((line:any)=>{
-      line.line = line.baseLine;
+      line.line = line.lineNum;
       return line;
     })
     this.comprasService.saveEntradaMercancia(sol).subscribe({
@@ -540,36 +563,21 @@ export class EntradaMercanciaComponent implements OnInit {
       !isNaN(item.costoReal) && !isNaN(item.rentabilidad)
         ? (item.costoReal * (item.rentabilidad / 100 + 1)).toFixed(4)
         : 0;
+
+    this.form.form.updateValueAndValidity();
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);
-
-    var {
-      itemCode,
-      itemDescription,
-      baseLine,
-      baseEntry,
-      baseType,
-      taxCode,
-      rentabilidad,
-      price,
-    } = item;
     var newObj = Object.assign(
       {},
-      {
-        itemCode,
-        itemDescription,
-        baseLine,
-        baseEntry,
-        baseType,
-        taxCode,
-        rentabilidad,
-        price,
-      }
+      item
     );
     console.log(newObj);
     this.solicitud.documentLines.splice(index + 1, 0, newObj);
+
     this.table.renderRows();
+    // this.form.form.u
+
   }
 
   removeItem(item: any) {

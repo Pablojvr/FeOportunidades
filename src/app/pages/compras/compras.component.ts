@@ -288,6 +288,17 @@ export class ComprasComponent implements OnInit {
           line: index,
         };
       });
+      if(articulosSolicitados.length == 0){
+        Swal.fire({
+          title: 'Solicitud de compra sin articulos!',
+          text: 'Esta intentando guardar una solicitud de compra vacia!',
+          icon: 'info',
+          heightAuto: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+        return;
+      }
     var solicitud = null;
     if (this.solicitud != null) {
       solicitud = Object.assign(this.solicitud, {
