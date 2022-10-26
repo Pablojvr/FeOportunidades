@@ -86,7 +86,9 @@ export function getServerErrorMessage(error: HttpErrorResponse): string {
 
   switch (error.status) {
     case 400: {
-      return typeof error.error == 'object'?`${error.error?.message}`:`${error.error}`;
+      // console.log("ESTOY VALIDANDO EL ERROR 400:");
+      // console.log(error.error);
+      return typeof error.error == 'object'?`${error.error.data.error?.message.value}`:`${error.error}`;
     }
     case 404: {
       return `No existe: ${error.message}`;

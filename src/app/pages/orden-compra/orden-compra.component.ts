@@ -224,22 +224,48 @@ export class OrdenCompraComponent implements OnInit {
       (result: any) => {
         console.log(result);
         if (!result.isConfirmed) return;
+        var dialog = Swal;
+        dialog.fire({
+          title: 'Generando PDF',
+          html:`<style>.loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+          }
+
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }</style><div class="flex align-middle justify-center"><div class="loader"></div></div>`,
+
+          heightAuto: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+
+          focusConfirm: false,
+        });
         this.comprasService
           .printOrdenCompra(
             item.DocNum
           )
           .subscribe({
+
             next: (data) => {
+              dialog.close();
               console.log(data);
               var link = document.createElement('a');
               document.body.appendChild(link);
               link.setAttribute('type', 'hidden');
               link.href = 'data:text/plain;base64,' + data;
-              link.download = `SolicitudCompraNum${item.idSolicitudCompra}.pdf`;
+              link.download = `OrdenCompra${item.DocNum}.pdf`;
               link.click();
               document.body.removeChild(link);
             },
             error: (error) => {
+              dialog.close();
               let errorMsg: string;
               if (error.error instanceof ErrorEvent) {
                 errorMsg = `Error: ${error.error.message}`;

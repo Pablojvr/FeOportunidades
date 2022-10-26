@@ -2,24 +2,32 @@
   <mat-card-content>
     <div class="flex flex-col">
       <div *ngFor="let item of ordenes" class="mt-3">
+        <div class="flex flex-column items-center">
         <h2>
           Detalle de Orden de Compra
           <span *ngIf="readOnly">#{{ item.DocNum }}</span>
-          <div class="flex flex-column items-center align-items-end ml-1">
-            <a
-            *ngIf="readOnly"
-              mat-flat-button
-              color="primary"
-              style="height: 4em; margin-bottom: 1em"
-              class="comprasBtn"
-              [routerLink]="['/ingreso_compras/new',item.DocNum]"
-              target="_blank"
-            >
-              Generar Ingreso de Compras
-              <mat-icon class="mat-18">add</mat-icon>
-            </a>
-            </div>
+
         </h2>
+        <div class="flex flex-column items-center align-items-end ml-3">
+          <a
+          *ngIf="readOnly && item.DocumentStatus != 'bost_Close'"
+            mat-flat-button
+            color="primary"
+            style="height: 4em; margin-bottom: 1em"
+            class="comprasBtn"
+            [routerLink]="['/ingreso_compras/new',item.DocNum]"
+            target="_blank"
+          >
+            Generar Ingreso de Compras
+            <mat-icon class="mat-18">add</mat-icon>
+          </a>
+          <a   color="primary"  style="height: 4em; margin-bottom: 1em"
+          class="printBtn" mat-flat-button (click)="printSolicitud(item)" *ngIf="readOnly">
+            <mat-icon class="mat-18">print</mat-icon>
+          </a>
+          </div>
+        </div>
+        <p *ngIf="item.DocumentStatus == 'bost_Close'"><b>Orden de compra ingresada</b></p>
         <p>Proveedor: {{ item.CardName }}</p>
         <p>
           Fecha:
@@ -43,11 +51,7 @@
           </mat-form-field>
 
         </p>
-        <p>
-          <button mat-icon-button (click)="printSolicitud(item)" *ngIf="readOnly">
-            <mat-icon class="mat-18">print</mat-icon>
-          </button>
-        </p>
+
 
         <mat-table
           class="items-table mat-elevation-z8"

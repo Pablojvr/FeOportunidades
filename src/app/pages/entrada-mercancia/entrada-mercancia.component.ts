@@ -241,7 +241,7 @@ export class EntradaMercanciaComponent implements OnInit {
           if (data.data != undefined) {
             processedData.documentLines.forEach( (obj: any) =>{
               obj.unidadesGravadas = obj.quantity;
-              obj.unidadesBonificadas = obj.u_EJJE_UBonificada;
+              obj.unidadesBonificadas = Number(obj.u_EJJE_UBonificada);
 
 
               obj.price = obj.unitPrice;
@@ -499,6 +499,7 @@ export class EntradaMercanciaComponent implements OnInit {
           errorMsg = `Error: ${error.error.message}`;
         } else {
           errorMsg = getServerErrorMessage(error);
+          console.log(error);
         }
 
         Swal.fire({
