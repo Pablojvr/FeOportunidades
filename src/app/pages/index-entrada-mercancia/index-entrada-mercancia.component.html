@@ -126,6 +126,9 @@
                   >visibility</mat-icon
                 >
               </button>
+              <button mat-icon-button (click)="printSolicitud(item)" *ngIf="item.estadoSolicitudFK > 0">
+                <mat-icon class="mat-18">print</mat-icon>
+              </button>
               <!-- <button
                 mat-icon-button
                 [routerLink]="['/orden_compras', item.idSolicitudCompra]"

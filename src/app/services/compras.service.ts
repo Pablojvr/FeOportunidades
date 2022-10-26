@@ -53,6 +53,13 @@ export class ComprasService {
     });
   }
 
+  printEntradaMercancia(idSolicitud = 1) {
+    return this.http.get<any>(`${this.baseUrl}/SolicitudCompras/printEntradaMercancia`, {
+      params: new HttpParams()
+        .set('idSolicitud', idSolicitud.toString())
+    });
+  }
+
   getVendorsByItemCode(itemCode = '') {
     return this.http.get<any>(`${this.baseUrl}/Compras/getVendorsByItemCode`, {
       params: new HttpParams()
