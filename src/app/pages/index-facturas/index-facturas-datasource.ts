@@ -31,6 +31,8 @@ export class FacturasDataSource extends DataSource<Object> {
   getPaginatedFacturas(
     fechaIni: string = '',
     fechaFin: string = '',
+    estado: number = -1,
+    search: string = '',
     pageIndex: number = -1,
     pageSize: number = -1
   ) {
@@ -38,7 +40,7 @@ export class FacturasDataSource extends DataSource<Object> {
     this.loadingSubject.next(true);
 
     this.facturaService
-      .getPaginatedFacturas(fechaIni, fechaFin, pageIndex, pageSize)
+      .getPaginatedFacturas(fechaIni, fechaFin,estado,search, pageIndex, pageSize)
       .pipe(
         catchError((error) => {
           Swal.fire({

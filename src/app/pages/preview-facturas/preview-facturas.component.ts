@@ -29,6 +29,10 @@ export class PreviewFacturasComponent implements OnInit {
   saving: boolean = false;
   saved: boolean = false;
   user: any;
+  creditoDisponible: any;
+  limiteCredito: any;
+  isLoadingFacturasMora: boolean = false;
+  totalFacturasVencidas: any;
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
@@ -54,6 +58,7 @@ export class PreviewFacturasComponent implements OnInit {
           });
           console.log(tempOrdenes);
           this.ordenes = tempOrdenes;
+          this.checkData();
         }
         console.log(data);
         console.log(this.solicitud);
@@ -65,7 +70,7 @@ export class PreviewFacturasComponent implements OnInit {
         next: (data) => {
           this.solicitud = data;
           this.ordenes = this.genInvoicesByChunkSize(this.solicitud);
-
+          this.checkData();
           Swal.fire({
             title: 'Cargando',
             text: '',
@@ -100,6 +105,37 @@ export class PreviewFacturasComponent implements OnInit {
         },
       });
     }
+
+
+  }
+
+  public checkData(){
+    debugger;
+    this.checkFacturasVencidas(this.ordenes[0].cardCode);
+    this.facturasService.GetBusinessPartner(this.ordenes[0].cardCode).subscribe({
+      next: (data) => {
+
+        this.creditoDisponible = data.data.currentAccountBalance;
+        this.limiteCredito = data.data.creditLimit;
+
+
+      },
+      error: (error) => {
+        let errorMsg: string;
+        if (error.error instanceof ErrorEvent) {
+          errorMsg = `Error: ${error.error.message}`;
+        } else {
+          errorMsg = getServerErrorMessage(error);
+        }
+
+        Swal.fire({
+          title: '',
+          text: errorMsg,
+          icon: 'error',
+          heightAuto: false,
+        });
+      },
+    });
   }
   private getServerErrorMessage(error: HttpErrorResponse): string {
     console.log(error);
@@ -307,5 +343,37 @@ export class PreviewFacturasComponent implements OnInit {
       "EXP" : "FAE",
     }
     return series[serie]??"CRF";
+  }
+
+  checkFacturasVencidas(cardCode: any) {
+
+    this.isLoadingFacturasMora = true;
+    this.facturasService.totalFacturasEnMora(cardCode).subscribe({
+      next: (value: any) => {
+        // debugger;
+        this.totalFacturasVencidas = value.data;
+        this.isLoadingFacturasMora = false;
+      },
+      error: (error) => {
+        // debugger;
+        this.totalFacturasVencidas = null;
+        this.isLoadingFacturasMora = false;
+        let errorMsg: string;
+        if (error.error instanceof ErrorEvent) {
+          errorMsg = `Error: ${error.error.message}`;
+        } else {
+          errorMsg = getServerErrorMessage(error);
+        }
+
+        Swal.fire({
+          title: '',
+          text: errorMsg,
+          icon: 'error',
+          heightAuto: false,
+        });
+        this.saving = false;
+        this.saved = false;
+      },
+    });
   }
 }

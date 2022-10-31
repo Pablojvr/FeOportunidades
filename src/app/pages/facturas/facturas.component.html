@@ -29,7 +29,7 @@
 
             <input matInput formControlName="proveedor" type="text" [matAutocomplete]="auto" (focus)="getProveedores()"
               class="appearance-none py-3 px-4 bg-transparent" />
-            <mat-icon matSuffix class="mat-18">store</mat-icon>
+            <!-- <mat-icon matSuffix class="mat-18">store</mat-icon> -->
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="updateSerie()">
               <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
               <ng-container *ngIf="!isLoading">
@@ -41,6 +41,8 @@
               </ng-container>
             </mat-autocomplete>
           </mat-form-field>
+
+
 
         </div>
 
@@ -54,6 +56,22 @@
 
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
+        </div>
+        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-6/12 w-full">
+          <span class="mx-1 mb-3">Sucursal</span>
+        <mat-form-field appearance="outline">
+
+
+          <mat-select  formControlName="ShipToCode" >
+            <ng-container *ngIf="!isLoading">
+              <mat-option *ngFor="let address of addresses" [value]="address.addressName">
+                <span>
+                  <b>{{ address.addressName }}</b>
+                </span>
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
         </div>
         <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
           <span class="mx-1 mb-3">Tipo Doc.</span>
@@ -217,7 +235,7 @@
               <mat-icon class="mat-18">save</mat-icon>
               Procesar
             </a>
-            <a mat-stroked-button color="primary" routerLink="/compras">
+            <a mat-stroked-button color="primary" routerLink="/facturas">
               <mat-icon class="mat-18">undo</mat-icon>
               Regresar
             </a>

@@ -19,13 +19,16 @@ import { FacturasDataSource } from './index-facturas-datasource';
   styleUrls: ['./index-facturas.component.css'],
 })
 export class IndexFacturasComponent implements OnInit {
+  ListadoEstados: Array<any> = [];
   comprasForm!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Usuario>;
   dataSource: FacturasDataSource;
   displayedColumns: any[] = [
-    'codigo',
+    // 'codigo',
+    'numDoc',
+    // 'numDocSAP',
     // 'correlativo',
     'fecha',
     'tipo',
@@ -49,6 +52,8 @@ export class IndexFacturasComponent implements OnInit {
     this.comprasForm = this._fb.group({
       fechaIni: [null],
       fechaFin: [null],
+      estado: -1,
+      search: '',
     });
     this.dataSource = new FacturasDataSource(this.facturasService);
     // this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.laboratory);
@@ -56,7 +61,13 @@ export class IndexFacturasComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
-    this.dataSource.getPaginatedFacturas('', '', 0, 10);
+    this.dataSource.getPaginatedFacturas('', '',-1,'', 0, 10);
+    this.facturasService.getEstados().toPromise().then(data=>{
+
+      this.ListadoEstados = data;
+      this.ListadoEstados.push({idEstadoFactura:-1,nombreEstadoFactura:"Todos"})
+    }
+  )
   }
   get form() {
     return this.comprasForm.controls;
@@ -85,6 +96,8 @@ export class IndexFacturasComponent implements OnInit {
     this.dataSource.getPaginatedFacturas(
       fechaIni,
       fechaFin,
+      this.form.estado.value,
+      this.form.search.value,
       this.paginator.pageIndex,
       this.paginator.pageSize
     );

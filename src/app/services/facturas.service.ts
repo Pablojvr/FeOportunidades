@@ -44,16 +44,20 @@ export class FacturasService {
     );
   }
   getPaginatedFacturas(
-    filter = '',
-    sortOrder = 'asc',
+    fechaIni = '',
+   fechaFin='',
+    estado = -1,
+    search = '',
     pageNumber = 0,
     pageSize = 10
   ) {
     return this.http.get<Page[]>(`${this.baseUrl}/Facturas`, {
       params: new HttpParams()
         // .set('courseId', UserId.toString())
-        .set('filter', filter)
-        .set('sortOrder', sortOrder)
+        .set('fechaIni', fechaIni)
+        .set('fechaFin', fechaFin)
+        .set('search', search)
+        .set('estado', estado.toString())
         .set('pageNumber', pageNumber.toString())
         .set('pageSize', pageSize.toString()),
     });
@@ -86,6 +90,14 @@ export class FacturasService {
       params: new HttpParams()
         // .set('courseId', UserId.toString())
         .set('filter', filter),
+    });
+  }
+
+  GetBusinessPartner(cardCode = '') {
+    return this.http.get<any>(`${this.baseUrl}/Facturas/GetBusinessPartner`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('cardCode', cardCode),
     });
   }
 
@@ -141,6 +153,12 @@ export class FacturasService {
   aprobarFacturas( idFactura: any) {
     return this.http.get<any>(
       `${this.baseUrl}/Facturas/aprobarFacturas/?id=${idFactura}`,
+      {}
+    );
+  }
+  getEstados() {
+    return this.http.get<any>(
+      `${this.baseUrl}/Facturas/Estados/ALL`,
       {}
     );
   }

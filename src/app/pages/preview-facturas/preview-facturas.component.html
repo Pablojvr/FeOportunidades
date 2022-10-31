@@ -7,6 +7,19 @@
           <span *ngIf="readOnly">#{{ item.DocNum }}</span>
 
         </h2>
+        <div class="w-full" *ngIf="solicitud.estadoFacturaFK == 1">
+          <div class="flex flex-row w-full items-center">
+            SALDO:
+          <div class="bordeInput">${{(creditoDisponible*1).toFixed(4) | number :'1.2-2':'en-US'}}</div>
+          LIMITE CREDITO:
+          <div class="bordeInput">${{(limiteCredito*1).toFixed(4) | number :'1.2-2':'en-US'}}</div>
+          <div class="flex flex-row items-center"><b>CREDITO DISPONIBLE:</b><b>            <div class="bordeInput">${{(limiteCredito - creditoDisponible).toFixed(4) | number: '1.2-2':'en-US'}}</div>
+          </b>
+        </div>
+          </div >
+          <div class="flex flex-row items-center" *ngIf="!isLoadingFacturasMora && totalFacturasVencidas!=null">FACTURAS EN MORA:<div class="bordeInput"> {{totalFacturasVencidas}}
+          </div></div>
+        </div>
         <p>Proveedor: {{ item.cardName }}</p>
         <p>
           Fecha:

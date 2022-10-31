@@ -1,3 +1,16 @@
 mat-form-field {
   width: 100%;
 }
+
+.multiline-mat-option.mat-option {
+  white-space: normal;
+  line-height: normal;
+}
+
+.line1{
+  font-size: 12px;
+}
+
+.line2{
+  font-size: 10px;
+}

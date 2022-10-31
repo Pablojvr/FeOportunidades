@@ -11,13 +11,16 @@
           (ngModelChange)="changeItems($event)" required
           class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
         <mat-icon matSuffix class="mat-18">store</mat-icon>
-        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" >
           <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
           <ng-container *ngIf="!isLoading">
-            <mat-option *ngFor="let item of filteredItems" [value]="item">
-              <span>
+            <mat-option *ngFor="let item of filteredItems" [value]="item" class="multiline-mat-option">
+              <div class="line1">
                 <b>{{ item.itemCode }} - {{ item.itemName }}</b>
-              </span>
+              </div>
+              <div class="line2">
+                Stock: {{ item.quantityOnStock }}
+              </div>
             </mat-option>
           </ng-container>
         </mat-autocomplete>

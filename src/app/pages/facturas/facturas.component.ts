@@ -25,6 +25,7 @@ export class FacturasComponent implements OnInit {
   @ViewChild('input') input!: ElementRef;
 
   monthNames: any = [];
+  addresses: any = [];
   numFactura: number = 0;
   numOrdenCompra: number = 0;
   laboratory: string = '327573';
@@ -71,6 +72,7 @@ export class FacturasComponent implements OnInit {
       proveedor: [null, Validators.required],
       serie: [null, Validators.required],
       fecha: [new Date(), Validators.required],
+      ShipToCode:[null, Validators.required],
     });
 
     // this.dataSource.getReporte(this.numFactura, this.numOrdenCompra, this.laboratory);
@@ -122,6 +124,9 @@ export class FacturasComponent implements OnInit {
   updateSerie() {
 
     let value = this.form.proveedor.value;
+    debugger;
+    this.addresses = value.bpAddresses;
+    this.form.ShipToCode.setValue(this.addresses[0].addressName)
     this.checkFacturasVencidas(value.cardCode);
     this.form.serie.setValue(value.u_EJJE_TipoDoc);
     this.creditoDisponible = value.currentAccountBalance;
@@ -260,6 +265,7 @@ export class FacturasComponent implements OnInit {
     sol.fecha = this.form.fecha.value;
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardName;
+    sol.shipToCode = this.form.ShipToCode.value;
     sol.nrc = this.form.proveedor.value.additionalID;
     sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
     sol.tipoDocumento = this.form.serie.value;
@@ -444,6 +450,7 @@ export class FacturasComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
       // debugger;
+      if(result){
       var filteredResults = result.items.filter((item: any) => !!item.quantity);
 
       this.solicitud.documentLines = [
@@ -453,7 +460,12 @@ export class FacturasComponent implements OnInit {
         ...filteredResults,
       ];
       this.updateTotal();
+
+      this.addArticulo();
+
+    }
     });
+
   }
 
   getTaxCode(TipoDocumento:any){

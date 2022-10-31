@@ -10,7 +10,7 @@
         class="flex w-full flex-wrap"
       >
         <div
-          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-5/12 w-full"
+          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center  md:w-4/12 w-full"
         >
           <span class="mx-1 mb-3"> Fechas</span>
           <!-- <mat-date-range-input appearance="outline"> -->
@@ -40,18 +40,39 @@
             ></mat-datepicker-toggle>
             <mat-date-range-picker #picker></mat-date-range-picker>
           </mat-form-field>
+
+        </div>
+        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 sm:w-full">
+          <span class="mx-1 mb-3"> Estado:</span>
+          <mat-form-field appearance="outline">
+            <mat-select formControlName="estado" >
+              <mat-option *ngFor="let estadoSolicitud of ListadoEstados" [value]="estadoSolicitud.idEstadoFactura">{{estadoSolicitud.nombreEstadoFactura}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
-        <div class="flex flex-column items-center align-items-end ml-12">
-          <button
-            mat-flat-button
-            color="accent"
-            style="height: 3.7em; margin-bottom: 1.2em"
-          >
-            Filtrar
-            <mat-icon class="mat-18">search</mat-icon>
-          </button>
-        </div>
+        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-6/12 sm:w-full">
+          <span class="mx-1 mb-3"> Busqueda:</span>
+        <mat-form-field appearance="outline" style="width: 100%;">
+
+            <input
+              matInput
+              formControlName="search"
+              placeholder=""
+              clearable
+            />
+
+            </mat-form-field></div>
+            <div class="flex flex-column items-center align-items-end ml-12">
+              <button
+                mat-flat-button
+                color="accent"
+                style="height: 3.7em; margin-bottom: 1.2em"
+              >
+                Filtrar
+                <mat-icon class="mat-18">search</mat-icon>
+              </button>
+            </div>
         <div class="flex flex-auto"></div>
         <div class="flex flex-column items-center align-items-end ml-1">
           <button
@@ -104,7 +125,19 @@
           <ng-container matColumnDef="proveedor">
             <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
-              {{ item.cardName }}
+              {{ item.cardName }} ({{item.shipToCode}})
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="numDoc">
+            <mat-header-cell *matHeaderCellDef>Num. Documento</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              {{ item.numeroDocumento }}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="numDocSAP">
+            <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              {{ item.docNum }}
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="tipo">
