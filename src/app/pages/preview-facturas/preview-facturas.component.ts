@@ -19,7 +19,7 @@ export class PreviewFacturasComponent implements OnInit {
     'codigo',
     'descripcion',
     'lote',
-    // 'vencimiento',
+    'vencimiento',
     'UnidadesGravadas',
     'price',
     'totalGravado',

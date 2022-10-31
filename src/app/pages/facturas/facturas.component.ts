@@ -55,6 +55,7 @@ export class FacturasComponent implements OnInit {
   creditoDisponible: any;
   limiteCredito: any;
   user: any;
+  readOnly:boolean = false;
   totalFactura: any = 0;
   totalFacturasVencidas: any;
   isLoadingFacturasMora: boolean = false;
@@ -149,9 +150,64 @@ export class FacturasComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
-    var id = this.route.snapshot.paramMap.get('id');
-  }
+    var id = this.route.snapshot.paramMap.get('idFacturas');
+    if (id) {
 
+      this.getFactura(id);
+    }
+  }
+  getFactura(idFacturas:any){
+    Swal.fire({
+      title: '',
+      text: 'Cargando...',
+      icon: 'info',
+      heightAuto: false,
+      showCancelButton: false,
+      showConfirmButton: false,
+    });
+      this.facturasService.getFacturaByID(idFacturas).subscribe({
+        next: (data) => {
+          this.solicitud = data;
+          this.form.proveedor.setValue({cardCode : this.solicitud.cardCode, cardName : this.solicitud.cardName,});
+          this.form.proveedor.disable;
+          this.form.serie.setValue(this.solicitud.serie);
+          this.form.ShipToCode.setValue(this.solicitud.shipToCode);
+          this.addresses.push({addressName:this.solicitud.shipToCode});
+          this.readOnly = true;
+          Swal.fire({
+            title: 'Cargando',
+            text: '',
+            icon: 'info',
+            timer: 2000,
+            heightAuto: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+          }).then(
+            () => {
+              // this._router.navigate(['/compras']);
+            },
+            (dismiss: any) => {
+              // this._router.navigate(['/compras']);
+            }
+          );
+        },
+        error: (error) => {
+          let errorMsg: string;
+          if (error.error instanceof ErrorEvent) {
+            errorMsg = `Error: ${error.error.message}`;
+          } else {
+            errorMsg = getServerErrorMessage(error);
+          }
+
+          Swal.fire({
+            title: '',
+            text: errorMsg,
+            icon: 'error',
+            heightAuto: false,
+          });
+        },
+      });
+  }
   get form() {
     return this.comprasForm.controls;
   }
@@ -258,10 +314,12 @@ export class FacturasComponent implements OnInit {
       },
     });
   }
-  facturar(valid: boolean) {
+  facturar(valid: boolean,readOnly:boolean = false) {
     this.updateTaxCode();
     this.updateLineNum();
     var sol = Object.assign({}, this.solicitud);
+    if(sol.idFactura == null){
+      debugger;
     sol.fecha = this.form.fecha.value;
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardName;
@@ -273,6 +331,7 @@ export class FacturasComponent implements OnInit {
     sol.estadoFacturaFK = valid ? 2 : 1;
     // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
     sol.serie = this.form.serie.value;
+    }
 
     this.facturasService.guardarFactura(sol).subscribe({
       next: (value: any) => {

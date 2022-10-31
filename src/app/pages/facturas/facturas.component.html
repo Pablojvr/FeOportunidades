@@ -25,12 +25,19 @@
         <div
           class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center justify-center align-middle md:w-9/12 w-full">
           <span class="mx-1 mb-3">Cliente</span>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" >
 
-            <input matInput formControlName="proveedor" type="text" [matAutocomplete]="auto" (focus)="getProveedores()"
-              class="appearance-none py-3 px-4 bg-transparent" />
-            <!-- <mat-icon matSuffix class="mat-18">store</mat-icon> -->
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="updateSerie()">
+            <input matInput
+            formControlName="proveedor"
+            type="text"
+            [readonly]="readOnly"
+            [disabled]="readOnly"
+            [matAutocomplete]="auto"
+
+            (focus)="getProveedores()"
+            class="appearance-none py-3 px-4 bg-transparent"
+            />
+            <mat-autocomplete  #auto="matAutocomplete"  [displayWith]="displayFn" (optionSelected)="updateSerie()">
               <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
               <ng-container *ngIf="!isLoading">
                 <mat-option *ngFor="let lab of filteredLabs" [value]="lab">
@@ -50,7 +57,7 @@
           <span class="mx-1 mb-3">Fecha</span>
           <mat-form-field appearance="outline">
             <input [matDatepicker]="picker" matInput formControlName="fecha" type="text"
-              class="appearance-none py-3 px-4 bg-transparent">
+              class="appearance-none py-3 px-4 bg-transparent" [disabled]="readOnly">
             <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
 
 
@@ -62,7 +69,7 @@
         <mat-form-field appearance="outline">
 
 
-          <mat-select  formControlName="ShipToCode" >
+          <mat-select  formControlName="ShipToCode" [disabled]="readOnly">
             <ng-container *ngIf="!isLoading">
               <mat-option *ngFor="let address of addresses" [value]="address.addressName">
                 <span>
@@ -77,7 +84,7 @@
           <span class="mx-1 mb-3">Tipo Doc.</span>
           <mat-form-field appearance="outline">
 
-            <mat-select formControlName="serie">
+            <mat-select formControlName="serie" [disabled]="readOnly">
               <mat-option value="" selected></mat-option>
               <mat-option value="CCF">CRF</mat-option>
               <mat-option value="COF">COF</mat-option>

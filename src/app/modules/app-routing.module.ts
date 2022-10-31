@@ -124,6 +124,10 @@ const routes: Routes = [
         path: 'view/:idFacturas',
         component: PreviewFacturasComponent,
       },
+      {
+        path: 'edit/:idFacturas',
+        component: FacturasComponent,
+      },
     ],
     canActivate: [AuthGuard],
     data: { permission: ['facturacion'] },
