@@ -356,7 +356,7 @@ export class ComprasComponent implements OnInit {
 
         Swal.fire({
           title: '',
-          text: errorMsg,
+          html: errorMsg,
           icon: 'error',
           heightAuto: false,
         });

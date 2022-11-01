@@ -105,7 +105,7 @@
               <div class="flex flex-row">
                 <mat-form-field appearance="outline" style="width: 100px">
                   <mat-label>Lote</mat-label>
-                  <input name="lote{{index}}" [(ngModel)]="item.lote" matInput type="text" [readonly]="readMode" required>
+                  <input name="lote{{item.randomID}}" [(ngModel)]="item.lote" matInput type="text" [readonly]="readMode" required>
                 </mat-form-field>
                 <div *ngIf="!readMode" class="flex flex-col" style="padding-top:2px;height:64px;">
                   <mat-icon class="removeButton" matTooltip="Elimina la linea actual" (click)="removeItem(item)">remove
@@ -122,7 +122,7 @@
             <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 160px">
                 <mat-label>Vencimiento</mat-label>
-                <input name="fechaExpiracion{{index}}" [(ngModel)]="item.fechaExpiracion" matInput type="date" [readonly]="readMode" required>
+                <input name="fechaExpiracion{{item.randomID}}" [(ngModel)]="item.fechaExpiracion" matInput type="date" [readonly]="readMode" required>
               </mat-form-field>
 
             </mat-cell>
@@ -134,7 +134,7 @@
             <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-                <input name="unidadesGravadas{{index}}"  [(ngModel)]="item.unidadesGravadas" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput
+                <input name="unidadesGravadas{{item.randomID}}"  [(ngModel)]="item.unidadesGravadas" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput
                   min="0" matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
@@ -147,7 +147,7 @@
                 <span matPrefix class="money-input-prefix">
                   $&nbsp;
                 </span>
-                <input name="price{{index}}" [(ngModel)]="item.price" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput min="0.0"
+                <input name="price{{item.randomID}}" [(ngModel)]="item.price" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput min="0.0"
                   matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
@@ -168,7 +168,7 @@
             <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-                <input name="unidadesBonificadas{{index}}" [(ngModel)]="item.unidadesBonificadas" (ngModelChange)="updateItemCalculatedValues(item,$event)"
+                <input name="unidadesBonificadas{{item.randomID}}" [(ngModel)]="item.unidadesBonificadas" (ngModelChange)="updateItemCalculatedValues(item,$event)"
                   matInput min="0" matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
@@ -178,7 +178,7 @@
             <mat-cell *matCellDef="let item;let rowIdx = index" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>%</mat-label>
-                <input #descuento="ngModel" name="txtDescuento{{rowIdx}}" [(ngModel)]="item.descuento"
+                <input #descuento="ngModel" name="txtDescuento{{item.randomID}}" [(ngModel)]="item.descuento"
                   (ngModelChange)="updateItemCalculatedValues(item,$event)"
 
                   matInput min="0" max="100" matInput placeholder="0"
@@ -234,7 +234,7 @@
                 <span matPrefix class="money-input-prefix">
                   $&nbsp;
                 </span>
-                <input name="costoReal{{index}}" [(ngModel)]="item.costoReal" (ngModelChange)="updateItemCalculatedValues(item,'costoReal')" matInput min="0.0"
+                <input name="costoReal{{item.randomID}}" [(ngModel)]="item.costoReal" (ngModelChange)="updateItemCalculatedValues(item,'costoReal')" matInput min="0.0"
                   matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
@@ -245,7 +245,7 @@
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>%</mat-label>
 
-                <input name="rentabilidad{{index}}" [(ngModel)]="item.rentabilidad" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput
+                <input name="rentabilidad{{item.randomID}}" [(ngModel)]="item.rentabilidad" (ngModelChange)="updateItemCalculatedValues(item,$event)" matInput
                   min="0" max="100" matInput placeholder="0" type="number" required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>
@@ -258,7 +258,7 @@
                 <span matPrefix class="money-input-prefix">
                   $&nbsp;
                 </span>
-                <input name="precioVenta{{index}}" readonly [(ngModel)]="item.precioVenta" matInput min="0.0" matInput placeholder="0" type="number"
+                <input name="precioVenta{{item.randomID}}" readonly [(ngModel)]="item.precioVenta" matInput min="0.0" matInput placeholder="0" type="number"
                   required >
               </mat-form-field>
             </mat-cell>
@@ -272,7 +272,7 @@
                 <span matPrefix class="money-input-prefix">
                   $&nbsp;
                 </span>
-                <input name="precioPublico{{index}}" [(ngModel)]="item.precioPublico" matInput min="0.0" matInput placeholder="0" type="number"
+                <input name="precioPublico{{item.randomID}}" [(ngModel)]="item.precioPublico" matInput min="0.0" matInput placeholder="0" type="number"
                   required [readonly]="readMode">
               </mat-form-field>
             </mat-cell>

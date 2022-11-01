@@ -88,7 +88,16 @@ export function getServerErrorMessage(error: HttpErrorResponse): string {
     case 400: {
       // console.log("ESTOY VALIDANDO EL ERROR 400:");
       // console.log(error.error);
+      if(error.error.errors != null){
+        var msg = '';
+        for(var key in error.error.errors){
+          console.log(key, error.error.errors[key]);
+          msg+=`${key}:  ${JSON.stringify(error.error.errors[key])}<br>`;
+        };
+        return msg;
+      }else{
       return typeof error.error == 'object'?`${error.error.data.error?.message.value}`:`${error.error}`;
+      }
     }
     case 404: {
       return `No existe: ${error.message}`;
@@ -106,4 +115,31 @@ export function getServerErrorMessage(error: HttpErrorResponse): string {
       return `Error desconocido`;
     }
   }
+}
+  export function getServerErrorMessage2(error: HttpErrorResponse): string {
+    console.log("EL ERROR ES",error);
+
+    switch (error.status) {
+      case 400: {
+        // console.log("ESTOY VALIDANDO EL ERROR 400:");
+        // console.log(JSON.parse(error.error.error)[0].Data.error.message.value);
+
+        return typeof error.error == 'object'?`${JSON.parse(error.error.error)[0].Data?.error?.message.value}`:`${error.error}`;
+      }
+      case 404: {
+        return `No existe: ${error.message}`;
+      }
+      case 403: {
+        return `Acceso denegado: ${error.message}`;
+      }
+      case 500: {
+        return `Internal Server Error: ${error.message}`;
+      }
+      case 0: {
+        return 'No se puede conectar al servidor';
+      }
+      default: {
+        return `Error desconocido`;
+      }
+    }
 }

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   Component, OnInit,
   ViewChild
@@ -53,6 +54,7 @@ export class EntradaMercanciaComponent implements OnInit {
   middleColumns = ['M1', 'M2'];
   onlyNewColums = [];
   endColumns = [];
+  itemsUniqueCor= 0;
   filteredLabs: any;
   isLoading = false;
   errorMsg!: string;
@@ -68,7 +70,8 @@ export class EntradaMercanciaComponent implements OnInit {
     private _fb: FormBuilder,
     private comprasService: ComprasService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe: DatePipe
   ) {
     // this.comprasForm = this._fb.group({
     //   numFactura: [2, [Validators.required]],
@@ -240,10 +243,9 @@ export class EntradaMercanciaComponent implements OnInit {
         this.comprasService.getItemsRentabilidad(ids).subscribe((data2) => {
           if (data.data != undefined) {
             processedData.documentLines.forEach( (obj: any) =>{
-              obj.unidadesGravadas = obj.quantity;
+              obj.unidadesGravadas = Number(obj.remainingOpenInventoryQuantity);
               obj.unidadesBonificadas = Number(obj.u_EJJE_UBonificada);
-
-
+              obj.randomID =  this.itemsUniqueCor++;
               obj.price = obj.unitPrice;
               let found = data2.data.value.find(
                 (element: any) => element.itemCode == obj.itemCode
@@ -270,7 +272,7 @@ export class EntradaMercanciaComponent implements OnInit {
             cardName: this.solicitud.cardName,
             cardCode: this.solicitud.cardCode,
           };
-          this.solicitud.fecha = new Date();
+          this.solicitud.fecha = this.datePipe.transform(new Date(),"yyyy-MM-dd");
 
           Swal.fire({
             title: '',
@@ -573,6 +575,7 @@ export class EntradaMercanciaComponent implements OnInit {
       {},
       item
     );
+    newObj.randomID = this.itemsUniqueCor++;
     console.log(newObj);
     this.solicitud.documentLines.splice(index + 1, 0, newObj);
 

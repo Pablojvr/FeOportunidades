@@ -165,6 +165,16 @@
                   >visibility</mat-icon
                 >
               </button>
+              <button
+                mat-icon-button
+                *ngIf="item.estadoFacturaFK==1 || (user.rol.supervisorFacturacion===false && item.estadoFacturaFK == 2)"
+                [routerLink]="['/facturas/edit/', item.idFactura]"
+              >
+
+                <mat-icon class="mat-18"
+                  >edit</mat-icon
+                >
+              </button>
 
               <button
                 mat-icon-button

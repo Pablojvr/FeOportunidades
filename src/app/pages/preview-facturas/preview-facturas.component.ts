@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FacturasService } from 'src/app/services/facturas.service';
 import Swal from 'sweetalert2';
-import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
+import { getServerErrorMessage, getServerErrorMessage2 } from '../index-compras/index-compras-datasource';
 
 @Component({
   selector: 'app-preview-facturas',
@@ -254,7 +254,7 @@ export class PreviewFacturasComponent implements OnInit {
           if (error.error instanceof ErrorEvent) {
             errorMsg = `Error: ${error.error.message}`;
           } else {
-            errorMsg = getServerErrorMessage(error);
+            errorMsg = getServerErrorMessage2(error);
           }
 
           Swal.fire({

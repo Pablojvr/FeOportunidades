@@ -21,6 +21,7 @@ export class OrdenCompraComponent implements OnInit {
     'comprado',
     'punit',
     'ubonif',
+    'unidadesPendientes',
     'total',
     'comentario',
   ];
@@ -49,10 +50,16 @@ export class OrdenCompraComponent implements OnInit {
           });
           console.log(tempOrdenes);
           this.ordenes = tempOrdenes;
+
+
         }
         console.log(data);
         console.log(this.solicitud);
       });
+    }else{
+
+      this.displayedColumns = this.displayedColumns.filter((x:any)=>x != 'unidadesPendientes');
+
     }
     var idSolicitud = this.route.snapshot.paramMap.get('idSolicitudCompra');
     if (idSolicitud) {
@@ -142,11 +149,12 @@ export class OrdenCompraComponent implements OnInit {
           ItemName: o['itemName'],
           Quantity: o['amount'],
           UnitPrice: o['price'],
+          UnidadesPendientes: o['remainingOpenInventoryQuantity'],
           BaseType: '1470000113',
           BaseEntry: DocEntry,
           BaseLine: `${o['line']}`,
           TaxCode: o['vatCode'],
-          U_EJJE_UBonificada: 0,
+          U_EJJE_UBonificada: "0",
         });
       });
     });

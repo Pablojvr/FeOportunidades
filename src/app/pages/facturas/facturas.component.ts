@@ -60,6 +60,9 @@ export class FacturasComponent implements OnInit {
   totalFacturasVencidas: any;
   isLoadingFacturasMora: boolean = false;
   overrideAdministrador: boolean = false;
+  subtotalFactura: any = 0;
+  iva: any = 0;
+  dialogCargando: typeof Swal = Swal;
 
   constructor(
     private _router: Router,
@@ -147,7 +150,34 @@ export class FacturasComponent implements OnInit {
       return Object.assign(element,{line:index})
     });
   }
+  public checkData(){
+    debugger;
+    this.checkFacturasVencidas(this.solicitud.cardCode);
+    this.facturasService.GetBusinessPartner(this.solicitud.cardCode).subscribe({
+      next: (data) => {
+        this.form.proveedor.setValue(data.data);
+        this.creditoDisponible = data.data.currentAccountBalance;
+        this.limiteCredito = data.data.creditLimit;
+        this.dialogCargando.close();
 
+      },
+      error: (error) => {
+        let errorMsg: string;
+        if (error.error instanceof ErrorEvent) {
+          errorMsg = `Error: ${error.error.message}`;
+        } else {
+          errorMsg = getServerErrorMessage(error);
+        }
+
+        Swal.fire({
+          title: '',
+          text: errorMsg,
+          icon: 'error',
+          heightAuto: false,
+        });
+      },
+    });
+  }
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
     var id = this.route.snapshot.paramMap.get('idFacturas');
@@ -157,39 +187,31 @@ export class FacturasComponent implements OnInit {
     }
   }
   getFactura(idFacturas:any){
-    Swal.fire({
+    // this.dialogCargando =  Swal;
+    this.dialogCargando.fire({
       title: '',
       text: 'Cargando...',
       icon: 'info',
       heightAuto: false,
       showCancelButton: false,
       showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false
     });
       this.facturasService.getFacturaByID(idFacturas).subscribe({
         next: (data) => {
           this.solicitud = data;
+          this.solicitud.estadoFacturaFK = 1;
           this.form.proveedor.setValue({cardCode : this.solicitud.cardCode, cardName : this.solicitud.cardName,});
           this.form.proveedor.disable;
           this.form.serie.setValue(this.solicitud.serie);
+
           this.form.ShipToCode.setValue(this.solicitud.shipToCode);
           this.addresses.push({addressName:this.solicitud.shipToCode});
+
+          this.updateTotal();
           this.readOnly = true;
-          Swal.fire({
-            title: 'Cargando',
-            text: '',
-            icon: 'info',
-            timer: 2000,
-            heightAuto: false,
-            showCancelButton: false,
-            showConfirmButton: false,
-          }).then(
-            () => {
-              // this._router.navigate(['/compras']);
-            },
-            (dismiss: any) => {
-              // this._router.navigate(['/compras']);
-            }
-          );
+          this.checkData();
         },
         error: (error) => {
           let errorMsg: string;
@@ -460,13 +482,15 @@ export class FacturasComponent implements OnInit {
   }
 
   updateTotal() {
-    this.totalFactura = this.solicitud.documentLines.reduce(
+    this.subtotalFactura = this.solicitud.documentLines.reduce(
       (a: any, b: any) => {
         console.log( a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100)))
         return a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100));
       },
       0.0
     ).toFixed(2);
+    // this.iva = (this.subtotalFactura * 0.13).toFixed(2);
+    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);
