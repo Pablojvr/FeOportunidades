@@ -22,6 +22,7 @@ export class PreviewFacturasComponent implements OnInit {
     'vencimiento',
     'UnidadesGravadas',
     'price',
+    'retener',
     'totalGravado',
     'descuento',
     'total',
@@ -177,7 +178,19 @@ export class PreviewFacturasComponent implements OnInit {
       return rv;
     }, {});
   }
+  updateTotal(element:any) {
+    element.subtotalFactura = element.documentLines.reduce(
+      (a: any, b: any) => {
+        console.log( a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100)))
+        return a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100));
+      },
+      0.0
+    ).toFixed(4);
+    element.iva = (element.subtotalFactura * 0.13).toFixed(4);
+    element.totalFactura = Number(element.subtotalFactura) + Number(element.iva);
 
+
+  }
   genInvoicesByChunkSize(xs: any, chunkSize = 10) {
     let lines = xs.documentLines;
     let invoices = [];
@@ -193,12 +206,13 @@ export class PreviewFacturasComponent implements OnInit {
           u_EJJE_Giro:xs.giro,
           u_EJJE_TipoDocumento: this.getTipoDocumento(xs.serie),
           u_EJJE_NitSocioNegocio: xs.nit,
-          U_EJJE_CorDes:"DES-FAC-"+this.solicitud.idFactura
+          u_EJJE_CorDes:"DES-FAC-"+this.solicitud.idFactura
           // u_EJJE_TipoDocumento: xs.serie,
         },
         xs
       );
       newInvoice.documentLines = chunk;
+      this.updateTotal(newInvoice);
       invoices.push(newInvoice);
       // do whatever
     }

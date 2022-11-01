@@ -38,6 +38,7 @@ export class FacturasComponent implements OnInit {
     'vencimiento',
     'UnidadesGravadas',
     'price',
+    'Retener',
     'totalGravado',
     'descuento',
     'total',
@@ -62,6 +63,8 @@ export class FacturasComponent implements OnInit {
   subtotalFactura: any = 0;
   iva: any = 0;
   dialogCargando: typeof Swal = Swal;
+  tipoContribuyente: any;
+  retener: any;
 
   constructor(
     private _router: Router,
@@ -134,6 +137,8 @@ export class FacturasComponent implements OnInit {
     this.form.serie.setValue(value.u_EJJE_TipoDoc);
     this.creditoDisponible = value.currentAccountBalance;
     this.limiteCredito = value.creditLimit;
+    this.retener = value.subjectToWithholdingTax;
+    this.tipoContribuyente = value.u_EJJE_TipoContribuyente;
   }
 
   updateTaxCode(){
@@ -142,10 +147,17 @@ export class FacturasComponent implements OnInit {
       return Object.assign(element,{taxCode: this.getTaxCode(this.form.serie.value)})
     });
   }
-  updateRetencion(status:boolean){
-    console.log("updatingRetencion")
+  updateRetencion(menorDe100:boolean){
+    // console.log("updatingRetencion"+ [menorDe100,this.retener,this.tipoContribuyente])
+    var retener = '';
+    if(this.retener == 'boYES' && (this.tipoContribuyente == '03' || this.tipoContribuyente == '02') && !menorDe100 ){
+      var retener = 'tYES';
+    }else{
+      var retener = 'tNO';
+    }
+    console.log("updatingRetencion"+ [menorDe100,this.retener,this.tipoContribuyente,retener])
     this.solicitud.documentLines = this.solicitud.documentLines.map((element:any) => {
-      return Object.assign(element,{wTLiable: status?'tNO':null})
+      return Object.assign(element,{wTLiable: retener})
     });
   }
   updateLineNum(){
@@ -492,10 +504,10 @@ export class FacturasComponent implements OnInit {
         return a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100));
       },
       0.0
-    ).toFixed(2);
-    // this.iva = (this.subtotalFactura * 0.13).toFixed(2);
+    ).toFixed(4);
+    this.iva = (this.subtotalFactura * 0.13).toFixed(4);
     this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
-    this.updateRetencion(this.subtotalFactura<100);
+    this.updateRetencion(Number(this.subtotalFactura)<100);
 
   }
   duplicateItem(item: any) {

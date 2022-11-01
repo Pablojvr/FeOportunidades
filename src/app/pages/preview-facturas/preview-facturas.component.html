@@ -110,6 +110,20 @@
           </mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="retener">
+          <mat-header-cell *matHeaderCellDef>Retener</mat-header-cell>
+          <mat-cell *matCellDef="let item" class="duration-cell">
+
+
+              <span *ngIf="item.wtLiable=='tYES'">
+                SI
+              </span >
+              <span *ngIf="item.wtLiable=='tNO'">
+                NO
+              </span>
+          </mat-cell>
+        </ng-container>
+
 
 
 
@@ -119,9 +133,10 @@
           <mat-cell *matCellDef="let item" class="duration-cell">
             $
             {{
-            (item.price * item.quantity).toFixed(4)
+            (item.price * item.quantity).toFixed(2)
             }}
           </mat-cell>
+
         </ng-container>
 
         <ng-container matColumnDef="descuento">
@@ -134,11 +149,20 @@
         <ng-container matColumnDef="total">
           <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
           <mat-cell *matCellDef="let item">
-            <div> $ {{(item.price * item.quantity*(1-(item.discountPercent/100))).toFixed(4)}}</div>
+            <div> $ {{(item.price * item.quantity*(1-(item.discountPercent/100))).toFixed(2)}}</div>
           </mat-cell>
+          <td mat-footer-cell *matFooterCellDef colspan="2" align="right" style="flex:auto">
+            <div style="width:100%"><b>SUBTOTAL $ {{item.subtotalFactura | number
+              :'1.2-2':'en-US'}} </b></div>
+              <div style="width:100%"><b>IVA $ {{item.iva | number
+                :'1.2-2':'en-US'}} </b></div>
+            <div style="width:100%"><b>TOTAL $ {{item.totalFactura | number
+                :'1.2-2':'en-US'}} </b></div>
+          </td>
         </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          <mat-footer-row *matFooterRowDef="['total']"></mat-footer-row>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell" style="vertical-align: middle" colspan="9999">
               No se han encontrado registros

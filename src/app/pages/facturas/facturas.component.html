@@ -179,6 +179,24 @@
               </mat-form-field>
             </mat-cell>
           </ng-container>
+
+          <ng-container matColumnDef="Retener">
+            <mat-header-cell *matHeaderCellDef>Retener</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+              <mat-form-field appearance="outline" style="width: 100px">
+                <mat-label>Unidades</mat-label>
+                <mat-select [(ngModel)]="item.wTLiable">
+                  <mat-option value="tYES">
+                    SI
+                  </mat-option >
+                  <mat-option value="tNO">
+                    NO
+                  </mat-option>
+                </mat-select>
+
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
           <ng-container matColumnDef="price">
             <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
@@ -215,15 +233,15 @@
             <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
             <mat-cell *matCellDef="let item">
               <div> $ {{(item.price * item.quantity*(1-(item.discountPercent/100))).toFixed(2) |number
-                :'1.2-4':'en-US'}}</div>
+                :'1.2-2':'en-US'}}</div>
             </mat-cell>
             <td mat-footer-cell *matFooterCellDef colspan="1" align="right" style="flex:auto">
               <div style="width:100%"><b>SUBTOTAL $ {{subtotalFactura | number
-                :'1.2-4':'en-US'}} </b></div>
+                :'1.2-2':'en-US'}} </b></div>
                 <!-- <div style="width:100%"><b>IVA $ {{iva | number
                   :'1.2-4':'en-US'}} </b></div> -->
               <div style="width:100%"><b>TOTAL $ {{totalFactura | number
-                  :'1.2-4':'en-US'}} </b></div>
+                  :'1.2-2':'en-US'}} </b></div>
             </td>
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
