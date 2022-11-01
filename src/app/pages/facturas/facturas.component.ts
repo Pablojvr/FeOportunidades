@@ -30,7 +30,6 @@ export class FacturasComponent implements OnInit {
   numOrdenCompra: number = 0;
   laboratory: string = '327573';
   fecha: string = '';
-
   displayedColumns = [
     'index',
     'codigo',
@@ -143,7 +142,12 @@ export class FacturasComponent implements OnInit {
       return Object.assign(element,{taxCode: this.getTaxCode(this.form.serie.value)})
     });
   }
-
+  updateRetencion(status:boolean){
+    console.log("updatingRetencion")
+    this.solicitud.documentLines = this.solicitud.documentLines.map((element:any) => {
+      return Object.assign(element,{wTLiable: status?'tNO':null})
+    });
+  }
   updateLineNum(){
     console.log("updatingLineNum")
     this.solicitud.documentLines = this.solicitud.documentLines.map((element:any,index:any) => {
@@ -491,6 +495,8 @@ export class FacturasComponent implements OnInit {
     ).toFixed(2);
     // this.iva = (this.subtotalFactura * 0.13).toFixed(2);
     this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
+    this.updateRetencion(this.subtotalFactura<100);
+
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);
