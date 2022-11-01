@@ -45,6 +45,7 @@ export class OrdenCompraComponent implements OnInit {
             let newItem = this.capitalizeName(item);
             newItem.DocumentLines = newItem.DocumentLines.map((item2: any) => {
               return this.capitalizeName(item2);
+
             });
             return newItem;
           });
@@ -149,7 +150,7 @@ export class OrdenCompraComponent implements OnInit {
           ItemName: o['itemName'],
           Quantity: o['amount'],
           UnitPrice: o['price'],
-          UnidadesPendientes: o['remainingOpenInventoryQuantity'],
+          RemainingOpenInventoryQuantity: o['remainingOpenInventoryQuantity'],
           BaseType: '1470000113',
           BaseEntry: DocEntry,
           BaseLine: `${o['line']}`,
