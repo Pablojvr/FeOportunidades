@@ -1,11 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, finalize, switchMap, take, tap } from 'rxjs/operators';
 import { DevolucionesService } from 'src/app/services/devoluciones.service';
 import { FacturasService } from 'src/app/services/facturas.service';
 import Swal from 'sweetalert2';
@@ -24,6 +25,7 @@ export class DevolucionesComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
   @ViewChild('input') input!: ElementRef;
+  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
   monthNames: any = [];
   numFactura: number = 0;
@@ -51,6 +53,7 @@ export class DevolucionesComponent implements OnInit {
   isLoadingPO: boolean = false;
   filteredPO!: any[];
   readOnly: boolean = false;
+  comentario: string= '';
 
   constructor(
     private _router: Router,
@@ -58,7 +61,8 @@ export class DevolucionesComponent implements OnInit {
     private devolucionesService: DevolucionesService,
     private facturasService: FacturasService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _ngZone: NgZone
   ) {
     this.devolucionesForm = this._fb.group({
       proveedor: [null, Validators.required],
@@ -69,6 +73,12 @@ export class DevolucionesComponent implements OnInit {
 
 
     this.suscribeInputs();
+  }
+
+
+  triggerResize() {
+    // Wait for changes to be applied, then trigger textarea resize.
+    this._ngZone.onStable.pipe(take(1)).subscribe(() => this.autosize.resizeToFitContent(true));
   }
   suscribeInputs() {
     this.devolucionesForm.controls.proveedor.valueChanges
@@ -130,17 +140,18 @@ export class DevolucionesComponent implements OnInit {
         } else {
           this.errorMsg = '';
           this.solicitud = data;
-
+          this.comentario= data.comentario;
           this.devolucionesForm.setValue({
             proveedor: {
-              cardName: this.solicitud.cardName,
-              cardCode: this.solicitud.cardCode,
+              cardName: data.cardName,
+              cardCode: data.cardCode,
             },
-            fecha: this.solicitud.fecha,
+            fecha: this.solicitud.fecha
+
           });
 
         }
-        this
+
         this.isLoading = false;
         console.log(data);
         console.log(this.solicitud);
@@ -186,6 +197,8 @@ export class DevolucionesComponent implements OnInit {
       heightAuto: false,
       showCancelButton: false,
       showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false
     });
 
     var sol = Object.assign({}, this.solicitud);
@@ -194,6 +207,7 @@ export class DevolucionesComponent implements OnInit {
     sol.cardName = this.form.proveedor.value.cardName;
     sol.nrc = this.form.proveedor.value.additionalID;
     sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
+    sol.comentario = this.comentario;
     // sol.tipoDocumento = this.form.proveedor.value.u_EJJE_TipoDoc;
     sol.giro = this.form.proveedor.value.notes;
     sol.estadoDevolucionFK = 1;

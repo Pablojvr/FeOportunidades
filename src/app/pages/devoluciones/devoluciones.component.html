@@ -167,11 +167,26 @@
               </td>
             </tr>
           </tbody>
+
         </mat-table>
 
 
         <div style="position: relative">
+          <div class="mat-elevation-z8 w-full flex flex-row px-4 py-4 items-center justify-around bg-white">
+
+          <mat-form-field  appearance="outline">
+            <mat-label>Comentario:</mat-label>
+            <textarea matInput class="custom-textarea"
+            readonly="readOnly"
+                      cdkTextareaAutosize
+                      #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="1"
+                      [(ngModel)]="comentario"
+                      cdkAutosizeMaxRows="5"></textarea>
+          </mat-form-field>
+          </div>
           <mat-divider></mat-divider>
+
           <div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">
             <a *ngIf="!readOnly" (click)="guardarDevolucion()" mat-button mat-flat-button color="primary">
               <mat-icon class="mat-18">save</mat-icon>

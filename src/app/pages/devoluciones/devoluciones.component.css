@@ -1,3 +1,6 @@
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: rgba(0, 0, 0, 0.5);
+}
 .mat-table {
   overflow-x: auto;
 }
