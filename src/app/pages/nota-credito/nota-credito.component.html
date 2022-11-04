@@ -47,7 +47,7 @@
                 <mat-icon class="mat-18" style="color:red">delete</mat-icon>
               </button>
               {{
-              factura.itemCode
+              factura.ItemCode
               }}
             </div></mat-cell> </ng-container
           >
@@ -91,13 +91,30 @@
             </mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="descuento">
+            <mat-header-cell *matHeaderCellDef>Descuento</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let factura">
+              {{ factura.DiscountPercent }}%
+            </mat-cell>
+          </ng-container>
+
           <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let factura"
               >${{
-                factura.Quantity ? factura.UnitPrice * factura.Quantity : 0
+                (factura.Quantity ? (factura.UnitPrice * factura.Quantity)*(1-factura.DiscountPercent/100)  : 0) |number
+                :'1.2-2':'en-US'
               }}</mat-cell
             >
+
+            <td mat-footer-cell *matFooterCellDef colspan="1" align="right" style="flex:auto">
+              <div style="width:100%"><b>SUBTOTAL $ {{subtotalFactura | number
+                :'1.2-2':'en-US'}} </b></div>
+                 <div style="width:100%"><b>IVA $ {{iva | number
+                  :'1.2-2':'en-US'}} </b></div>
+              <div style="width:100%"><b>TOTAL $ {{totalFactura | number
+                  :'1.2-2':'en-US'}} </b></div>
+            </td>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -107,11 +124,24 @@
               No se han encontrado registros
             </td>
           </tr>
+          <mat-footer-row *matFooterRowDef="['total']"></mat-footer-row>
         </mat-table>
 
         <mat-divider></mat-divider>
       </div>
+      <div class="mat-elevation-z8 w-full flex flex-row px-4 py-4 items-center justify-around bg-white">
 
+        <mat-form-field  appearance="outline">
+          <mat-label>Comentario:</mat-label>
+          <textarea matInput class="custom-textarea"
+
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="1"
+                    [(ngModel)]="factura.Comments"
+                    cdkAutosizeMaxRows="5"></textarea>
+        </mat-form-field>
+        </div>
       <div class="mt-3" style="text-align: center">
         <a
           *ngIf="solicitud && solicitud.estadoFacturaFK == 3 && factura.DocumentLines.length>0"

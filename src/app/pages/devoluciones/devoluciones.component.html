@@ -157,6 +157,14 @@
             <mat-cell *matCellDef="let item">
               <div> $ {{(item.price * item.quantity).toFixed(4)}}</div>
             </mat-cell>
+            <td mat-footer-cell *matFooterCellDef colspan="1" align="right" style="flex:auto">
+              <div style="width:100%"><b>SUBTOTAL $ {{subtotalFactura | number
+                :'1.2-2':'en-US'}} </b></div>
+                <!-- <div style="width:100%"><b>IVA $ {{iva | number
+                  :'1.2-4':'en-US'}} </b></div> -->
+              <div style="width:100%"><b>TOTAL $ {{totalFactura | number
+                  :'1.2-2':'en-US'}} </b></div>
+            </td>
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
@@ -166,6 +174,7 @@
                 <b>Aún no se han agregado articulos</b>
               </td>
             </tr>
+            <mat-footer-row *matFooterRowDef="['saldo']"></mat-footer-row>
           </tbody>
 
         </mat-table>

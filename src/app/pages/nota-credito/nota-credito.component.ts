@@ -23,13 +23,16 @@ export class NotaCreditoComponent implements OnInit {
     'unidades',
     'comprado',
     'punit',
+    'descuento',
     'total',
   ];
   saving: boolean = false;
   saved: boolean = false;
-  totalFactura: any;
+  totalFactura: any=0;
   factura: any;
   @ViewChild(MatTable) table!: MatTable<any>;
+  subtotalFactura: any = 0;
+  iva: any = 0;
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
@@ -92,6 +95,7 @@ export class NotaCreditoComponent implements OnInit {
               BaseLine: `${o['line']}`,
               TaxCode: o['taxCode'],
               BatchNum: o['batchNum'],
+              DiscountPercent: o['discountPercent'],
             };
           });
           this.factura = capitalizedData;
@@ -203,6 +207,8 @@ export class NotaCreditoComponent implements OnInit {
       heightAuto: false,
       showCancelButton: false,
       showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
     });
 
     var facturas0 = this.factura.DocumentLines.filter(
@@ -295,13 +301,18 @@ export class NotaCreditoComponent implements OnInit {
   }
 
   updateTotal() {
-    this.totalFactura = this.solicitud.documentLines.reduce(
+    this.subtotalFactura = this.factura.DocumentLines.reduce(
       (a: any, b: any) => {
-        return a + b.price * b.quantity;
+        console.log( a + b.UnitPrice * b.Quantity*(1-(parseInt(b.DiscountPercent)/100)))
+        return a + b.UnitPrice * b.Quantity*(1-(parseInt(b.DiscountPercent)/100));
       },
-      0
-    );
+      0.0
+    ).toFixed(4);
+    this.iva = (this.subtotalFactura * 0.13).toFixed(4);
+    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
+    // this.updateRetencion(Number(this.subtotalFactura)<100);
   }
+
   getSeries(serie: any) {
     let series: any = {
       CCF: 42,

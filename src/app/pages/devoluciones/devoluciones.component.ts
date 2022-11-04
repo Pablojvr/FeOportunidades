@@ -54,6 +54,9 @@ export class DevolucionesComponent implements OnInit {
   filteredPO!: any[];
   readOnly: boolean = false;
   comentario: string= '';
+  subtotalFactura: any = 0;
+  iva: any = 0;
+  totalFactura: any = 0;
 
   constructor(
     private _router: Router,
@@ -315,8 +318,27 @@ export class DevolucionesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      if(result){
       this.solicitud.documentLines = [...this.solicitud.documentLines,...result];
+      if(result)
+      this.updateTotal();
+      this.addArticulo();
+      }
     });
   }
+
+  updateTotal() {
+    this.subtotalFactura = this.solicitud.documentLines.reduce(
+      (a: any, b: any) => {
+        console.log( a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100)))
+        return a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100));
+      },
+      0.0
+    ).toFixed(4);
+    this.iva = (this.subtotalFactura * 0.13).toFixed(4);
+    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
+    // this.updateRetencion(Number(this.subtotalFactura)<100);
+  }
+
 
 }
