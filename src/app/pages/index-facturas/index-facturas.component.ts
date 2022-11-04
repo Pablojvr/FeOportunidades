@@ -116,7 +116,7 @@ export class IndexFacturasComponent implements OnInit {
   anularFacturas(item:any){
     Swal.fire({
       title: '¿Esta seguro?',
-      text: 'Todas las facturas en sap seran anuladas',
+      text: 'La factura sera anulada en SAP',
       icon: 'question',
       heightAuto: false,
       showCancelButton: true,
@@ -131,7 +131,7 @@ export class IndexFacturasComponent implements OnInit {
             this.dataSource.removeFacturas(item);
             Swal.fire({
               title: '',
-              text: 'Se ha anulado correctamente todas las facturas',
+              text: 'Se ha anulado correctamente la factura',
               icon: 'success',
               timer: 2000,
               heightAuto: false,
