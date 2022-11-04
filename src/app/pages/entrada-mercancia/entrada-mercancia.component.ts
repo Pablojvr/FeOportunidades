@@ -236,6 +236,7 @@ export class EntradaMercanciaComponent implements OnInit {
 
           return a.itemDescription.localeCompare(b.itemDescription)
         });
+        processedData.documentLines = processedData.documentLines.filter((x:any)=>Number(x.remainingOpenInventoryQuantity) > 0);
         var ids = processedData.documentLines
           .map((x: any) => x.itemCode)
           .join();
