@@ -29,9 +29,12 @@
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
               <ng-container *ngIf="!isLoading">
-                <mat-option *ngFor="let lab of filteredLabs" [value]="lab">
-                  <span>
-                    <b>{{ lab.cardName }} ({{ lab.cardCode }})</b>
+                <mat-option *ngFor="let lab of filteredLabs" [value]="lab"  class="multiline-mat-option">
+                  <span class="line1">
+                    <b>{{ lab.cardForeignName }}({{ lab.cardCode }})</b>
+                  </span>
+                  <span class="line2">
+                  &nbsp;{{ lab.cardName }}
                   </span>
                 </mat-option>
               </ng-container>
@@ -186,7 +189,7 @@
           <mat-form-field  appearance="outline">
             <mat-label>Comentario:</mat-label>
             <textarea matInput class="custom-textarea"
-            readonly="readOnly"
+            [readonly]="readOnly"
                       cdkTextareaAutosize
                       #autosize="cdkTextareaAutosize"
                       cdkAutosizeMinRows="1"

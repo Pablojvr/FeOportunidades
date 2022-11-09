@@ -116,7 +116,7 @@ export class FacturasComponent implements OnInit {
   }
   displayFn(data: any): string {
     console.log(data);
-    return data ? `${data.cardName} (${data.cardCode})` : '';
+    return data ? `${data.cardForeignName} (${data.cardCode})` : '';
   }
 
   displayPurchaseOrder(data: any): string {
@@ -218,7 +218,7 @@ export class FacturasComponent implements OnInit {
         next: (data) => {
           this.solicitud = data;
           this.solicitud.estadoFacturaFK = 1;
-          this.form.proveedor.setValue({cardCode : this.solicitud.cardCode, cardName : this.solicitud.cardName,});
+          this.form.proveedor.setValue({cardCode : this.solicitud.cardCode, cardForeignName : this.solicitud.cardName,});
           this.form.proveedor.disable;
           this.form.serie.setValue(this.solicitud.serie);
 
@@ -360,7 +360,7 @@ export class FacturasComponent implements OnInit {
       debugger;
     sol.fecha = this.form.fecha.value;
     sol.cardCode = this.form.proveedor.value.cardCode;
-    sol.cardName = this.form.proveedor.value.cardName;
+    sol.cardName = this.form.proveedor.value.cardForeignName;
     sol.shipToCode = this.form.ShipToCode.value;
     sol.nrc = this.form.proveedor.value.additionalID;
     sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;

@@ -33,6 +33,7 @@ import { OrdenCompraComponent } from './pages/orden-compra/orden-compra.componen
 import { PreviewFacturasComponent } from './pages/preview-facturas/preview-facturas.component';
 import { RolesComponent } from './pages/roles/roles.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { NotaCreditoCrudComponent } from './pages/nota-credito-crud/nota-credito-crud.component';
 registerLocaleData(localeEs, 'es');
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ registerLocaleData(localeEs, 'es');
     DevolucionesComponent,
     AgregarArticuloDevolucionModalComponent,
     NotaCreditoComponent,
+    NotaCreditoCrudComponent,
   ],
   imports: [
     BrowserModule,

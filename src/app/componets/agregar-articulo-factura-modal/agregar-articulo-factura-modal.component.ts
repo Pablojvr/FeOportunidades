@@ -202,7 +202,7 @@ export class AgregarArticuloFacturaModalComponent implements OnInit {
             expDate: lote.ExpDate,
             price: Math.ceil(lote.PrecioVenta * 100)/100,
             stock:lote.Quantity,
-            discountPercent:this.data.descuento,
+            discountPercent: lote.WhsCode=='03'?0:this.data.descuento,
             taxCode:this.data.taxCode,
             quantity: 0,
           };

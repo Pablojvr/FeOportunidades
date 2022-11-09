@@ -116,7 +116,7 @@ export class DevolucionesComponent implements OnInit {
   }
   displayFn(data: any): string {
     console.log(data);
-    return data ? `${data.cardName} (${data.cardCode})` : '';
+    return data ? `${data.cardForeignName} (${data.cardCode})` : '';
   }
 
   displayPurchaseOrder(data: any): string {
@@ -146,7 +146,7 @@ export class DevolucionesComponent implements OnInit {
           this.comentario= data.comentario;
           this.devolucionesForm.setValue({
             proveedor: {
-              cardName: data.cardName,
+              cardForeignName: data.cardName,
               cardCode: data.cardCode,
             },
             fecha: this.solicitud.fecha
@@ -207,7 +207,7 @@ export class DevolucionesComponent implements OnInit {
     var sol = Object.assign({}, this.solicitud);
     sol.fecha = this.form.fecha.value;
     sol.cardCode = this.form.proveedor.value.cardCode;
-    sol.cardName = this.form.proveedor.value.cardName;
+    sol.cardName = this.form.proveedor.value.cardForeignName;
     sol.nrc = this.form.proveedor.value.additionalID;
     sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
     sol.comentario = this.comentario;
@@ -267,7 +267,7 @@ export class DevolucionesComponent implements OnInit {
     if (item.quantity != '' && item.quantity != null) {
       item.quantity <= 0 ? (item.quantity = 1) : item.quantity;
       eval(item.quantity) > (item.cantidadFacturada - item.devuelta) ? item.quantity = (item.cantidadFacturada - item.devuelta) : item.quantity;
-
+      this.updateTotal();
     }
 
   }
@@ -330,8 +330,9 @@ export class DevolucionesComponent implements OnInit {
   updateTotal() {
     this.subtotalFactura = this.solicitud.documentLines.reduce(
       (a: any, b: any) => {
-        console.log( a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100)))
-        return a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100));
+        console.log( a + b.price * b.quantity)
+        debugger;
+        return a + (b.price * b.quantity);
       },
       0.0
     ).toFixed(4);

@@ -108,3 +108,17 @@ tr.example-element-row:not(.example-expanded-row):active {
   border-color: black;
   min-width: 50px;
 }
+
+
+.line1{
+  font-size: 12px;
+}
+
+.line2{
+  font-size: 10px;
+}
+
+.multiline-mat-option.mat-option {
+  white-space: normal;
+  line-height: normal;
+}

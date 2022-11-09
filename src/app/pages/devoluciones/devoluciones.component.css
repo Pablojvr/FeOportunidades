@@ -100,3 +100,18 @@ tr.example-element-row:not(.example-expanded-row):active {
   border-radius:  2px 2px 0 0 ;
 }
 
+
+
+.line1{
+  font-size: 12px;
+}
+
+.line2{
+  font-size: 10px;
+}
+
+.multiline-mat-option.mat-option {
+  white-space: normal;
+  line-height: normal;
+}
+
