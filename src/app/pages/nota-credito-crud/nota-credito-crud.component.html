@@ -1,1 +1,270 @@
-<p>nota-credito-crud works!</p>
+<mat-card>
+  <mat-card-content>
+    <div class="flex flex-wrap">
+      <div class="w-full">
+        <h1>
+          {{ readOnly ? "" : "Nueva" }}  Nota Credito {{ readOnly?('#'+solicitud.docNum) :'' }}
+        </h1>
+      </div>
+
+
+      <form [formGroup]="comprasForm" class="flex w-full flex-wrap">
+        <div class="w-full" *ngIf="creditoDisponible&&creditoDisponible">
+          <div class="flex flex-row w-full items-center">
+            SALDO:
+          <div class="bordeInput">${{(creditoDisponible*1).toFixed(4) | number :'1.2-2':'en-US'}}</div>
+          LIMITE CREDITO:
+          <div class="bordeInput">${{(limiteCredito*1).toFixed(4) | number :'1.2-2':'en-US'}}</div>
+          <div class="flex flex-row items-center"><b>CREDITO DISPONIBLE:</b><b>            <div class="bordeInput">${{(limiteCredito - creditoDisponible).toFixed(4) | number: '1.2-2':'en-US'}}</div>
+          </b>
+        </div>
+          </div >
+          <div class="flex flex-row items-center" *ngIf="!isLoadingFacturasMora && totalFacturasVencidas!=null">FACTURAS EN MORA:<div class="bordeInput"> {{totalFacturasVencidas}}
+          </div></div>
+        </div>
+        <div
+          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center justify-center align-middle md:w-9/12 w-full">
+          <span class="mx-1 mb-3">Cliente</span>
+          <mat-form-field appearance="outline" >
+
+            <input matInput
+            formControlName="proveedor"
+            type="text"
+            [readonly]="readOnly || isFact"
+            [disabled]="readOnly || isFact"
+            [matAutocomplete]="auto"
+
+            (focus)="getProveedores()"
+            class="appearance-none py-3 px-4 bg-transparent"
+            />
+            <mat-autocomplete  #auto="matAutocomplete"  [displayWith]="displayFn" (optionSelected)="updateSerie()">
+              <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+              <ng-container *ngIf="!isLoading">
+                <mat-option *ngFor="let lab of filteredLabs" [value]="lab" class="multiline-mat-option">
+                  <span class="line1">
+                    <b>{{ lab.cardForeignName }}({{ lab.cardCode }})</b>
+                  </span>
+                  <span class="line2">
+                  &nbsp;{{ lab.cardName }}
+                  </span>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+
+
+
+        </div>
+
+        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-3/12 w-full">
+          <span class="mx-1 mb-3">Fecha</span>
+          <mat-form-field appearance="outline">
+            <input [matDatepicker]="picker" matInput formControlName="fecha" type="text"
+              class="appearance-none py-3 px-4 bg-transparent" [disabled]="readOnly">
+            <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+
+
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-6/12 w-full">
+          <span class="mx-1 mb-3">Sucursal</span>
+        <mat-form-field appearance="outline">
+
+
+          <mat-select  formControlName="ShipToCode" [disabled]="readOnly || isFact">
+            <ng-container *ngIf="!isLoading">
+              <mat-option *ngFor="let address of addresses" [value]="address.addressName">
+                <span>
+                  <b>{{ address.addressName }}</b>
+                </span>
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+        </div>
+        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
+          <span class="mx-1 mb-3">Tipo Doc.</span>
+          <mat-form-field appearance="outline">
+
+            <mat-select formControlName="serie" [disabled]="readOnly">
+              <mat-option value="NCF">NCF</mat-option>
+              <mat-option value="INT">INT</mat-option>
+
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+        <div class="flex flex-auto"></div>
+        <div class="flex w-full justify-end">
+          <div class="flex flex-column items-center align-items-end ml-1">
+            <button *ngIf="!readOnly && !isFact" [disabled]="!form.proveedor.value" mat-button mat-flat-button color="primary" color="primary"
+              style="height: 4em; margin-bottom: 1em" (click)="addArticulo()">
+              Agregar Articulo
+              <mat-icon class="mat-18">add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="w-full rounded">
+        <!-- <div *ngIf="dataSource.loading$ | async" class="spinner-container" class="w-min-full">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div> -->
+        <mat-table [dataSource]="solicitud.documentLines" #table class="items-table mat-elevation-z8" matSort
+          matSortActive="id" matSortDirection="asc" matSortDisableClear>
+          <ng-container matColumnDef="codigo">
+            <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
+            <mat-cell *matCellDef="let item">
+
+              <div style="min-width: 100px;">
+                <button *ngIf="!readOnly" mat-icon-button style="color:red" (click)="removeItem(item) ">
+                  <mat-icon class="mat-18" style="color:red">delete</mat-icon>
+                </button>
+                {{
+                item.itemCode
+                }}
+              </div>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="descripcion">
+            <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+              <div style="min-width: 200px;">{{
+                item.itemDescription
+                }}</div>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="numeroFactura">
+            <mat-header-cell *matHeaderCellDef>No. Factura</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+              {{
+              item.u_EJJE_NumeroFactura
+              }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="lote">
+            <mat-header-cell *matHeaderCellDef>Lote</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+              <div class="flex flex-row">
+                {{item.batchNumber}}
+
+              </div>
+            </mat-cell>
+          </ng-container>
+
+
+          <ng-container matColumnDef="vencimiento">
+            <mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+
+              {{item.expDate | date:'shortDate'}}
+
+
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="index">
+            <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
+            <mat-cell *matCellDef="let item; let i = index" class="duration-cell" style="width: 50px;">
+
+              {{i + 1}}
+
+
+            </mat-cell>
+          </ng-container>
+
+
+          <ng-container matColumnDef="UnidadesGravadas">
+            <mat-header-cell *matHeaderCellDef>U.Gravadas</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+              <mat-form-field appearance="outline" style="width: 100px">
+                <mat-label>Unidades</mat-label>
+                <input   [max]="item.cantidadFacturada - item.devuelta"    [readonly]="readOnly" [disabled]="readOnly" [disabled]="readOnly"   [(ngModel)]="item.quantity" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
+                  matInput placeholder="0" type="number" required [readonly]="user.rol.supervisorFacturacion!==false">
+                 <mat-hint *ngIf="!readOnly">{{"Max:"+ (item.cantidadFacturada - item.devuelta)}}</mat-hint>
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
+
+
+          <ng-container matColumnDef="price">
+            <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+              $ {{item.price | number: '1.2-2':'en-US'}}
+            </mat-cell>
+          </ng-container>
+
+
+
+
+
+          <ng-container matColumnDef="totalGravado">
+            <mat-header-cell *matHeaderCellDef>T.Gravado</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+              $
+              {{
+              (item.price * item.quantity).toFixed(2) |number :'1.2-2':'en-US'
+              }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="descuento">
+            <mat-header-cell *matHeaderCellDef>% Desc.</mat-header-cell>
+            <mat-cell *matCellDef="let item">
+              <mat-form-field appearance="outline" style="width: 100px">
+                <mat-label>%</mat-label>
+              <input  [readonly]="readOnly || isFact" [disabled]="readOnly || isFact"  [(ngModel)]="item.discountPercent" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
+                  matInput placeholder="0" type="number">
+              </mat-form-field>
+            </mat-cell>
+            <td mat-footer-cell *matFooterCellDef colspan="8"></td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="total">
+            <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+            <mat-cell *matCellDef="let item">
+              <div> $ {{(item.price * item.quantity*(1-(item.discountPercent/100))).toFixed(2) |number
+                :'1.2-2':'en-US'}}</div>
+            </mat-cell>
+            <td mat-footer-cell *matFooterCellDef colspan="1" align="right" style="flex:auto">
+              <div style="width:100%"><b>SUBTOTAL $ {{subtotalFactura | number
+                :'1.2-2':'en-US'}} </b></div>
+                 <div style="width:100%"><b>IVA $ {{iva | number
+                  :'1.2-2':'en-US'}} </b></div>
+              <div style="width:100%"><b>TOTAL $ {{totalFactura | number
+                  :'1.2-2':'en-US'}} </b></div>
+            </td>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          <tbody>
+            <tr *matNoDataRow class="mat-row">
+              <td class="mat-cell" style="vertical-align: middle" colspan="9999">
+                <b>Aún no se han agregado articulos para facturar</b>
+              </td>
+            </tr>
+          </tbody>
+          <mat-footer-row *matFooterRowDef="['descuento','total']"></mat-footer-row>
+        </mat-table>
+
+
+        <div style="position: relative">
+          <mat-divider></mat-divider>
+          <div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">
+            <a  *ngIf="!readOnly"(click)="guardarSolicitud()" mat-button mat-flat-button color="primary">
+              <mat-icon class="mat-18">save</mat-icon>
+              Procesar
+            </a>
+            <a mat-stroked-button color="primary" routerLink="/notasCredito">
+              <mat-icon class="mat-18">undo</mat-icon>
+              Regresar
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

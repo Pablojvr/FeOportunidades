@@ -1,16 +1,17 @@
+
 <mat-card>
   <mat-card-content>
     <div class="flex flex-wrap">
-      <div class="w-full"><h1>Facturacion</h1></div>
-      <div class="w-full"><h4>Facturacion</h4></div>
+      <div class="w-full"><h1>Notas de Credito</h1></div>
+      <div class="w-full"><h4></h4></div>
 
       <form
-        [formGroup]="comprasForm"
+        [formGroup]="devolucionesForm"
         (ngSubmit)="onSubmit()"
         class="flex w-full flex-wrap"
       >
         <div
-          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center  md:w-4/12 w-full"
+          class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-5/12 w-full"
         >
           <span class="mx-1 mb-3"> Fechas</span>
           <!-- <mat-date-range-input appearance="outline"> -->
@@ -40,48 +41,27 @@
             ></mat-datepicker-toggle>
             <mat-date-range-picker #picker></mat-date-range-picker>
           </mat-form-field>
-
-        </div>
-        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 sm:w-full">
-          <span class="mx-1 mb-3"> Estado:</span>
-          <mat-form-field appearance="outline">
-            <mat-select formControlName="estado" >
-              <mat-option *ngFor="let estadoSolicitud of ListadoEstados" [value]="estadoSolicitud.idEstadoFactura">{{estadoSolicitud.nombreEstadoFactura}}</mat-option>
-            </mat-select>
-          </mat-form-field>
         </div>
 
-        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-6/12 sm:w-full">
-          <span class="mx-1 mb-3"> Busqueda:</span>
-        <mat-form-field appearance="outline" style="width: 100%;">
-
-            <input
-              matInput
-              formControlName="search"
-              placeholder=""
-              clearable
-            />
-
-            </mat-form-field></div>
-            <div class="flex flex-column items-center align-items-end ml-12">
-              <button
-                mat-flat-button
-                color="accent"
-                style="height: 3.7em; margin-bottom: 1.2em"
-              >
-                Filtrar
-                <mat-icon class="mat-18">search</mat-icon>
-              </button>
-            </div>
+        <div class="flex flex-column items-center align-items-end ml-12">
+          <button
+            mat-flat-button
+            color="accent"
+            style="height: 3.7em; margin-bottom: 1.2em"
+          >
+            Filtrar
+            <mat-icon class="mat-18">search</mat-icon>
+          </button>
+        </div>
         <div class="flex flex-auto"></div>
         <div class="flex flex-column items-center align-items-end ml-1">
           <button
             mat-flat-button
             color="primary"
             style="height: 4em; margin-bottom: 1em"
-            routerLink="/facturas/new"
+            routerLink="/notasCredito/new"
           >
-            Nueva Factura
+            Nueva Nota de Credito
             <mat-icon class="mat-18">add</mat-icon>
           </button>
         </div>
@@ -107,50 +87,32 @@
               >#</mat-header-cell
             >
             <mat-cell *matCellDef="let item">{{
-              item.idFactura
+              item.idNotaCredito
             }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="correlativo">
             <mat-header-cell *matHeaderCellDef mat-sort-header
-              >Num. Ingreso</mat-header-cell
+              >Num Doc</mat-header-cell
             >
             <mat-cell *matCellDef="let item">{{ item.docNum }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="fecha">
             <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">{{
-              item.fecha | date: "shortDate"
+              item.docDate | date: "shortDate"
             }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="proveedor">
-            <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
-              {{ item.cardName }} ({{item.shipToCode}})
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="numDoc">
-            <mat-header-cell *matHeaderCellDef>Num. Documento</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              {{ item.numeroDocumento }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="numDocSAP">
-            <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              {{ item.docNum }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="tipo">
-            <mat-header-cell *matHeaderCellDef>Tipo Factura</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              {{ item.serie }}
+              {{ item.cardName }}
             </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="estado">
             <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
-              <div>{{ item.estado.nombreEstadoFactura }}</div>
+              <div>{{ item.estado.nombreEstadoNotaCredito }}</div>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="acciones">
@@ -158,46 +120,23 @@
             <mat-cell class="duration-cell" *matCellDef="let item">
               <button
                 mat-icon-button
-                [routerLink]="['/facturas/', item.idFactura]"
+                [routerLink]="['/notasCredito/view', item.idNotaCredito]"
               >
 
                 <mat-icon class="mat-18"
                   >visibility</mat-icon
                 >
-              </button>
-              <button
-                mat-icon-button
-                *ngIf="item.estadoFacturaFK==1 || (user.rol.supervisorFacturacion===false && item.estadoFacturaFK == 2)"
-                [routerLink]="['/facturas/edit/', item.idFactura]"
-              >
 
-                <mat-icon class="mat-18"
-                  >edit</mat-icon
-                >
               </button>
+
 
               <button
                 mat-icon-button
-                *ngIf="user.rol.supervisorFacturacion===false && item.estadoFacturaFK == 3"
-                (click)="anularFacturas(item)"
+                *ngIf="item.estadoNotaCreditoFK == 1"
+
               >
-
-                <mat-icon class="mat-18"
-                  >delete</mat-icon
-                >
+                <mat-icon class="mat-18"> delete </mat-icon>
               </button>
-
-              <button
-                mat-icon-button
-                *ngIf="item.estadoFacturaFK == 3"
-                [routerLink]="['/notasCredito/new/', item.idFactura]"
-              >
-
-                <mat-icon class="mat-18"
-                  >note_add</mat-icon
-                >
-              </button>
-
             </mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

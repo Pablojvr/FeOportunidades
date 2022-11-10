@@ -8,3 +8,7 @@
   border-color: black;
   min-width: 50px;
 }
+
+.no-margin{
+  margin-left: 0 !important;
+}

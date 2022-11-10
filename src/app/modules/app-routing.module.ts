@@ -10,8 +10,10 @@ import { IndexComprasComponent } from './../pages/index-compras/index-compras.co
 import { IndexDevolucionesComponent } from './../pages/index-devoluciones/index-devoluciones.component';
 import { IndexEntradaMercanciaComponent } from './../pages/index-entrada-mercancia/index-entrada-mercancia.component';
 import { IndexFacturasComponent } from './../pages/index-facturas/index-facturas.component';
+import { IndexNotasCreditoComponent } from './../pages/index-notas-credito/index-notas-credito.component';
 import { IndexComponent } from './../pages/index/index.component';
 import { LoginComponent } from './../pages/login/login.component';
+import { NotaCreditoCrudComponent } from './../pages/nota-credito-crud/nota-credito-crud.component';
 import { NotaCreditoComponent } from './../pages/nota-credito/nota-credito.component';
 import { OrdenCompraComponent } from './../pages/orden-compra/orden-compra.component';
 import { PreviewFacturasComponent } from './../pages/preview-facturas/preview-facturas.component';
@@ -104,6 +106,30 @@ const routes: Routes = [
       },
     ]
     },
+
+    {
+      path: 'notasCredito',
+      component: LayoutComponent,
+      children: [
+        {
+          path: '',
+          component: IndexNotasCreditoComponent,
+        },
+        {
+          path: 'new/:idFactura',
+          component: NotaCreditoCrudComponent,
+        },
+        {
+          path: 'new',
+          component: NotaCreditoCrudComponent,
+        },
+        {
+          path: 'view/:idNotaCredito',
+          component: NotaCreditoCrudComponent,
+        },
+
+      ]
+      },
   {
     path: 'facturas',
     component: LayoutComponent,

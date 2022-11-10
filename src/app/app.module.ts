@@ -34,6 +34,8 @@ import { PreviewFacturasComponent } from './pages/preview-facturas/preview-factu
 import { RolesComponent } from './pages/roles/roles.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { NotaCreditoCrudComponent } from './pages/nota-credito-crud/nota-credito-crud.component';
+import { AgregarArticuloNotaCreditoComponent } from './componets/agregar-articulo-nota-credito/agregar-articulo-nota-credito.component';
+import { IndexNotasCreditoComponent } from './pages/index-notas-credito/index-notas-credito.component';
 registerLocaleData(localeEs, 'es');
 @NgModule({
   declarations: [
@@ -60,6 +62,8 @@ registerLocaleData(localeEs, 'es');
     AgregarArticuloDevolucionModalComponent,
     NotaCreditoComponent,
     NotaCreditoCrudComponent,
+    AgregarArticuloNotaCreditoComponent,
+    IndexNotasCreditoComponent,
   ],
   imports: [
     BrowserModule,

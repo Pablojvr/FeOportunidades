@@ -36,10 +36,11 @@ export class DevolucionesService {
 
   }
 
-  getItemsFacturadosByItemCodeBatchNumAndCardCode(itemCode:any, batchNum:any,  cardCode:any){
+  getItemsFacturadosByItemCodeBatchNumAndCardCode(itemCode:any, batchNum:any,  cardCode:any,vencidos:boolean = true){
     return this.http.get<Page[]>(`${this.baseUrl}/Devoluciones/getItemsFacturadosByItemCodeBatchNumAndCardCode`, {
       params: new HttpParams()
         // .set('courseId', UserId.toString())
+        .set('vencidos', vencidos?'1':'-1')
         .set('itemCode', itemCode)
         .set('batchNum', batchNum)
         .set('cardCode', cardCode)

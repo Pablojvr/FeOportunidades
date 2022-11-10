@@ -320,7 +320,7 @@ export class DevolucionesComponent implements OnInit {
       console.log('The dialog was closed');
       if(result){
       this.solicitud.documentLines = [...this.solicitud.documentLines,...result];
-      if(result)
+
       this.updateTotal();
       this.addArticulo();
       }

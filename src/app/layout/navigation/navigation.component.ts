@@ -68,11 +68,11 @@ export class NavigationComponent implements OnInit {
           url: '/facturas',
           show: false,
         },
-        // {
-        //   text: 'Ingresos de Compra',
-        //   icon: 'post_add',
-        //   url: '/entrada_mercancia',
-        // },
+        {
+          text: 'Notas de Credito',
+           icon: 'post_add',
+           url: '/notasCredito',
+         },
       ],
     },
     {

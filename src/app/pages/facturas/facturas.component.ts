@@ -361,6 +361,7 @@ export class FacturasComponent implements OnInit {
     sol.fecha = this.form.fecha.value;
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardForeignName;
+    sol.razonSocial = this.form.proveedor.value.cardName;
     sol.shipToCode = this.form.ShipToCode.value;
     sol.nrc = this.form.proveedor.value.additionalID;
     sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;

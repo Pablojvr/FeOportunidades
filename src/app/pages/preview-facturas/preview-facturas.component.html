@@ -20,28 +20,17 @@
           <div class="flex flex-row items-center" *ngIf="!isLoadingFacturasMora && totalFacturasVencidas!=null">FACTURAS EN MORA:<div class="bordeInput"> {{totalFacturasVencidas}}
           </div></div>
         </div>
-        <p>Proveedor: {{ item.cardName }}</p>
-        <p>
-          Fecha:
-          <mat-form-field appearance="outline">
-            <mat-label>dd/mm/yyyy</mat-label>
-            <input
-              [matDatepicker]="picker"
-              [readonly]="readOnly"
-              matInput
-              type="text"
-              [(ngModel)]="item.docDate"
-              required
-            />
+        <div class="flex flex-row items-center">
+        <div class="w-6/12 ">
+          <b>Farmacia:</b>
+          <div class="bordeInput no-margin">{{ item.cardName }}</div></div>
+        <div class="w-6/12 items-start"><b>Sucursal:</b> <div class="bordeInput no-margin">{{ item.shipToCode }}</div></div>
+        <div class="w-full items-start"><b>Nombre Cliente:</b> <div class="bordeInput no-margin">{{ item.razonSocial }}</div></div>
+        <div class="w-6/12 items-start"><b>Tipo Documento:</b> <div class="bordeInput no-margin">{{ item.serie }}</div></div>
+        <div class="w-6/12 items-start"><b>Fecha:</b> <div class="bordeInput no-margin">{{ item.docDate | date : 'shortDate':'en-US' }}</div></div>
 
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-              *ngIf="!readOnly"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </p>
+      </div>
+    <div style="margin-bottom:10px"></div>
 
         <mat-table
           class="items-table mat-elevation-z8"

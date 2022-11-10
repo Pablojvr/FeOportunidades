@@ -64,16 +64,16 @@ export class FacturasService {
   }
 
   getPaginatedNotasCredito(
-    filter = '',
-    sortOrder = 'asc',
+    fechaIni = '',
+    fechaFin = '',
     pageNumber = 0,
     pageSize = 10
   ) {
-    return this.http.get<Page[]>(`${this.baseUrl}/Facturas`, {
+    return this.http.get<Page[]>(`${this.baseUrl}/NotasCredito`, {
       params: new HttpParams()
         // .set('courseId', UserId.toString())
-        .set('filter', filter)
-        .set('sortOrder', sortOrder)
+        .set('fechaIni', fechaIni)
+        .set('fechaFin', fechaFin)
         .set('pageNumber', pageNumber.toString())
         .set('pageSize', pageSize.toString()),
     });
@@ -109,6 +109,15 @@ export class FacturasService {
     });
   }
 
+  getLotes(itemCode='',filter = '') {
+    return this.http.get<any>(`${this.baseUrl}/NotasCredito/GetLotesList`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('filter', filter)
+        .set('itemCode', itemCode),
+    });
+  }
+
   guardarFactura(sol: any) {
     let solId = sol.idFactura;
     if (!solId) {
@@ -118,8 +127,21 @@ export class FacturasService {
     }
   }
 
+  guardarNotaCredito(sol: any) {
+    let solId = sol.idNotaCredito;
+    if (!solId) {
+      return this.http.post(`${this.baseUrl}/NotasCredito`, sol);
+    } else {
+      return this.http.put(`${this.baseUrl}/NotasCredito/${solId}`, sol);
+    }
+  }
+
   getFacturaByID(idFactura: any) {
     return this.http.get(`${this.baseUrl}/Facturas/${idFactura}`);
+  }
+
+  getNotaCreditoByID(idFactura: any) {
+    return this.http.get(`${this.baseUrl}/NotasCredito/${idFactura}`);
   }
 
   saveInvoices(sol: any) {
