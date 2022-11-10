@@ -249,7 +249,21 @@
           </tbody>
           <mat-footer-row *matFooterRowDef="['descuento','total']"></mat-footer-row>
         </mat-table>
+        <div style="position: relative">
+          <div class="mat-elevation-z8 w-full flex flex-row px-4 py-4 items-center justify-around bg-white">
 
+          <mat-form-field  appearance="outline">
+            <mat-label>Comentario:</mat-label>
+            <textarea matInput class="custom-textarea"
+            [readonly]="readOnly"
+                      cdkTextareaAutosize
+                      #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="1"
+                      [(ngModel)]="comments"
+                      cdkAutosizeMaxRows="5"></textarea>
+          </mat-form-field>
+          </div>
+          </div>
 
         <div style="position: relative">
           <mat-divider></mat-divider>
