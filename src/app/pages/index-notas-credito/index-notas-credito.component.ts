@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { FacturasService } from 'src/app/services/facturas.service';
 import Swal from 'sweetalert2';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 import { Usuario } from '../usuarios/usuarios-datasource';
 import { ListadoNotasCreditoDataSource } from './index-notas-credito-datasource';
 
@@ -142,6 +143,53 @@ export class IndexNotasCreditoComponent implements OnInit {
       )
       .subscribe();
   }
+  anularFacturas(item:any){
+    Swal.fire({
+      title: '¿Esta seguro?',
+      text: 'Esta nota de credito se anulara',
+      icon: 'question',
+      heightAuto: false,
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then(
+      (result) => {
+        if (!result.isConfirmed) return;
+        this.devolucionesService.anularNotasCreditoByID(item).subscribe({
+          next: (_) => {
+            this.dataSource.removeSolicitud(item);
+            Swal.fire({
+              title: '',
+              text: 'Se ha anulado correctamente la nota de credito',
+              icon: 'success',
+              timer: 2000,
+              heightAuto: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
 
+            this.onSubmit()
+          },
+          error: (error) => {
+            let errorMsg: string;
+            if (error.error instanceof ErrorEvent) {
+              errorMsg = `Error: ${error.error.message}`;
+            } else {
+              errorMsg = getServerErrorMessage(error);
+            }
+
+            Swal.fire({
+              title: '',
+              text: errorMsg,
+              icon: 'error',
+              heightAuto: false,
+            });
+          },
+        });
+      },
+      () => {}
+    );
+  }
 
 }

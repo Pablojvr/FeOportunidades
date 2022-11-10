@@ -28,6 +28,16 @@ export class FacturasService {
     );
   }
 
+  anularNotasCreditoByID(item: any) {
+
+    return this.http.get<any>(
+      `${this.baseUrl}/NotasCredito/cancel`,
+      {
+        params: new HttpParams().set('id', item.idNotaCredito)
+      }
+    );
+  }
+
   generarNotaCreditoFactura(notaCredito: any,idFactura:any) {
 
     return this.http.post<any>(

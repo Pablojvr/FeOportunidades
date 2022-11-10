@@ -133,7 +133,7 @@
               <button
                 mat-icon-button
                 *ngIf="item.estadoNotaCreditoFK == 1"
-
+                (click)="anularFacturas(item)"
               >
                 <mat-icon class="mat-18"> delete </mat-icon>
               </button>
