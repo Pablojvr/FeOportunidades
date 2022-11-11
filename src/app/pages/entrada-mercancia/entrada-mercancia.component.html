@@ -120,10 +120,11 @@
           <ng-container matColumnDef="vencimiento">
             <mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
             <mat-cell *matCellDef="let item;let index=index" class="duration-cell">
-              <mat-form-field appearance="outline" style="width: 160px">
+              <mat-form-field appearance="outline" style="width: 160px" *ngIf="!readMode">
                 <mat-label>Vencimiento</mat-label>
                 <input name="fechaExpiracion{{item.randomID}}" [(ngModel)]="item.fechaExpiracion" matInput type="date" [readonly]="readMode" required>
               </mat-form-field>
+              <span  *ngIf="readMode"> {{item.fechaExpiracion | date : 'shortDate':'en-US'}}</span>
 
             </mat-cell>
           </ng-container>
@@ -288,7 +289,14 @@
           </tbody>
         </mat-table>
 
+        <div class="flex flex-row items-end justify-end  bg-gray-200 px-2"><div> <div style="width:100%"><b>SUBTOTAL $ {{subtotalFactura | number
+          :'1.2-2':'en-US'}} </b></div>
+           <div style="width:100%"><b>IVA $ {{iva | number
+            :'1.2-2':'en-US'}} </b></div>
 
+        <div style="width:100%"><b>TOTAL $ {{totalFactura | number
+            :'1.2-2':'en-US'}} </b></div>
+          </div></div>
         <div style="position: relative">
           <mat-divider></mat-divider>
           <div class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200">

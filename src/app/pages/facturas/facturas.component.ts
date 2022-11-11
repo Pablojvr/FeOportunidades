@@ -548,6 +548,7 @@ export class FacturasComponent implements OnInit {
     );
     console.log(newObj);
     this.solicitud.documentLines.splice(index + 1, 0, newObj);
+    this.updateTotal();
     this.table.renderRows();
   }
 
@@ -557,6 +558,7 @@ export class FacturasComponent implements OnInit {
         return el.itemCode != item.itemCode;
       }
     );
+    this.updateTotal();
     this.table.renderRows();
   }
 

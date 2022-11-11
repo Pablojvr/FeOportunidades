@@ -64,6 +64,9 @@ export class EntradaMercanciaComponent implements OnInit {
   expandedElement: any | null;
   isLoadingPO: boolean = false;
   filteredPO!: any[];
+  subtotalFactura: any;
+  iva: any = 0;
+  totalFactura: any = 0;
 
   constructor(
     private _router: Router,
@@ -207,6 +210,7 @@ export class EntradaMercanciaComponent implements OnInit {
   }
 
   getPurchaseOrderById(id: any) {
+    if(this.readMode) return;
     Swal.fire({
       title: '',
       text: 'Cargando...',
@@ -329,6 +333,15 @@ export class EntradaMercanciaComponent implements OnInit {
           cardCode: this.solicitud.cardCode,
         };
         this.solicitud.numFactura = this.solicitud.numeroFactura;
+        this.solicitud.documentLines = this.solicitud.documentLines.map(
+          (element: any) => {
+            return Object.assign(element, {
+              randomID : this.itemsUniqueCor++
+            });
+          }
+        );
+
+        this.updateTotal();
         Swal.fire({
           title: '',
           text: 'Listo',
@@ -569,6 +582,7 @@ export class EntradaMercanciaComponent implements OnInit {
         : 0;
 
     this.form.form.updateValueAndValidity();
+    this.updateTotal();
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);
@@ -581,6 +595,7 @@ export class EntradaMercanciaComponent implements OnInit {
     this.solicitud.documentLines.splice(index + 1, 0, newObj);
 
     this.table.renderRows();
+    this.updateTotal();
     // this.form.form.u
 
   }
@@ -589,7 +604,22 @@ export class EntradaMercanciaComponent implements OnInit {
     var index = this.solicitud.documentLines.indexOf(item);
     this.solicitud.documentLines.splice(index, 1);
     this.table.renderRows();
+    this.updateTotal();
   }
+  updateTotal() {
+    this.subtotalFactura = this.solicitud.documentLines
+      .reduce((a: any, b: any) => {
+        console.log(
+          a + b.costoReal * b.totalUnidades
+        );
+        return (
+          a + b.costoReal * b.totalUnidades
+        );
+      }, 0.0)
+      .toFixed(4);
+    this.iva = (this.subtotalFactura * 0.13).toFixed(4);
 
+    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
+  }
 
 }
