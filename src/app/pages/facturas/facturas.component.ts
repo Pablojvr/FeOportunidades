@@ -55,7 +55,7 @@ export class FacturasComponent implements OnInit {
   creditoDisponible: any;
   limiteCredito: any;
   user: any;
-  readOnly:boolean = false;
+  readOnly: boolean = false;
   totalFactura: any = 0;
   totalFacturasVencidas: any;
   isLoadingFacturasMora: boolean = false;
@@ -65,6 +65,7 @@ export class FacturasComponent implements OnInit {
   dialogCargando: typeof Swal = Swal;
   tipoContribuyente: any;
   retener: any;
+  percepcion: any = 0;
 
   constructor(
     private _router: Router,
@@ -72,13 +73,13 @@ export class FacturasComponent implements OnInit {
     private facturasService: FacturasService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private authService :AuthService,
+    private authService: AuthService
   ) {
     this.comprasForm = this._fb.group({
       proveedor: [null, Validators.required],
       serie: [null, Validators.required],
       fecha: [new Date(), Validators.required],
-      ShipToCode:[null, Validators.required],
+      ShipToCode: [null, Validators.required],
     });
 
     // this.dataSource.getReporte(this.numFactura, this.numOrdenCompra, this.laboratory);
@@ -128,11 +129,10 @@ export class FacturasComponent implements OnInit {
   }
 
   updateSerie() {
-
     let value = this.form.proveedor.value;
     debugger;
     this.addresses = value.bpAddresses;
-    this.form.ShipToCode.setValue(this.addresses[0].addressName)
+    this.form.ShipToCode.setValue(this.addresses[0].addressName);
     this.checkFacturasVencidas(value.cardCode);
     this.form.serie.setValue(value.u_EJJE_TipoDoc);
     this.creditoDisponible = value.currentAccountBalance;
@@ -141,32 +141,60 @@ export class FacturasComponent implements OnInit {
     this.tipoContribuyente = value.u_EJJE_TipoContribuyente;
   }
 
-  updateTaxCode(){
-    console.log("updatingTaxCode")
-    this.solicitud.documentLines = this.solicitud.documentLines.map((element:any) => {
-      return Object.assign(element,{taxCode: this.getTaxCode(this.form.serie.value)})
-    });
+  updateTaxCode() {
+    console.log('updatingTaxCode');
+    this.solicitud.documentLines = this.solicitud.documentLines.map(
+      (element: any) => {
+        return Object.assign(element, {
+          taxCode: this.getTaxCode(this.form.serie.value),
+        });
+      }
+    );
   }
-  updateRetencion(menorDe100:boolean){
+  updateRetencion(menorDe100: boolean) {
     // console.log("updatingRetencion"+ [menorDe100,this.retener,this.tipoContribuyente])
     var retener = '';
-    if(this.retener == 'boYES' && (this.tipoContribuyente == '03' || this.tipoContribuyente == '02') && !menorDe100 ){
-      var retener = 'tYES';
-    }else{
+    var codigoImpuesto = this.getTaxCode(this.form.serie.value);
+    if (
+      (this.tipoContribuyente == '03' || this.tipoContribuyente == '02') &&
+      !menorDe100
+    ) {
       var retener = 'tNO';
+      if (this.form.serie.value == 'CCF') {
+        codigoImpuesto = 'PERCRF';
+        this.percepcion = (this.subtotalFactura * 0.01).toFixed(4);
+      } else if (this.form.serie.value == 'COF') {
+        codigoImpuesto = 'PERCOF';
+        this.percepcion = (this.subtotalFactura * 0.01).toFixed(4);
+      } else {
+        this.percepcion = 0;
+      }
+    } else {
+      var retener = 'tNO';
+      this.percepcion = 0;
     }
-    console.log("updatingRetencion"+ [menorDe100,this.retener,this.tipoContribuyente,retener])
-    this.solicitud.documentLines = this.solicitud.documentLines.map((element:any) => {
-      return Object.assign(element,{wTLiable: retener})
-    });
+    console.log(
+      'updatingRetencion' +
+        [menorDe100, this.retener, this.tipoContribuyente, retener]
+    );
+    this.solicitud.documentLines = this.solicitud.documentLines.map(
+      (element: any) => {
+        return Object.assign(element, {
+          wTLiable: retener,
+          taxCode: codigoImpuesto,
+        });
+      }
+    );
   }
-  updateLineNum(){
-    console.log("updatingLineNum")
-    this.solicitud.documentLines = this.solicitud.documentLines.map((element:any,index:any) => {
-      return Object.assign(element,{line:index})
-    });
+  updateLineNum() {
+    console.log('updatingLineNum');
+    this.solicitud.documentLines = this.solicitud.documentLines.map(
+      (element: any, index: any) => {
+        return Object.assign(element, { line: index });
+      }
+    );
   }
-  public checkData(){
+  public checkData() {
     debugger;
     this.checkFacturasVencidas(this.solicitud.cardCode);
     this.facturasService.GetBusinessPartner(this.solicitud.cardCode).subscribe({
@@ -175,7 +203,6 @@ export class FacturasComponent implements OnInit {
         this.creditoDisponible = data.data.currentAccountBalance;
         this.limiteCredito = data.data.creditLimit;
         this.dialogCargando.close();
-
       },
       error: (error) => {
         let errorMsg: string;
@@ -198,11 +225,10 @@ export class FacturasComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
     var id = this.route.snapshot.paramMap.get('idFacturas');
     if (id) {
-
       this.getFactura(id);
     }
   }
-  getFactura(idFacturas:any){
+  getFactura(idFacturas: any) {
     // this.dialogCargando =  Swal;
     this.dialogCargando.fire({
       title: '',
@@ -212,39 +238,42 @@ export class FacturasComponent implements OnInit {
       showCancelButton: false,
       showConfirmButton: false,
       allowOutsideClick: false,
-      allowEscapeKey: false
+      allowEscapeKey: false,
     });
-      this.facturasService.getFacturaByID(idFacturas).subscribe({
-        next: (data) => {
-          this.solicitud = data;
-          this.solicitud.estadoFacturaFK = 1;
-          this.form.proveedor.setValue({cardCode : this.solicitud.cardCode, cardForeignName : this.solicitud.cardName,});
-          this.form.proveedor.disable;
-          this.form.serie.setValue(this.solicitud.serie);
+    this.facturasService.getFacturaByID(idFacturas).subscribe({
+      next: (data) => {
+        this.solicitud = data;
+        this.solicitud.estadoFacturaFK = 1;
+        this.form.proveedor.setValue({
+          cardCode: this.solicitud.cardCode,
+          cardForeignName: this.solicitud.cardName,
+        });
+        this.form.proveedor.disable;
+        this.form.serie.setValue(this.solicitud.serie);
 
-          this.form.ShipToCode.setValue(this.solicitud.shipToCode);
-          this.addresses.push({addressName:this.solicitud.shipToCode});
+        this.form.ShipToCode.setValue(this.solicitud.shipToCode);
+        this.addresses.push({ addressName: this.solicitud.shipToCode });
 
-          this.updateTotal();
-          this.readOnly = true;
-          this.checkData();
-        },
-        error: (error) => {
-          let errorMsg: string;
-          if (error.error instanceof ErrorEvent) {
-            errorMsg = `Error: ${error.error.message}`;
-          } else {
-            errorMsg = getServerErrorMessage(error);
-          }
+        this.updateTotal();
+        this.readOnly = true;
+        this.checkData();
+      },
+      error: (error) => {
+        let errorMsg: string;
+        if (error.error instanceof ErrorEvent) {
+          errorMsg = `Error: ${error.error.message}`;
+        } else {
+          errorMsg = getServerErrorMessage(error);
+        }
 
-          Swal.fire({
-            title: '',
-            text: errorMsg,
-            icon: 'error',
-            heightAuto: false,
-          });
-        },
-      });
+        Swal.fire({
+          title: '',
+          text: errorMsg,
+          icon: 'error',
+          heightAuto: false,
+        });
+      },
+    });
   }
   get form() {
     return this.comprasForm.controls;
@@ -322,7 +351,6 @@ export class FacturasComponent implements OnInit {
     }
   }
   checkFacturasVencidas(cardCode: any) {
-
     this.isLoadingFacturasMora = true;
     this.facturasService.totalFacturasEnMora(cardCode).subscribe({
       next: (value: any) => {
@@ -352,24 +380,24 @@ export class FacturasComponent implements OnInit {
       },
     });
   }
-  facturar(valid: boolean,readOnly:boolean = false) {
+  facturar(valid: boolean, readOnly: boolean = false) {
     this.updateTaxCode();
     this.updateLineNum();
     var sol = Object.assign({}, this.solicitud);
-    if(sol.idFactura == null){
+    if (sol.idFactura == null) {
       debugger;
-    sol.fecha = this.form.fecha.value;
-    sol.cardCode = this.form.proveedor.value.cardCode;
-    sol.cardName = this.form.proveedor.value.cardForeignName;
-    sol.razonSocial = this.form.proveedor.value.cardName;
-    sol.shipToCode = this.form.ShipToCode.value;
-    sol.nrc = this.form.proveedor.value.additionalID;
-    sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
-    sol.tipoDocumento = this.form.serie.value;
-    sol.giro = this.form.proveedor.value.notes;
-    sol.estadoFacturaFK = valid ? 2 : 1;
-    // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
-    sol.serie = this.form.serie.value;
+      sol.fecha = this.form.fecha.value;
+      sol.cardCode = this.form.proveedor.value.cardCode;
+      sol.cardName = this.form.proveedor.value.cardForeignName;
+      sol.razonSocial = this.form.proveedor.value.cardName;
+      sol.shipToCode = this.form.ShipToCode.value;
+      sol.nrc = this.form.proveedor.value.additionalID;
+      sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
+      sol.tipoDocumento = this.form.serie.value;
+      sol.giro = this.form.proveedor.value.notes;
+      sol.estadoFacturaFK = valid ? 2 : 1;
+      // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
+      sol.serie = this.form.serie.value;
     }
 
     this.facturasService.guardarFactura(sol).subscribe({
@@ -428,14 +456,16 @@ export class FacturasComponent implements OnInit {
   }
 
   checkValidCredit(proveedor: any, total: any) {
-    console.log(  eval(proveedor.creditLimit)
-   ,  eval(proveedor.currentAccountBalance) + eval(total))
+    console.log(
+      eval(proveedor.creditLimit),
+      eval(proveedor.currentAccountBalance) + eval(total)
+    );
     return (
       eval(proveedor.creditLimit) >=
       eval(proveedor.currentAccountBalance) + eval(total)
     );
   }
-  manualOverrideAdministrador(){
+  manualOverrideAdministrador() {
     Swal.fire({
       title: 'Generar Archivo PDF',
       icon: 'question',
@@ -445,7 +475,7 @@ export class FacturasComponent implements OnInit {
       confirmButtonText: 'Descargar',
       cancelButtonText: 'Cancelar',
       html:
-      '<label> Usuario:</label><br>' +
+        '<label> Usuario:</label><br>' +
         '<input id="swal-input1" class="swal2-input" type="text" max="6" min="1" value="2"><br>' +
         '<label> Contraseña:</label><br>' +
         '<input id="swal-input2" class="swal2-input" type="password" max="6" min="1" value="2"><br>',
@@ -459,35 +489,29 @@ export class FacturasComponent implements OnInit {
       (result: any) => {
         console.log(result);
         if (!result.isConfirmed) return;
-        this.authService
-          .checkUser(
-            result.value[0],
-            result.value[1]
-          )
-          .subscribe({
-            next: (data) => {
-              this.overrideAdministrador = true;
-            },
-            error: (error) => {
-              let errorMsg: string;
-              if (error.error instanceof ErrorEvent) {
-                errorMsg = `Error: ${error.error.message}`;
-              } else {
-                errorMsg = getServerErrorMessage(error);
-              }
+        this.authService.checkUser(result.value[0], result.value[1]).subscribe({
+          next: (data) => {
+            this.overrideAdministrador = true;
+          },
+          error: (error) => {
+            let errorMsg: string;
+            if (error.error instanceof ErrorEvent) {
+              errorMsg = `Error: ${error.error.message}`;
+            } else {
+              errorMsg = getServerErrorMessage(error);
+            }
 
-              Swal.fire({
-                title: '',
-                text: errorMsg,
-                icon: 'error',
-                heightAuto: false,
-              });
-            },
-          });
+            Swal.fire({
+              title: '',
+              text: errorMsg,
+              icon: 'error',
+              heightAuto: false,
+            });
+          },
+        });
       },
       () => {}
     );
-
   }
   updateItemCalculatedValues(item: any) {
     if (item.quantity != '' && item.quantity != null) {
@@ -499,17 +523,19 @@ export class FacturasComponent implements OnInit {
   }
 
   updateTotal() {
-    this.subtotalFactura = this.solicitud.documentLines.reduce(
-      (a: any, b: any) => {
-        console.log( a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100)))
-        return a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100));
-      },
-      0.0
-    ).toFixed(4);
+    this.subtotalFactura = this.solicitud.documentLines
+      .reduce((a: any, b: any) => {
+        console.log(
+          a + b.price * b.quantity * (1 - parseInt(b.discountPercent) / 100)
+        );
+        return (
+          a + b.price * b.quantity * (1 - parseInt(b.discountPercent) / 100)
+        );
+      }, 0.0)
+      .toFixed(4);
     this.iva = (this.subtotalFactura * 0.13).toFixed(4);
-    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
-    this.updateRetencion(Number(this.subtotalFactura)<100);
-
+    this.updateRetencion(Number(this.subtotalFactura) < 100);
+    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva) + Number(this.percepcion);
   }
   duplicateItem(item: any) {
     var index = this.solicitud.documentLines.indexOf(item);
@@ -552,31 +578,32 @@ export class FacturasComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
       // debugger;
-      if(result){
-      var filteredResults = result.items.filter((item: any) => !!item.quantity);
+      if (result) {
+        var filteredResults = result.items.filter(
+          (item: any) => !!item.quantity
+        );
 
-      this.solicitud.documentLines = [
-        ...this.solicitud.documentLines.filter((item: any) => {
-          // debugger;
-          return item.itemCode!=result.itemCode}),
-        ...filteredResults,
-      ];
-      this.updateTotal();
+        this.solicitud.documentLines = [
+          ...this.solicitud.documentLines.filter((item: any) => {
+            // debugger;
+            return item.itemCode != result.itemCode;
+          }),
+          ...filteredResults,
+        ];
+        this.updateTotal();
 
-      this.addArticulo();
-
-    }
+        this.addArticulo();
+      }
     });
-
   }
 
-  getTaxCode(TipoDocumento:any){
-    let series:any = {
-      "CCF" : 'IVACRF',
-       "COF" : 'IVACOF',
-      "TIC" :'IVACOF',
-      "EXP" : 'IVAEXP',
-    }
-    return series[TipoDocumento]??'';
+  getTaxCode(TipoDocumento: any) {
+    let series: any = {
+      CCF: 'IVACRF',
+      COF: 'IVACOF',
+      TIC: 'IVACOF',
+      EXP: 'IVAEXP',
+    };
+    return series[TipoDocumento] ?? '';
   }
 }

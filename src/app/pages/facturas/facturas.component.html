@@ -187,7 +187,7 @@
             <mat-header-cell *matHeaderCellDef>Retener</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Unidades</mat-label>
+                <mat-label>Retener</mat-label>
                 <mat-select [(ngModel)]="item.wTLiable">
                   <mat-option value="tYES">
                     SI
@@ -204,8 +204,15 @@
             <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">
 
-              $&nbsp;
-              {{item.price }}
+              <!-- $&nbsp;
+              {{item.price }} -->
+
+              <mat-form-field appearance="outline" style="width: 100px">
+                <mat-label>Precio</mat-label>
+                <input [(ngModel)]="item.price" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
+                  matInput placeholder="0" type="number" required [readonly]="user.rol.supervisorFacturacion!==false && false">
+                <!-- <mat-hint>{{"Max:"+item.stock}}</mat-hint> -->
+              </mat-form-field>
             </mat-cell>
           </ng-container>
 
@@ -243,6 +250,8 @@
                 :'1.2-2':'en-US'}} </b></div>
                  <div style="width:100%"><b>IVA $ {{iva | number
                   :'1.2-2':'en-US'}} </b></div>
+                  <div style="width:100%" *ngIf="percepcion>0"><b>Percepcion $ {{percepcion | number
+                    :'1.2-2':'en-US'}} </b></div>
               <div style="width:100%"><b>TOTAL $ {{totalFactura | number
                   :'1.2-2':'en-US'}} </b></div>
             </td>
