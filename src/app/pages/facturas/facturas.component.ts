@@ -592,13 +592,25 @@ export class FacturasComponent implements OnInit {
           (item: any) => !!item.quantity
         );
 
-        this.solicitud.documentLines = [
+        var tempDocumentList = [
           ...this.solicitud.documentLines.filter((item: any) => {
             // debugger;
             return item.itemCode != result.itemCode;
           }),
           ...filteredResults,
         ];
+        if(tempDocumentList.length > 21){
+          Swal.fire({
+            title: 'Atención',
+            html: 'No se puede incluir este articulo porque excede las 21 lineas',
+            icon: 'error',
+            heightAuto: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }else{
+          this.solicitud.documentLines = tempDocumentList;
+        }
         this.updateTotal();
 
         this.addArticulo();
