@@ -217,6 +217,23 @@
           </ng-container>
 
 
+          <ng-container matColumnDef="priceDesc">
+            <mat-header-cell *matHeaderCellDef>PU Desc.</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+
+              <!-- $&nbsp;
+              {{item.price }} -->
+
+              <mat-form-field appearance="outline" style="width: 100px">
+                <mat-label>Precio</mat-label>
+                <input [(ngModel)]="item.priceDiscount" (ngModelChange)="updateItemCalculatedValuesDiscount(item)" matInput min="0"
+                  matInput placeholder="0" type="number" required [readonly]="user.rol.supervisorFacturacion!==false && false">
+                <!-- <mat-hint>{{"Max:"+item.stock}}</mat-hint> -->
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
+
+
 
 
 

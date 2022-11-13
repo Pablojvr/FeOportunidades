@@ -37,6 +37,7 @@ export class FacturasComponent implements OnInit {
     'lote',
     'vencimiento',
     'UnidadesGravadas',
+    'priceDesc',
     'price',
     'Retener',
     'totalGravado',
@@ -161,10 +162,7 @@ export class FacturasComponent implements OnInit {
     ) {
       var retener = 'tNO';
       if (this.form.serie.value == 'CCF') {
-        codigoImpuesto = 'PERCRF';
-        this.percepcion = (this.subtotalFactura * 0.01).toFixed(4);
-      } else if (this.form.serie.value == 'COF') {
-        codigoImpuesto = 'PERCOF';
+        codigoImpuesto = 'IVAPER';
         this.percepcion = (this.subtotalFactura * 0.01).toFixed(4);
       } else {
         this.percepcion = 0;
@@ -382,6 +380,7 @@ export class FacturasComponent implements OnInit {
   }
   facturar(valid: boolean, readOnly: boolean = false) {
     this.updateTaxCode();
+    this.updateTotal();
     this.updateLineNum();
     var sol = Object.assign({}, this.solicitud);
     if (sol.idFactura == null) {
@@ -518,7 +517,15 @@ export class FacturasComponent implements OnInit {
       item.quantity <= 0 ? (item.quantity = 1) : item.quantity;
       item.quantity > item.stock ? (item.quantity = item.stock) : item.quantity;
     }
+    this.updateTotal();
+  }
 
+  updateItemCalculatedValuesDiscount(item: any) {
+    if (item.quantity != '' && item.quantity != null) {
+      item.quantity <= 0 ? (item.quantity = 1) : item.quantity;
+      item.quantity > item.stock ? (item.quantity = item.stock) : item.quantity;
+    }
+    item.discountPercent = ((1 - (item.priceDiscount/item.price))*100).toFixed(2)+"";
     this.updateTotal();
   }
 

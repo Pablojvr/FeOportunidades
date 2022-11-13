@@ -191,7 +191,7 @@ export class PreviewFacturasComponent implements OnInit {
 
 
   }
-  genInvoicesByChunkSize(xs: any, chunkSize = 10) {
+  genInvoicesByChunkSize(xs: any, chunkSize = 21) {
     let lines = xs.documentLines;
     let invoices = [];
     for (let i = 0; i < lines.length; i += chunkSize) {
