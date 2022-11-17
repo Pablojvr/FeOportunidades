@@ -127,6 +127,11 @@ export class ComprasService {
     return this.http.get<any>(`${this.baseUrl}/SolicitudCompras/${id}`, {});
   }
 
+
+  abrirSolicitud(id:any){
+    return this.http.get<any>(`${this.baseUrl}/Compras/abrirSolicitud/?id=${id}`, {});
+  }
+
   getOrdenesCompraByID(id: any) {
     return this.http.get<any>(
       `${this.baseUrl}/Compras/GetPurchaseOrdersBySolicitudId/?id=${id}`,

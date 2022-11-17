@@ -271,6 +271,60 @@ export class ComprasComponent implements OnInit {
 
   //   console.log(solicitud);
   // }
+  abrirFacturas() {
+    Swal.fire({
+      title: '',
+      text: 'Guardando...',
+      icon: 'info',
+      heightAuto: false,
+      showCancelButton: false,
+      showConfirmButton: false,
+    });
+
+    this.comprasService
+      .abrirSolicitud(
+        this.solicitud.idSolicitudCompra
+      )
+      .subscribe({
+        next: (_) => {
+          this.saving = false;
+          this.saved = true;
+          Swal.fire({
+            title: 'Guardado',
+            text: 'Se ha guardado correctamente...',
+            icon: 'success',
+            timer: 2000,
+            heightAuto: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+          }).then(
+            () => {
+              this._router.navigate(['/compras']);
+            },
+            (dismiss: any) => {
+              this._router.navigate(['/compras']);
+            }
+          );
+        },
+        error: (error) => {
+          let errorMsg: string;
+          if (error.error instanceof ErrorEvent) {
+            errorMsg = `Error: ${error.error.message}`;
+          } else {
+            errorMsg = getServerErrorMessage(error);
+          }
+
+          Swal.fire({
+            title: '',
+            text: errorMsg,
+            icon: 'error',
+            heightAuto: false,
+          });
+          this.saving = false;
+          this.saved = false;
+        },
+      });
+  }
 
   guardarSolicitud(aprobar: any = 1) {
     var articulosSolicitados = this.dataSource.usuarioSubject

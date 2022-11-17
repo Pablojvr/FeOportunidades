@@ -184,6 +184,17 @@
       >
         Aprobar Factura
       </a>
+
+      <a
+        style="margin-left:10px"
+        *ngIf="solicitud && solicitud.estadoFacturaFK == 2 && user.rol.supervisorFacturacion==false"
+        mat-button
+        mat-flat-button
+        color="primary"
+        (click)="abrirFacturas()"
+      >
+        Abrir Factura
+      </a>
       </div>
 
     </div>

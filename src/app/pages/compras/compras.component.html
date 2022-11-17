@@ -70,12 +70,12 @@
               [matDatepicker]="picker"
               formControlName="fecha"
               type="text"
-              [readonly]="solicitud != null"
+              [readonly]="solicitud != null &&  solicitud?.estadoSolicitudFK != 1"
               class="appearance-none py-3 px-4 bg-transparent"
             />
             <mat-datepicker-toggle
               matSuffix
-              *ngIf="solicitud == null"
+              *ngIf="solicitud == null || (solicitud != null && solicitud?.estadoSolicitudFK == 1) "
               [for]="picker"
             ></mat-datepicker-toggle>
 
@@ -350,6 +350,16 @@
             >
               Generar Orden de Compras
             </a>
+
+            <a
+            *ngIf="solicitud && solicitud.estadoSolicitudFK == 2"
+            mat-button
+            mat-flat-button
+            color="primary"
+            (click)="abrirFacturas()"
+          >
+            Abrir Solicitud
+          </a>
             <a mat-stroked-button color="primary" routerLink="/compras">
               <mat-icon class="mat-18">undo</mat-icon>
               Regresar

@@ -246,6 +246,7 @@ export class FacturasComponent implements OnInit {
           cardCode: this.solicitud.cardCode,
           cardForeignName: this.solicitud.cardName,
         });
+        this.form.fecha.setValue(this.solicitud.fecha);
         this.form.proveedor.disable;
         this.form.serie.setValue(this.solicitud.serie);
 
@@ -385,7 +386,7 @@ export class FacturasComponent implements OnInit {
     var sol = Object.assign({}, this.solicitud);
     if (sol.idFactura == null) {
       debugger;
-      sol.fecha = this.form.fecha.value;
+
       sol.cardCode = this.form.proveedor.value.cardCode;
       sol.cardName = this.form.proveedor.value.cardForeignName;
       sol.razonSocial = this.form.proveedor.value.cardName;
@@ -398,7 +399,7 @@ export class FacturasComponent implements OnInit {
       // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
       sol.serie = this.form.serie.value;
     }
-
+    sol.fecha = this.form.fecha.value;
     this.facturasService.guardarFactura(sol).subscribe({
       next: (value: any) => {
         this.saving = false;
@@ -599,7 +600,7 @@ export class FacturasComponent implements OnInit {
           }),
           ...filteredResults,
         ];
-        if(tempDocumentList.length > 21){
+        if(tempDocumentList.length > 25){
           Swal.fire({
             title: 'Atención',
             html: 'No se puede incluir este articulo porque excede las 21 lineas',

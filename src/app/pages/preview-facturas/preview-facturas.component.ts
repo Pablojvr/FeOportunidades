@@ -191,7 +191,7 @@ export class PreviewFacturasComponent implements OnInit {
 
 
   }
-  genInvoicesByChunkSize(xs: any, chunkSize = 21) {
+  genInvoicesByChunkSize(xs: any, chunkSize = 25) {
     let lines = xs.documentLines;
     let invoices = [];
     for (let i = 0; i < lines.length; i += chunkSize) {
@@ -298,6 +298,62 @@ export class PreviewFacturasComponent implements OnInit {
 
     this.facturasService
       .aprobarFacturas(
+        this.solicitud.idFactura
+      )
+      .subscribe({
+        next: (_) => {
+          this.saving = false;
+          this.saved = true;
+          Swal.fire({
+            title: 'Guardado',
+            text: 'Se ha guardado correctamente...',
+            icon: 'success',
+            timer: 2000,
+            heightAuto: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+          }).then(
+            () => {
+              this._router.navigate(['/facturas']);
+            },
+            (dismiss: any) => {
+              this._router.navigate(['/facturas']);
+            }
+          );
+        },
+        error: (error) => {
+          let errorMsg: string;
+          if (error.error instanceof ErrorEvent) {
+            errorMsg = `Error: ${error.error.message}`;
+          } else {
+            errorMsg = getServerErrorMessage(error);
+          }
+
+          Swal.fire({
+            title: '',
+            text: errorMsg,
+            icon: 'error',
+            heightAuto: false,
+          });
+          this.saving = false;
+          this.saved = false;
+        },
+      });
+    console.log(this.ordenes);
+  }
+
+  abrirFacturas() {
+    Swal.fire({
+      title: '',
+      text: 'Guardando...',
+      icon: 'info',
+      heightAuto: false,
+      showCancelButton: false,
+      showConfirmButton: false,
+    });
+
+    this.facturasService
+      .abrirFacturas(
         this.solicitud.idFactura
       )
       .subscribe({

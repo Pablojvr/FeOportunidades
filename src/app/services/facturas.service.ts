@@ -188,6 +188,13 @@ export class FacturasService {
       {}
     );
   }
+
+  abrirFacturas( idFactura: any) {
+    return this.http.get<any>(
+      `${this.baseUrl}/Facturas/abrirFacturas/?id=${idFactura}`,
+      {}
+    );
+  }
   getEstados() {
     return this.http.get<any>(
       `${this.baseUrl}/Facturas/Estados/ALL`,

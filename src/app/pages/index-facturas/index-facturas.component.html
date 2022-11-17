@@ -167,7 +167,7 @@
               </button>
               <button
                 mat-icon-button
-                *ngIf="item.estadoFacturaFK==1 || (user.rol.supervisorFacturacion===false && item.estadoFacturaFK == 2)"
+                *ngIf="item.estadoFacturaFK==1"
                 [routerLink]="['/facturas/edit/', item.idFactura]"
               >
 
@@ -212,7 +212,7 @@
           #paginator
           class="mat-elevation-z8"
           [length]="dataSource?.solicitudesLength"
-          [pageSize]="10"
+          [pageSize]="30"
           [pageSizeOptions]="[10, 20, 30]"
         ></mat-paginator>
       </div>
