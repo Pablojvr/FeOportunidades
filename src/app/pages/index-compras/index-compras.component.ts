@@ -1,8 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-  FormBuilder, FormGroup
-} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -12,7 +10,10 @@ import { tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Usuario } from '../usuarios/usuarios-datasource';
 import { ComprasService } from './../../services/compras.service';
-import { getServerErrorMessage, ListadoComprasDataSource } from './index-compras-datasource';
+import {
+  getServerErrorMessage,
+  ListadoComprasDataSource
+} from './index-compras-datasource';
 
 @Component({
   selector: 'app-index-compras',
@@ -37,6 +38,10 @@ export class IndexComprasComponent implements OnInit {
   isLoading = false;
   errorMsg!: string;
   ListadoEstados: Array<any> = [];
+  term$: any;
+  appService: any;
+  resultsLength: any;
+  data: any;
 
   constructor(
     private datePipe: DatePipe,
@@ -55,14 +60,19 @@ export class IndexComprasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataSource.getPaginatedSolicitudDeCompra('', '',-1, 0, 10);
-    this.comprasService.getEstados().toPromise().then(data=>{
-
+    this.dataSource.getPaginatedSolicitudDeCompra('', '', -1, 0, 10, 'fecha','desc');
+    this.comprasService
+      .getEstados()
+      .toPromise()
+      .then((data) => {
         this.ListadoEstados = data;
-        this.ListadoEstados.push({idEstadoSolicitud:-1,nombreEstadoSolicitud:"Todos"})
-      }
-    )
+        this.ListadoEstados.push({
+          idEstadoSolicitud: -1,
+          nombreEstadoSolicitud: 'Todos',
+        });
+      });
   }
+
   get form() {
     return this.comprasForm.controls;
   }
@@ -87,13 +97,27 @@ export class IndexComprasComponent implements OnInit {
       this.datePipe.transform(this.form.fechaIni.value, 'dd-MM-yyyy') ?? '';
     var fechaFin =
       this.datePipe.transform(this.form.fechaFin.value, 'dd-MM-yyyy') ?? '';
+    console.log('SORT ES');
+    console.log(this.sort);
     this.dataSource.getPaginatedSolicitudDeCompra(
       fechaIni,
       fechaFin,
       this.form.estado.value,
       this.paginator.pageIndex,
-      this.paginator.pageSize
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
     );
+  }
+  orderByColumn(
+    fechaIni: string,
+    fechaFin: string,
+    value: any,
+    pageIndex: number,
+    pageSize: number,
+    orderByColumn: any
+  ) {
+    throw new Error('Method not implemented.');
   }
 
   deleteSolicitud(item: any) {
@@ -151,6 +175,11 @@ export class IndexComprasComponent implements OnInit {
         })
       )
       .subscribe();
+
+    this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0;
+      this.onSubmit();
+    });
   }
 
   printSolicitud(item: any) {
@@ -163,7 +192,7 @@ export class IndexComprasComponent implements OnInit {
       confirmButtonText: 'Descargar',
       cancelButtonText: 'Cancelar',
       html:
-      '<label> Meses historico:</label><br>' +
+        '<label> Meses historico:</label><br>' +
         '<input id="swal-input1" class="swal2-input" type="number" max="6" min="1" value="2"><br>' +
         '<label> Meses aprovisionamiento:</label><br>' +
         '<input id="swal-input2" class="swal2-input" type="number" max="6" min="1" value="2"><br>',
@@ -180,7 +209,7 @@ export class IndexComprasComponent implements OnInit {
         var dialog = Swal;
         dialog.fire({
           title: 'Generando PDF',
-          html:`<style>.loader {
+          html: `<style>.loader {
             border: 16px solid #f3f3f3; /* Light grey */
             border-top: 16px solid #3498db; /* Blue */
             border-radius: 50%;
@@ -240,3 +269,4 @@ export class IndexComprasComponent implements OnInit {
     );
   }
 }
+

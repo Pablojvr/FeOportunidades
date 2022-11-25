@@ -357,6 +357,7 @@ export class ComprasComponent implements OnInit {
     if (this.solicitud != null) {
       solicitud = Object.assign(this.solicitud, {
         articulos: articulosSolicitados,
+        fecha: this.form.fecha.value,
       });
     } else {
       var laboratoryData = this.form.laboratory.value;

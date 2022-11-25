@@ -54,8 +54,8 @@
         <div class="spinner-container" class="w-min-full" *ngIf="dataSource.loading$ | async">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
-        <mat-table class="items-table mat-elevation-z8" [dataSource]="dataSource" matSort matSortActive="id"
-          matSortDirection="asc" matSortDisableClear>
+        <mat-table class="items-table mat-elevation-z8" [dataSource]="dataSource" matSort matSortActive="fecha"
+          matSortDirection="desc" matSortDisableClear>
           <ng-container matColumnDef="codigo">
             <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
             <mat-cell *matCellDef="let item">{{
@@ -67,13 +67,13 @@
             <mat-cell *matCellDef="let item">{{ item.docNum }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="fecha">
-            <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+            <mat-header-cell   mat-sort-header *matHeaderCellDef>Fecha</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">{{
               item.fecha | date: "shortDate"
               }}</mat-cell>
           </ng-container>
-          <ng-container matColumnDef="proveedor">
-            <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
+          <ng-container  matColumnDef="proveedor">
+            <mat-header-cell mat-sort-header *matHeaderCellDef>Proveedor</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
               {{ item.groupName }}
             </mat-cell>

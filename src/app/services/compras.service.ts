@@ -90,7 +90,9 @@ export class ComprasService {
     fechaFin = '',
     estado = 1,
     pageNumber = 0,
-    pageSize = 10
+    pageSize = 10,
+    orderBy = '',
+    direction = ''
   ) {
     return this.http.get<Page[]>(`${this.baseUrl}/SolicitudCompras`, {
       params: new HttpParams()
@@ -99,7 +101,9 @@ export class ComprasService {
         .set('fechaFin', fechaFin)
         .set('estado', estado.toString())
         .set('pageNumber', pageNumber.toString())
-        .set('pageSize', pageSize.toString()),
+        .set('pageSize', pageSize.toString())
+        .set('orderBy',orderBy)
+        .set('direction',direction),
     });
   }
 
