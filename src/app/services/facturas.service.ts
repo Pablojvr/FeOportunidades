@@ -59,7 +59,9 @@ export class FacturasService {
     estado = -1,
     search = '',
     pageNumber = 0,
-    pageSize = 10
+    pageSize = 10,
+    active = '',
+    direction = '',
   ) {
     return this.http.get<Page[]>(`${this.baseUrl}/Facturas`, {
       params: new HttpParams()
@@ -69,7 +71,9 @@ export class FacturasService {
         .set('search', search)
         .set('estado', estado.toString())
         .set('pageNumber', pageNumber.toString())
-        .set('pageSize', pageSize.toString()),
+        .set('pageSize', pageSize.toString())
+        .set('orderBy', active.toString())
+        .set('direction', direction.toString()),
     });
   }
 

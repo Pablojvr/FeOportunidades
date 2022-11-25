@@ -91,7 +91,9 @@ export class IndexComprasComponent implements OnInit {
       this.form.fechaIni.value,
       this.form.fechaFin.value,
       this.paginator.pageIndex,
-      this.paginator.pageSize
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
     );
     var fechaIni =
       this.datePipe.transform(this.form.fechaIni.value, 'dd-MM-yyyy') ?? '';

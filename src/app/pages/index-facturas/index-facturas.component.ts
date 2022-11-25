@@ -64,7 +64,7 @@ export class IndexFacturasComponent implements OnInit {
     if(this.user.rol.supervisorFacturacion===false){
       this.form.estado.setValue(1);
     }
-    this.dataSource.getPaginatedFacturas('', '',this.form.estado.value,'', 0, 30);
+    this.dataSource.getPaginatedFacturas('', '',this.form.estado.value,'', 0, 30,'fecha','desc');
     this.facturasService.getEstados().toPromise().then(data=>{
 
       this.ListadoEstados = data;
@@ -92,7 +92,9 @@ export class IndexFacturasComponent implements OnInit {
       this.form.fechaIni.value,
       this.form.fechaFin.value,
       this.paginator.pageIndex,
-      this.paginator.pageSize
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
     );
     var fechaIni =
       this.datePipe.transform(this.form.fechaIni.value, 'dd-MM-yyyy') ?? '';
@@ -104,7 +106,9 @@ export class IndexFacturasComponent implements OnInit {
       this.form.estado.value,
       this.form.search.value,
       this.paginator.pageIndex,
-      this.paginator.pageSize
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
     );
   }
 
@@ -116,6 +120,10 @@ export class IndexFacturasComponent implements OnInit {
         })
       )
       .subscribe();
+      this.sort.sortChange.subscribe(() => {
+        this.paginator.pageIndex = 0;
+        this.onSubmit();
+      });
   }
 
   anularFacturas(item:any){

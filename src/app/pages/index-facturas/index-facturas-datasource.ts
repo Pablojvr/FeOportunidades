@@ -34,13 +34,15 @@ export class FacturasDataSource extends DataSource<Object> {
     estado: number = -1,
     search: string = '',
     pageIndex: number = -1,
-    pageSize: number = -1
+    pageSize: number = -1,
+    active:any = '',
+    direction:any=''
   ) {
     interface Reporte extends Object {}
     this.loadingSubject.next(true);
 
     this.facturaService
-      .getPaginatedFacturas(fechaIni, fechaFin,estado,search, pageIndex, pageSize)
+      .getPaginatedFacturas(fechaIni, fechaFin,estado,search, pageIndex, pageSize,active,direction)
       .pipe(
         catchError((error) => {
           Swal.fire({
