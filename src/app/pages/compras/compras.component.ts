@@ -37,7 +37,7 @@ export class ComprasComponent implements OnInit {
   initialColumns = ['codigo', 'descripcion', 'proveedor'];
   middleColumns = ['M1', 'M2'];
   onlyNewColums = ['vtaProm', 'existencia', 'sugerido'];
-  endColumns = ['comprado', 'punit', 'total'];
+  endColumns = ['comprado','bonificado', 'punit', 'total'];
   filteredLabs: any;
   isLoading = false;
   errorMsg!: string;
@@ -241,6 +241,7 @@ export class ComprasComponent implements OnInit {
         var index = listadoActiculosDataSource.indexOf(found);
         listadoActiculosDataSource[index] = Object.assign(found, {
           COMPRAR: item.amount,
+          BONIFICADO:item.u_EJJE_UBonificada,
           PUNIT: parseFloat(item.price),
           PROVEEDOR: item.cardName,
           CARDCODE: item.cardCode,
@@ -339,6 +340,7 @@ export class ComprasComponent implements OnInit {
           vatCode: item.VATGROUP,
           amount: item.COMPRAR,
           price: item.PUNIT,
+          u_EJJE_UBonificada:item.BONIFICADO??0,
           line: index,
         };
       });

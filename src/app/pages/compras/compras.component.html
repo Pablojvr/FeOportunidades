@@ -264,6 +264,24 @@
               </mat-form-field>
             </mat-cell>
           </ng-container>
+          <ng-container matColumnDef="bonificado">
+            <mat-header-cell *matHeaderCellDef>Bonificado</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              <mat-form-field appearance="outline" style="width: 100px">
+                <mat-label>Unidades</mat-label>
+                <input
+                  [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
+                  matInput
+                  min="0"
+                  matInput
+                  placeholder="0"
+                  type="number"
+                  [(ngModel)]="item.BONIFICADO"
+                  required
+                />
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
 
           <ng-container matColumnDef="punit">
             <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>

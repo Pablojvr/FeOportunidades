@@ -155,7 +155,8 @@ export class OrdenCompraComponent implements OnInit {
           BaseEntry: DocEntry,
           BaseLine: `${o['line']}`,
           TaxCode: o['vatCode'],
-          U_EJJE_UBonificada: "0",
+          U_EJJE_UBonificada: o['u_EJJE_UBonificada']??"0",
+          totalLinea : Number( o['amount'])*Number(o['price'])
         });
       });
     });
