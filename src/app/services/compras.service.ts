@@ -111,7 +111,9 @@ export class ComprasService {
     fechaIni = '',
     fechaFin = '',
     pageNumber = 0,
-    pageSize = 10
+    pageSize = 10,
+    orderBy='',
+    direction=''
   ) {
     return this.http.get<Page[]>(`${this.baseUrl}/EntradaMercancia`, {
       params: new HttpParams()
@@ -119,7 +121,10 @@ export class ComprasService {
         .set('fechaIni', fechaIni)
         .set('fechaFin', fechaFin)
         .set('pageNumber', pageNumber.toString())
-        .set('pageSize', pageSize.toString()),
+        .set('pageSize', pageSize.toString())
+        .set('orderBy', orderBy.toString())
+        .set('direction', direction.toString())
+        ,
     });
   }
 

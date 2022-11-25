@@ -52,7 +52,7 @@ export class IndexEntradaMercanciaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataSource.getPaginatedEntradaMercancia('', '', 0, 10);
+    this.dataSource.getPaginatedEntradaMercancia('', '', 0, 10,'fecha','desc');
   }
   get form() {
     return this.comprasForm.controls;
@@ -72,7 +72,9 @@ export class IndexEntradaMercanciaComponent implements OnInit {
       this.form.fechaIni.value,
       this.form.fechaFin.value,
       this.paginator.pageIndex,
-      this.paginator.pageSize
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
     );
     var fechaIni =
       this.datePipe.transform(this.form.fechaIni.value, 'dd-MM-yyyy') ?? '';
@@ -82,7 +84,9 @@ export class IndexEntradaMercanciaComponent implements OnInit {
       fechaIni,
       fechaFin,
       this.paginator.pageIndex,
-      this.paginator.pageSize
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
     );
   }
 
@@ -142,6 +146,10 @@ export class IndexEntradaMercanciaComponent implements OnInit {
         })
       )
       .subscribe();
+      this.sort.sortChange.subscribe(() => {
+        this.paginator.pageIndex = 0;
+        this.onSubmit();
+      });
   }
   printSolicitud(item: any) {
     Swal.fire({

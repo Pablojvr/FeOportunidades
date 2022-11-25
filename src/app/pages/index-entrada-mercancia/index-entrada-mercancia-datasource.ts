@@ -1,11 +1,8 @@
-import { ComprasService } from '../../services/compras.service';
-import { UserService } from '../../services/user.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { catchError, finalize, map } from 'rxjs/operators';
-import { Observable, merge, BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { ComprasService } from '../../services/compras.service';
 import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 
 /**
@@ -35,13 +32,15 @@ export class EntradaMercanciaDataSource extends DataSource<Object> {
     fechaIni: string = '',
     fechaFin: string = '',
     pageIndex: number = -1,
-    pageSize: number = -1
+    pageSize: number = -1,
+    active:any = '',
+    direction:any = ''
   ) {
     interface Reporte extends Object {}
     this.loadingSubject.next(true);
 
     this.comprasService
-      .getPaginatedEntradaMercancia(fechaIni, fechaFin, pageIndex, pageSize)
+      .getPaginatedEntradaMercancia(fechaIni, fechaFin, pageIndex, pageSize,active,direction)
       .pipe(
         catchError((error) => {
           Swal.fire({

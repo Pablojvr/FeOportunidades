@@ -77,8 +77,8 @@
           class="items-table mat-elevation-z8"
           [dataSource]="dataSource"
           matSort
-          matSortActive="id"
-          matSortDirection="asc"
+          matSortActive="fecha"
+          matSortDirection="desc"
           matSortDisableClear
         >
           <ng-container matColumnDef="codigo">
@@ -96,13 +96,13 @@
             <mat-cell *matCellDef="let item">{{ item.docNum }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="fecha">
-            <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">{{
               item.fecha | date: "shortDate"
             }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="proveedor">
-            <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Proveedor</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
               {{ item.cardName }}
             </mat-cell>
