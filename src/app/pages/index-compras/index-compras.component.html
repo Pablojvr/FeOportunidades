@@ -54,7 +54,7 @@
         <div class="spinner-container" class="w-min-full" *ngIf="dataSource.loading$ | async">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
-        <mat-table class="items-table mat-elevation-z8" [dataSource]="dataSource" matSort matSortActive="fecha"
+        <mat-table class="items-table mat-elevation-z8" [dataSource]="dataSource" matSort matSortActive="codigo"
           matSortDirection="desc" matSortDisableClear>
           <ng-container matColumnDef="codigo">
             <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>

@@ -60,7 +60,7 @@ export class IndexComprasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataSource.getPaginatedSolicitudDeCompra('', '', -1, 0, 10, 'fecha','desc');
+    this.dataSource.getPaginatedSolicitudDeCompra('', '', -1, 0, 10, 'codigo','desc');
     this.comprasService
       .getEstados()
       .toPromise()

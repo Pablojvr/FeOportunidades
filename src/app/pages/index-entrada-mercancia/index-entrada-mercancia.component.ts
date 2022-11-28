@@ -52,7 +52,7 @@ export class IndexEntradaMercanciaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataSource.getPaginatedEntradaMercancia('', '', 0, 10,'fecha','desc');
+    this.dataSource.getPaginatedEntradaMercancia('', '', 0, 10,'codigo','desc');
   }
   get form() {
     return this.comprasForm.controls;

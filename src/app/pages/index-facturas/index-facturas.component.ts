@@ -64,7 +64,7 @@ export class IndexFacturasComponent implements OnInit {
     if(this.user.rol.supervisorFacturacion===false){
       this.form.estado.setValue(1);
     }
-    this.dataSource.getPaginatedFacturas('', '',this.form.estado.value,'', 0, 30,'fecha','desc');
+    this.dataSource.getPaginatedFacturas('', '',this.form.estado.value,'', 0, 30,'codigo','desc');
     this.facturasService.getEstados().toPromise().then(data=>{
 
       this.ListadoEstados = data;
