@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -627,5 +627,12 @@ export class FacturasComponent implements OnInit {
       EXP: 'IVAEXP',
     };
     return series[TipoDocumento] ?? '';
+  }
+  @HostListener('keydown.f2', ['$event'])
+  onEsc(event: KeyboardEvent) {
+    if(this.form.proveedor.value){
+      this.addArticulo();
+    }
+
   }
 }

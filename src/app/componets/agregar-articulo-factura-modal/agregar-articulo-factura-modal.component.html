@@ -7,7 +7,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label> Código - Nombre</mat-label>
-        <input matInput name="numFactura" (focus)="getItems()" [matAutocomplete]="auto" [(ngModel)]="data.item"
+        <input matInput cdkFocusInitial name="numFactura" (focus)="getItems()" [matAutocomplete]="auto" [(ngModel)]="data.item"
           (ngModelChange)="changeItems($event)" required
           class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
         <mat-icon matSuffix class="mat-18">store</mat-icon>
@@ -37,12 +37,12 @@
     </div>
     <div class="flex md:w-6/12 items-right" style="padding-bottom: 1.34375em;">
 
-      <button bat-button mat-flat-button color="secondary" cdkFocusInitial style="background: #198d19;
+      <button bat-button mat-flat-button color="secondary" style="background: #198d19;
       color: white;" (click)="agregarArticulo()">
         Procesar
       </button>
 
-      <button bat-button mat-flat-button color="secondary" cdkFocusInitial style="background: #b9491d;
+      <button bat-button mat-flat-button color="secondary"  style="background: #b9491d;
       color: white;" (click)="manualOverrideAdministrador()">
         Editar
       </button>
@@ -109,7 +109,7 @@
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancelar</button>
 
-  <button [disabled]="listadoLotes.length==0" mat-flat-button color="primary" cdkFocusInitial
+  <button [disabled]="listadoLotes.length==0" mat-flat-button color="primary"
     [mat-dialog-close]="{items:listadoLotes, itemCode:data?.item?.itemCode}">
     Agregar
   </button>

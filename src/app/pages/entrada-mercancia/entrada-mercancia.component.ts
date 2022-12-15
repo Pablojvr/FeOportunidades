@@ -242,7 +242,7 @@ export class EntradaMercanciaComponent implements OnInit {
         });
         processedData.documentLines = processedData.documentLines.filter((x:any)=>Number(x.remainingOpenInventoryQuantity) > 0);
         var ids = processedData.documentLines
-          .map((x: any) => x.itemCode)
+          .map((x: any) => `'${x.itemCode}'`)
           .join();
 
         this.comprasService.getItemsRentabilidad(ids).subscribe((data2) => {
@@ -252,11 +252,11 @@ export class EntradaMercanciaComponent implements OnInit {
               obj.unidadesBonificadas = Number(obj.u_EJJE_UBonificada);
               obj.randomID =  this.itemsUniqueCor++;
               obj.price = obj.unitPrice;
-              let found = data2.data.value.find(
-                (element: any) => element.itemCode == obj.itemCode
+              let found = JSON.parse(data2.data).find(
+                (element: any) => element.ItemCode == obj.itemCode
               );
               if (found) {
-                obj.rentabilidad = found.u_EJJE_Rentabilidad;
+                obj.rentabilidad = found.U_EJJE_Rentabilidad;
               }
               this.updateItemCalculatedValues(obj,null);
             });
