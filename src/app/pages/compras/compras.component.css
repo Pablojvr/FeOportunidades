@@ -25,3 +25,6 @@ mat-form-field {
   top: -0.25em !important;
   position: relative;
 }
+.mat-option.mat-selected:not(.mat-option-multiple):not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled), .mat-option:hover:not(.mat-option-disabled) {
+  background: #00695dab;
+}

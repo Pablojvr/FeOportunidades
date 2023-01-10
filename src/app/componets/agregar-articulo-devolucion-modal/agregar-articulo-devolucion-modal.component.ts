@@ -108,7 +108,7 @@ export class AgregarArticuloDevolucionModalComponent implements OnInit {
               'No se han vendido articulos de este lote al cliente seleccionado';
             return;
           } else {
-            var mappedData = data.map((item:any)=>{return {selected:false,batchNum:item.U_EJJE_Lote, quantity:0,price:item.U_EJJE_PrecioUnitario,cantidadFacturada:item.U_EJJE_CantidadFacturada,devuelta:item.U_EJJE_CantidadDevuelta,itemDescription:item.Name, itemCode:item.U_EJJE_CodigoProducto,numFactura:item.U_EJJE_NumeroFactura+"",fechaFactura:item.U_EJJE_FechaFactura,vencido: moment(item.U_EJJE_FechaV).isBefore( moment())}})
+            var mappedData = data.map((item:any)=>{return {selected:false,batchNum:item.U_EJJE_Lote, quantity:0,price:item.U_EJJE_PrecioUnitario,cantidadFacturada:Number(item.U_EJJE_CantidadFacturada),devuelta:Number(item.U_EJJE_CantidadDevuelta),itemDescription:item.Name, itemCode:item.U_EJJE_CodigoProducto,numFactura:item.U_EJJE_NumeroFactura+"",fechaFactura:item.U_EJJE_FechaFactura,vencido: moment(item.U_EJJE_FechaV).isBefore( moment())}})
             this.listadoLotes = mappedData;
           }
 

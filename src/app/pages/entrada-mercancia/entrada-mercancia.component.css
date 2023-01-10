@@ -97,3 +97,6 @@ tr.example-element-row:not(.example-expanded-row):active {
   border-radius:  2px 2px 0 0 ;
 }
 
+.mat-option.mat-selected:not(.mat-option-multiple):not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled), .mat-option:hover:not(.mat-option-disabled) {
+  background: #00695dab;
+}
