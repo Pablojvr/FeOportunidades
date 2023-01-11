@@ -4,3 +4,7 @@
 mat-form-field {
   width: 100%;
 }
+
+.mat-option.mat-selected:not(.mat-option-multiple):not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled), .mat-option:hover:not(.mat-option-disabled), .mat-option.mat-active {
+  background: #00695dab;
+}

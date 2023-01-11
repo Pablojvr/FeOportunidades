@@ -181,8 +181,8 @@
             <mat-cell *matCellDef="let item" class="duration-cell">
               <mat-form-field appearance="outline" style="width: 100px">
                 <mat-label>Unidades</mat-label>
-                <input   [max]="item.cantidadFacturada - item.devuelta"    [readonly]="readOnly" [disabled]="readOnly" [disabled]="readOnly"   [(ngModel)]="item.quantity" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
-                  matInput placeholder="0" type="number" required [readonly]="user.rol.supervisorFacturacion!==false">
+                <input   [max]="item.cantidadFacturada - item.devuelta"       [(ngModel)]="item.quantity" (ngModelChange)="updateItemCalculatedValues(item)" matInput min="0"
+                  matInput placeholder="0" type="number" required [readonly]="readOnly ">
                  <mat-hint *ngIf="!readOnly">{{"Max:"+ (item.cantidadFacturada - item.devuelta)}}</mat-hint>
               </mat-form-field>
             </mat-cell>
