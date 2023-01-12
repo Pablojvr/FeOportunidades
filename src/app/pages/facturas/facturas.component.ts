@@ -251,7 +251,22 @@ export class FacturasComponent implements OnInit {
         this.form.serie.setValue(this.solicitud.serie);
 
         this.form.ShipToCode.setValue(this.solicitud.shipToCode);
-        this.addresses.push({ addressName: this.solicitud.shipToCode });
+
+        this.facturasService.getClientes(this.solicitud.cardCode).subscribe((data) => {
+          if (data.data?.value == undefined) {
+            this.errorMsg = data['Error'];
+            this.filteredLabs = [];
+          } else {
+            this.errorMsg = '';
+            // this.filteredLabs = data.data.value;
+            debugger;
+            this.addresses = data.data.value[0].bpAddresses;
+          }
+          this.isLoading = false;
+          console.log(data);
+          console.log(this.filteredLabs);
+        });
+        // this.addresses.push({ addressName: this.solicitud.shipToCode });
 
         this.updateTotal();
         this.readOnly = true;

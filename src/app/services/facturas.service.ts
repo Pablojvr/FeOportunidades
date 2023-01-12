@@ -186,9 +186,9 @@ export class FacturasService {
     );
   }
 
-  aprobarFacturas( idFactura: any) {
+  aprobarFacturas( idFactura: any, estado:any) {
     return this.http.get<any>(
-      `${this.baseUrl}/Facturas/aprobarFacturas/?id=${idFactura}`,
+      `${this.baseUrl}/Facturas/aprobarFacturas/?id=${idFactura}&estado=${estado}`,
       {}
     );
   }

@@ -180,10 +180,21 @@
         mat-button
         mat-flat-button
         color="primary"
-        (click)="aprobarFacturas()"
+        (click)="aprobarFacturas(2)"
       >
         Aprobar Factura
       </a>
+
+      <a
+      style="margin-left:10px"
+      *ngIf="solicitud && solicitud.estadoFacturaFK == 1 && user.rol.supervisorFacturacion==false"
+      mat-button
+      mat-flat-button
+      color="warn"
+      (click)="aprobarFacturas(6)"
+    >
+      Rechazar Factura
+    </a>
 
       <a
         style="margin-left:10px"

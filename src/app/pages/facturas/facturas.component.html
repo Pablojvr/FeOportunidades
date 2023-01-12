@@ -72,7 +72,7 @@
         <mat-form-field appearance="outline">
 
 
-          <mat-select  formControlName="ShipToCode" [disabled]="readOnly">
+          <mat-select  formControlName="ShipToCode" >
             <ng-container *ngIf="!isLoading">
               <mat-option *ngFor="let address of addresses" [value]="address.addressName">
                 <span>

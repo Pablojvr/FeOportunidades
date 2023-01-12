@@ -286,7 +286,7 @@ export class PreviewFacturasComponent implements OnInit {
   }
 
 
-  aprobarFacturas() {
+  aprobarFacturas(estado:Number) {
     Swal.fire({
       title: '',
       text: 'Guardando...',
@@ -298,7 +298,8 @@ export class PreviewFacturasComponent implements OnInit {
 
     this.facturasService
       .aprobarFacturas(
-        this.solicitud.idFactura
+        this.solicitud.idFactura,
+        estado
       )
       .subscribe({
         next: (_) => {
