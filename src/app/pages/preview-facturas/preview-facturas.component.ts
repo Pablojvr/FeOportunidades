@@ -34,6 +34,7 @@ export class PreviewFacturasComponent implements OnInit {
   limiteCredito: any;
   isLoadingFacturasMora: boolean = false;
   totalFacturasVencidas: any;
+  tipoContribuyente: string = '';
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
@@ -118,7 +119,10 @@ export class PreviewFacturasComponent implements OnInit {
 
         this.creditoDisponible = data.data.currentAccountBalance;
         this.limiteCredito = data.data.creditLimit;
-
+        this.tipoContribuyente = data.data.u_EJJE_TipoContribuyente;
+        this.ordenes.forEach(e=>{
+          this.updateTotal(e);
+        })
 
       },
       error: (error) => {
@@ -179,6 +183,7 @@ export class PreviewFacturasComponent implements OnInit {
     }, {});
   }
   updateTotal(element:any) {
+    debugger
     element.subtotalFactura = element.documentLines.reduce(
       (a: any, b: any) => {
         console.log( a + b.price * b.quantity*(1-(parseInt(b.discountPercent)/100)))
@@ -187,9 +192,54 @@ export class PreviewFacturasComponent implements OnInit {
       0.0
     ).toFixed(4);
     element.iva = (element.subtotalFactura * 0.13).toFixed(4);
-    element.totalFactura = Number(element.subtotalFactura) + Number(element.iva);
+    this.updateRetencion(Number(element.subtotalFactura) < 100,element);
+    element.totalFactura = Number(element.subtotalFactura) + Number(element.iva) + Number(element.percepcion);
 
 
+  }
+
+  updateRetencion(menorDe100: boolean,element:any) {
+    // console.log("updatingRetencion"+ [menorDe100,this.retener,this.tipoContribuyente])
+    debugger
+    var retener = '';
+    var codigoImpuesto = this.getTaxCode(element.serie);
+    if (
+      (this.tipoContribuyente == '03' || this.tipoContribuyente == '02') &&
+      !menorDe100
+    ) {
+      var retener = 'tNO';
+      if (element.serie == 'CCF') {
+        codigoImpuesto = 'IVAPER';
+        element.percepcion = (element.subtotalFactura * 0.01).toFixed(4);
+      } else {
+        element.percepcion = 0;
+      }
+    } else {
+      var retener = 'tNO';
+      element.percepcion = 0;
+    }
+    console.log(
+      'updatingRetencion' +
+        [menorDe100, element.retener, element.tipoContribuyente, retener]
+    );
+    this.solicitud.documentLines = this.solicitud.documentLines.map(
+      (element: any) => {
+        return Object.assign(element, {
+          wTLiable: retener,
+          taxCode: codigoImpuesto,
+        });
+      }
+    );
+  }
+
+  getTaxCode(TipoDocumento: any) {
+    let series: any = {
+      CCF: 'IVACRF',
+      COF: 'IVACOF',
+      TIC: 'IVACOF',
+      EXP: 'IVAEXP',
+    };
+    return series[TipoDocumento] ?? '';
   }
   genInvoicesByChunkSize(xs: any, chunkSize = 25) {
     let lines = xs.documentLines;
@@ -213,7 +263,7 @@ export class PreviewFacturasComponent implements OnInit {
         xs
       );
       newInvoice.documentLines = chunk;
-      this.updateTotal(newInvoice);
+      // this.updateTotal(newInvoice);
       invoices.push(newInvoice);
       // do whatever
     }
@@ -230,6 +280,7 @@ export class PreviewFacturasComponent implements OnInit {
       showConfirmButton: false,
     });
     this.ordenes.forEach((orden: any) => {
+      orden.comments = 'Venta del dia ' + new Date().toLocaleDateString("es-ES");
       orden.documentLines = orden.documentLines.map((line: any) => {
         line.unitPrice = line.price;
         line.batchNumbers = [

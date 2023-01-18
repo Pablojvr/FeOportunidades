@@ -145,6 +145,8 @@
               :'1.2-2':'en-US'}} </b></div>
               <div style="width:100%"><b>IVA $ {{item.iva | number
                 :'1.2-2':'en-US'}} </b></div>
+                <div style="width:100%" *ngIf="item.percepcion>0"><b>Percepcion $ {{item.percepcion | number
+                  :'1.2-2':'en-US'}} </b></div>
             <div style="width:100%"><b>TOTAL $ {{item.totalFactura | number
                 :'1.2-2':'en-US'}} </b></div>
           </td>

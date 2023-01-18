@@ -27,6 +27,7 @@ export class ComprasComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Usuario>;
   @ViewChild('input') input!: ElementRef;
+  @ViewChild('tableContainer') tableContainer!: ElementRef;
   dataSource: ComprasDataSource;
   monthNames: any = [];
   numMonths: number = 0;
@@ -424,6 +425,14 @@ export class ComprasComponent implements OnInit {
 
     console.log(solicitud);
   }
+  public scrollRight(): void {
+    var tabla = this.tableContainer.nativeElement.getElementsByClassName("items-table")[0]
+    tabla.scrollTo({ left: (tabla.scrollLeft + 150), behavior: 'smooth' });
+  }
 
+  public scrollLeft(): void {
+    var tabla = this.tableContainer.nativeElement.getElementsByClassName("items-table")[0]
+    tabla.scrollTo({ left: (tabla.scrollLeft - 150), behavior: 'smooth' });
+  }
 
 }

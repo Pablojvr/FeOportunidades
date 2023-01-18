@@ -133,196 +133,204 @@
         >
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
-        <mat-table
-          class="items-table mat-elevation-z8"
-          [dataSource]="dataSource"
-          matSort
-          matSortActive="id"
-          matSortDirection="asc"
-          matSortDisableClear
-        >
-          <ng-container matColumnDef="codigo">
-            <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
-            <mat-cell *matCellDef="let item">{{ item.ITEMCODE }}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="descripcion">
-            <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">{{
-              item.NOMBRE
-            }}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="proveedor">
-            <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              <!-- <span *ngIf="!item.editing && !item.loadingSuppliers">
-                {{ item.PROVEEDOR }}
-                <mat-icon
-                  class="mat-18"
-                  color="primary"
-                  (click)="editProveedor(item)"
-                  >edit</mat-icon
-                >
-              </span> -->
-              <!-- <span *ngIf="item.loadingSuppliers"> Cargando...</span> -->
-              <mat-form-field
-                *ngIf="!(solicitud && solicitud?.estadoSolicitudFK != 1)"
-                [floatLabel]="
-                  item.loadingSuppliers ||
-                  (!item.loadingSuppliers && !item.suppliers && !item.CARDCODE)
-                "
-                appearance="fill"
-              >
-                <!-- <mat-label>Proveedor</mat-label> -->
-                <mat-select
-                  [(value)]="item.CARDCODE"
-                  (openedChange)="openChanged($event, item)"
-                  (selectionChange)="selectionChange($event, item)"
-                >
-                  <mat-option
-                    *ngFor="let supplier of item.suppliers"
-                    [value]="supplier.CardCode"
-                  >
-                    {{ supplier.CardName }}
-                  </mat-option>
-                  <mat-option
-                    *ngIf="!item.loadingSuppliers && !item.suppliers"
-                    [value]="item.CARDCODE"
-                  >
-                    {{ item.PROVEEDOR }}
-                  </mat-option>
-                </mat-select>
-                <mat-label *ngIf="item.loadingSuppliers">
-                  <div class="select-placeholder-container">
-                    <span>Loading...</span>
-                    <mat-spinner class="spinner" diameter="20"></mat-spinner>
-                  </div>
-                </mat-label>
-                <mat-label
-                  *ngIf="
-                    !item.loadingSuppliers && !item.suppliers && !item.CARDCODE
-                  "
-                >
-                  <div class="select-placeholder-container">
-                    <span> Selecciona un proveedor</span>
-                  </div>
-                </mat-label>
-              </mat-form-field>
-              <span *ngIf="solicitud && solicitud?.estadoSolicitudFK != 1">{{
-                item.PROVEEDOR
-              }}</span>
-            </mat-cell>
-          </ng-container>
-
-          <ng-container
-            *ngFor="let item of [].constructor(numMonths); let i = index"
-            [matColumnDef]="'M' + (i + 1)"
+        <div class="flex-area">
+        <div #tableContainer class="table-container">
+          <mat-table
+            class="items-table mat-elevation-z8"
+            [dataSource]="dataSource"
+            matSort
+            matSortActive="id"
+            matSortDirection="asc"
+            matSortDisableClear
           >
-            <mat-header-cell *matHeaderCellDef>{{
-              monthNames[i]
-            }}</mat-header-cell>
-            <mat-cell class="name-cell" *matCellDef="let item">{{
-              item["M" + (i + 1)]
-            }}</mat-cell>
-          </ng-container>
+            <ng-container matColumnDef="codigo">
+              <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
+              <mat-cell *matCellDef="let item">{{ item.ITEMCODE }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="descripcion">
+              <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item">{{
+                item.NOMBRE
+              }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="proveedor">
+              <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item">
+                <!-- <span *ngIf="!item.editing && !item.loadingSuppliers">
+                  {{ item.PROVEEDOR }}
+                  <mat-icon
+                    class="mat-18"
+                    color="primary"
+                    (click)="editProveedor(item)"
+                    >edit</mat-icon
+                  >
+                </span> -->
+                <!-- <span *ngIf="item.loadingSuppliers"> Cargando...</span> -->
+                <mat-form-field
+                  *ngIf="!(solicitud && solicitud?.estadoSolicitudFK != 1)"
+                  [floatLabel]="
+                    item.loadingSuppliers ||
+                    (!item.loadingSuppliers && !item.suppliers && !item.CARDCODE)
+                  "
+                  appearance="fill"
+                >
+                  <!-- <mat-label>Proveedor</mat-label> -->
+                  <mat-select
+                    [(value)]="item.CARDCODE"
+                    (openedChange)="openChanged($event, item)"
+                    (selectionChange)="selectionChange($event, item)"
+                  >
+                    <mat-option
+                      *ngFor="let supplier of item.suppliers"
+                      [value]="supplier.CardCode"
+                    >
+                      {{ supplier.CardName }}
+                    </mat-option>
+                    <mat-option
+                      *ngIf="!item.loadingSuppliers && !item.suppliers"
+                      [value]="item.CARDCODE"
+                    >
+                      {{ item.PROVEEDOR }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-label *ngIf="item.loadingSuppliers">
+                    <div class="select-placeholder-container">
+                      <span>Loading...</span>
+                      <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                    </div>
+                  </mat-label>
+                  <mat-label
+                    *ngIf="
+                      !item.loadingSuppliers && !item.suppliers && !item.CARDCODE
+                    "
+                  >
+                    <div class="select-placeholder-container">
+                      <span> Selecciona un proveedor</span>
+                    </div>
+                  </mat-label>
+                </mat-form-field>
+                <span *ngIf="solicitud && solicitud?.estadoSolicitudFK != 1">{{
+                  item.PROVEEDOR
+                }}</span>
+              </mat-cell>
+            </ng-container>
 
-          <ng-container matColumnDef="vtaProm">
-            <mat-header-cell *matHeaderCellDef>Vta. Prom</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">{{
-              item.VENTA_PROMEDIO
-            }}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="existencia">
-            <mat-header-cell *matHeaderCellDef>Existencia</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">{{
-              item.EXISTENCIAS
-            }}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="sugerido">
-            <mat-header-cell *matHeaderCellDef>Sugerido</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">{{
-              item.SUGERIDO
-            }}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="comprado">
-            <mat-header-cell *matHeaderCellDef>Comprar</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Unidades</mat-label>
-                <input
-                  [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
-                  matInput
-                  min="0"
-                  matInput
-                  placeholder="0"
-                  type="number"
-                  [(ngModel)]="item.COMPRAR"
-                  required
-                />
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="bonificado">
-            <mat-header-cell *matHeaderCellDef>Bonificado</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Unidades</mat-label>
-                <input
-                  [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
-                  matInput
-                  min="0"
-                  matInput
-                  placeholder="0"
-                  type="number"
-                  [(ngModel)]="item.BONIFICADO"
-                  required
-                />
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="punit">
-            <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item">
-              <mat-form-field
-                appearance="outline"
-                style="width: 100px"
-                class="money-input"
-              >
-                <mat-label>Precio</mat-label>
-                <span matPrefix class="money-input-prefix">$&nbsp;</span>
-                <input
-                  [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
-                  matInput
-                  min="0.0"
-                  matInput
-                  placeholder="0"
-                  type="number"
-                  [(ngModel)]="item.PUNIT"
-                  required
-                />
-              </mat-form-field>
-            </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="total">
-            <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
-            <mat-cell class="duration-cell" *matCellDef="let item"
-              >${{ item.COMPRAR ? item.PUNIT * item.COMPRAR : 0 }}</mat-cell
+            <ng-container
+              *ngFor="let item of [].constructor(numMonths); let i = index"
+              [matColumnDef]="'M' + (i + 1)"
             >
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" style="vertical-align: middle" colspan="9999">
-              No se han encontrado registros
-            </td>
-          </tr>
-        </mat-table>
+              <mat-header-cell *matHeaderCellDef>{{
+                monthNames[i]
+              }}</mat-header-cell>
+              <mat-cell class="name-cell" *matCellDef="let item">{{
+                item["M" + (i + 1)]
+              }}</mat-cell>
+            </ng-container>
 
-        <div style="position: relative">
+            <ng-container matColumnDef="vtaProm">
+              <mat-header-cell *matHeaderCellDef>Vta. Prom</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item">{{
+                item.VENTA_PROMEDIO
+              }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="existencia">
+              <mat-header-cell *matHeaderCellDef>Existencia</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item">{{
+                item.EXISTENCIAS
+              }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="sugerido">
+              <mat-header-cell *matHeaderCellDef>Sugerido</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item">{{
+                item.SUGERIDO
+              }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="comprado">
+              <mat-header-cell *matHeaderCellDef>Comprar</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item">
+                <mat-form-field appearance="outline" style="width: 100px">
+                  <mat-label>Unidades</mat-label>
+                  <input
+                    [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
+                    matInput
+                    min="0"
+                    matInput
+                    placeholder="0"
+                    type="number"
+                    [(ngModel)]="item.COMPRAR"
+                    required
+                  />
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="bonificado">
+              <mat-header-cell *matHeaderCellDef>Bonificado</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item">
+                <mat-form-field appearance="outline" style="width: 100px">
+                  <mat-label>Unidades</mat-label>
+                  <input
+                    [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
+                    matInput
+                    min="0"
+                    matInput
+                    placeholder="0"
+                    type="number"
+                    [(ngModel)]="item.BONIFICADO"
+                    required
+                  />
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="punit">
+              <mat-header-cell *matHeaderCellDef>P. Unit</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item">
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 100px"
+                  class="money-input"
+                >
+                  <mat-label>Precio</mat-label>
+                  <span matPrefix class="money-input-prefix">$&nbsp;</span>
+                  <input
+                    [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
+                    matInput
+                    min="0.0"
+                    matInput
+                    placeholder="0"
+                    type="number"
+                    [(ngModel)]="item.PUNIT"
+                    required
+                  />
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="total">
+              <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item"
+                >${{ item.COMPRAR ? item.PUNIT * item.COMPRAR : 0 }}</mat-cell
+              >
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" style="vertical-align: middle" colspan="9999">
+                No se han encontrado registros
+              </td>
+            </tr>
+          </mat-table>
+          <div class="left" (click)="scrollLeft()">
+            <!-- < -->
+          </div>
+          <div  class="right" (click)="scrollRight()">
+            <!-- > -->
+          </div>
+        </div>
+        <div class="bottom-area">
           <mat-divider></mat-divider>
           <div
             class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200"
@@ -384,6 +392,7 @@
             </a>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </mat-card-content>

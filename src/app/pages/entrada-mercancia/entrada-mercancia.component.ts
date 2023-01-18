@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import {
-  Component, OnInit,
+  Component, ElementRef, OnInit,
   ViewChild
 } from '@angular/core';
 import { FormBuilder, NgForm } from '@angular/forms';
@@ -27,6 +27,7 @@ export class EntradaMercanciaComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
   @ViewChild('heroForm')  form! : NgForm;
+  @ViewChild('tableContainer') tableContainer!: ElementRef;
   numOrdenCompra = new BehaviorSubject<string>('');
   proveedor = new BehaviorSubject<string>('');
   dataSource: ComprasDataSource;
@@ -620,6 +621,16 @@ export class EntradaMercanciaComponent implements OnInit {
     this.iva = (this.subtotalFactura * 0.13).toFixed(4);
 
     this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
+  }
+
+  public scrollRight(): void {
+    var tabla = this.tableContainer.nativeElement.getElementsByClassName("items-table")[0]
+    tabla.scrollTo({ left: (tabla.scrollLeft + 150), behavior: 'smooth' });
+  }
+
+  public scrollLeft(): void {
+    var tabla = this.tableContainer.nativeElement.getElementsByClassName("items-table")[0]
+    tabla.scrollTo({ left: (tabla.scrollLeft - 150), behavior: 'smooth' });
   }
 
 }

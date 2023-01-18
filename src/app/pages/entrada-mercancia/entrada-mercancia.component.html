@@ -83,6 +83,7 @@
         <div *ngIf="dataSource.loading$ | async" class="spinner-container" class="w-min-full">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
+        <div #tableContainer class="table-container">
         <mat-table [dataSource]="solicitud.documentLines" #table class="items-table mat-elevation-z8"
           >
           <ng-container matColumnDef="codigo">
@@ -288,6 +289,13 @@
             </tr>
           </tbody>
         </mat-table>
+        <div class="left" (click)="scrollLeft()">
+
+        </div>
+        <div  class="right" (click)="scrollRight()">
+
+        </div>
+      </div>
 
         <div class="flex flex-row items-end justify-end  bg-gray-200 px-2"><div> <div style="width:100%"><b>SUBTOTAL $ {{subtotalFactura | number
           :'1.2-2':'en-US'}} </b></div>
