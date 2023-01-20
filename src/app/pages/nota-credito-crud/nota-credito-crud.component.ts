@@ -69,6 +69,7 @@ export class NotaCreditoCrudComponent implements OnInit {
   retener: any;
   comments: any;
   isFact: boolean = false;
+  percepcion: any;
 
   constructor(
     private _router: Router,
@@ -143,6 +144,7 @@ export class NotaCreditoCrudComponent implements OnInit {
     this.limiteCredito = value.creditLimit;
     this.retener = value.subjectToWithholdingTax;
     this.tipoContribuyente = value.u_EJJE_TipoContribuyente;
+
   }
 
   updateTaxCode(){
@@ -153,16 +155,35 @@ export class NotaCreditoCrudComponent implements OnInit {
   }
   updateRetencion(menorDe100:boolean){
     // console.log("updatingRetencion"+ [menorDe100,this.retener,this.tipoContribuyente])
-    var retener = '';
-    if(this.retener == 'boYES' && (this.tipoContribuyente == '03' || this.tipoContribuyente == '02') && !menorDe100 ){
-      var retener = 'tYES';
-    }else{
-      var retener = 'tNO';
+    var retener = 'tNO';
+    var codigoImpuesto = this.getTaxCode(this.form.serie.value);
+    if (
+      (this.tipoContribuyente == '03' || this.tipoContribuyente == '02') &&
+      !menorDe100
+    ) {
+
+      if (this.form.serie.value == 'NCF') {
+        codigoImpuesto = 'IVAPER';
+        this.percepcion = Number((this.subtotalFactura * 0.01).toFixed(4));
+       } else {
+         this.percepcion = 0;
+      }
+    } else {
+
+      this.percepcion = 0;
     }
-    console.log("updatingRetencion"+ [menorDe100,this.retener,this.tipoContribuyente,retener])
-    this.solicitud.documentLines = this.solicitud.documentLines.map((element:any) => {
-      return Object.assign(element,{wTLiable: retener})
-    });
+    console.log(
+      'updatingRetencion' +
+        [menorDe100, null, this.tipoContribuyente, retener]
+    );
+    this.solicitud.documentLines = this.solicitud.documentLines.map(
+      (element: any) => {
+        return Object.assign(element, {
+          wTLiable: retener,
+          taxCode: codigoImpuesto,
+        });
+      }
+    );
   }
   updateLineNum(){
     console.log("updatingLineNum")
@@ -391,6 +412,7 @@ export class NotaCreditoCrudComponent implements OnInit {
   }
   facturar(valid: boolean,readOnly:boolean = false) {
     this.updateTaxCode();
+    this.updateTotal();
     this.updateLineNum();
     var sol = Object.assign({}, this.solicitud);
     if(sol.idNotaCredito == null){
@@ -544,7 +566,8 @@ export class NotaCreditoCrudComponent implements OnInit {
       0.0
     ).toFixed(4);
     this.iva = (this.subtotalFactura * 0.13).toFixed(4);
-    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
+    this.updateRetencion(Number(this.subtotalFactura) < 100);
+    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva) + Number(this.percepcion);
     // this.updateRetencion(Number(this.subtotalFactura)<100);
 
   }
@@ -610,4 +633,5 @@ getTaxCode(TipoDocumento:any){
   }
   return series[TipoDocumento]??'';
 }
+
 }

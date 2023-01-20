@@ -57,6 +57,8 @@ export class DevolucionesComponent implements OnInit {
   subtotalFactura: any = 0;
   iva: any = 0;
   totalFactura: any = 0;
+  tipoContribuyente!: string;
+  percepcion: number = 0;
 
   constructor(
     private _router: Router,
@@ -144,12 +146,19 @@ export class DevolucionesComponent implements OnInit {
           this.errorMsg = '';
           this.solicitud = data;
           this.comentario= data.comentario;
-          this.devolucionesForm.setValue({
-            proveedor: {
-              cardForeignName: data.cardName,
-              cardCode: data.cardCode,
-            },
-            fecha: this.solicitud.fecha
+          this.facturasService.getClientes(data.cardCode).subscribe((data) => {
+            if (data.data?.value == undefined) {
+              this.errorMsg = data['Error'];
+              this.filteredLabs = [];
+            } else {
+              this.devolucionesForm.setValue({
+                proveedor: data.data.value[0],
+                fecha: this.solicitud.fecha
+
+              });
+              this.updateTotal()
+            }
+            // this.isLoading = false;
 
           });
 
@@ -160,6 +169,10 @@ export class DevolucionesComponent implements OnInit {
         console.log(this.solicitud);
       });
     }
+
+    this.devolucionesForm.controls.proveedor.valueChanges.subscribe(x => {
+      this.tipoContribuyente =  x.u_EJJE_TipoContribuyente;
+   });
 
   }
 
@@ -337,8 +350,42 @@ export class DevolucionesComponent implements OnInit {
       0.0
     ).toFixed(4);
     this.iva = (this.subtotalFactura * 0.13).toFixed(4);
-    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva);
+    this.updateRetencion(Number(this.subtotalFactura) < 100);
+    this.totalFactura = Number(this.subtotalFactura) + Number(this.iva) + Number(this.percepcion);
     // this.updateRetencion(Number(this.subtotalFactura)<100);
+  }
+
+  updateRetencion(menorDe100: boolean) {
+    // console.log("updatingRetencion"+ [menorDe100,this.retener,this.tipoContribuyente])
+    var retener = 'tNO';
+    var codigoImpuesto = 'IVACRF';
+    if (
+      (this.tipoContribuyente == '03' || this.tipoContribuyente == '02') &&
+      !menorDe100
+    ) {
+
+      // if (this.form.serie.value == 'NCF') {
+        codigoImpuesto = 'IVAPER';
+        this.percepcion = Number((this.subtotalFactura * 0.01).toFixed(4));
+      // } else {
+        // this.percepcion = 0;
+      // }
+    } else {
+
+      this.percepcion = 0;
+    }
+    console.log(
+      'updatingRetencion' +
+        [menorDe100, null, this.tipoContribuyente, retener]
+    );
+    this.solicitud.documentLines = this.solicitud.documentLines.map(
+      (element: any) => {
+        return Object.assign(element, {
+          wTLiable: retener,
+          taxCode: codigoImpuesto,
+        });
+      }
+    );
   }
 
 

@@ -140,6 +140,7 @@ export class FacturasComponent implements OnInit {
     this.limiteCredito = value.creditLimit;
     this.retener = value.subjectToWithholdingTax;
     this.tipoContribuyente = value.u_EJJE_TipoContribuyente;
+    this.updateTotal();
   }
 
   updateTaxCode() {
