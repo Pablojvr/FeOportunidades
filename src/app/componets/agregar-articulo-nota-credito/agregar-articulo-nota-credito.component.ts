@@ -50,9 +50,20 @@ export class AgregarArticuloNotaCreditoComponent implements OnInit {
     this.data.then();
   }
 
-  actualizarLotesSeleccionados(item: any) {
-    item.selected = !item.selected;
-    this.lotesSeleccionados = this.listadoLotes.filter((item) => item.selected);
+  actualizarLotesSeleccionados() {
+    // item.selected = !item.selected;
+    this.lotesSeleccionados = this.listadoLotes.filter((item) => item.quantity>0);
+    return this.lotesSeleccionados;
+  }
+  validateTotal(item:any){
+    console.log("El item es:")
+    console.log(item);
+    var max = item.cantidadFacturada - item.devuelta;
+    if(item.quantity>max) {
+      item.quantity = max;
+    } else if(item.quantity<0){
+      item.quantity = 0;
+    }
   }
   getItems() {
     this.isLoading = true;
@@ -128,7 +139,7 @@ export class AgregarArticuloNotaCreditoComponent implements OnInit {
                 selected: false,
                 batchNum: item.U_EJJE_Lote,
                 batchNumber: item.U_EJJE_Lote,
-                quantity: 1,
+                quantity: 0,
                 price: item.U_EJJE_PrecioUnitario,
                 cantidadFacturada: item.U_EJJE_CantidadFacturada,
                 devuelta: item.U_EJJE_CantidadDevuelta,

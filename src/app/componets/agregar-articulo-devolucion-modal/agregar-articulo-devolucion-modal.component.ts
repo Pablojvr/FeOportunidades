@@ -9,10 +9,9 @@ import { FacturasService } from './../../services/facturas.service';
 @Component({
   selector: 'app-agregar-articulo-devolucion-modal',
   templateUrl: './agregar-articulo-devolucion-modal.component.html',
-  styleUrls: ['./agregar-articulo-devolucion-modal.component.css']
+  styleUrls: ['./agregar-articulo-devolucion-modal.component.css'],
 })
 export class AgregarArticuloDevolucionModalComponent implements OnInit {
-
   listadoLotes: Array<any> = [];
   lotesSeleccionados: Array<any> = [];
 
@@ -21,7 +20,16 @@ export class AgregarArticuloDevolucionModalComponent implements OnInit {
   isLoading = false;
   itemCode = new BehaviorSubject<string>('');
   @Output() addElements = new EventEmitter<any>();
-  displayedColumns = ['fecha','lote','vencido', 'precio', 'facturado','devuelto','factura','acciones'];
+  displayedColumns = [
+    'fecha',
+    'lote',
+    'vencido',
+    'precio',
+    'facturado',
+    'devuelto',
+    'factura',
+    'acciones',
+  ];
   batchNum: any;
   cardCode: any;
   constructor(
@@ -35,17 +43,26 @@ export class AgregarArticuloDevolucionModalComponent implements OnInit {
   }
 
   displayFn(item: any) {
-
-    return item ? `${item.itemCode} - ${item.itemName}`  : '';
+    return item ? `${item.itemCode} - ${item.itemName}` : '';
   }
   onConfirm() {
     this.addElements.emit(this.listadoLotes);
     this.data.then();
   }
 
-  actualizarLotesSeleccionados(item:any){
-    item.selected = !item.selected;
-    this.lotesSeleccionados = this.listadoLotes.filter(item=>item.selected);
+  actualizarLotesSeleccionados() {
+    // item.selected = !item.selected;
+    this.lotesSeleccionados = this.listadoLotes.filter((item) => item.quantity>0);
+    return this.lotesSeleccionados;
+  }
+
+  validateTotal(item:any){
+    var max = item.cantidadFacturada - item.devuelta;
+    if(item.quantity>max) {
+      item.quantity = max;
+    } else if(item.quantity<0){
+      item.quantity = 0;
+    }
   }
   getItems() {
     this.isLoading = true;
@@ -96,26 +113,43 @@ export class AgregarArticuloDevolucionModalComponent implements OnInit {
       });
   }
   agregarArticulo(number: number = 0) {
-    if (this.data.item && this.data.item.itemCode && !isNaN(this.data.batchNum)) {
+    if (
+      this.data.item &&
+      this.data.item.itemCode &&
+      !isNaN(this.data.batchNum)
+    ) {
       this.devolucionesService
-        .getItemsFacturadosByItemCodeBatchNumAndCardCode(this.data.item.itemCode,this.data.batchNum,this.data.cardCode)
+        .getItemsFacturadosByItemCodeBatchNumAndCardCode(
+          this.data.item.itemCode,
+          this.data.batchNum,
+          this.data.cardCode
+        )
         .subscribe((data) => {
-
           this.listadoLotes = [];
-          this.errorMsg = "";
-          if (data == undefined || data == null || data.length == 0  ) {
+          this.errorMsg = '';
+          if (data == undefined || data == null || data.length == 0) {
             this.errorMsg =
               'No se han vendido articulos de este lote al cliente seleccionado';
             return;
           } else {
-            var mappedData = data.map((item:any)=>{return {selected:false,batchNum:item.U_EJJE_Lote, quantity:0,price:item.U_EJJE_PrecioUnitario,cantidadFacturada:Number(item.U_EJJE_CantidadFacturada),devuelta:Number(item.U_EJJE_CantidadDevuelta),itemDescription:item.Name, itemCode:item.U_EJJE_CodigoProducto,numFactura:item.U_EJJE_NumeroFactura+"",fechaFactura:item.U_EJJE_FechaFactura,vencido: moment(item.U_EJJE_FechaV).isBefore( moment())}})
+            var mappedData = data.map((item: any) => {
+              return {
+                selected: false,
+                batchNum: item.U_EJJE_Lote,
+                quantity: 0,
+                price: item.U_EJJE_PrecioUnitario,
+                cantidadFacturada: Number(item.U_EJJE_CantidadFacturada),
+                devuelta: Number(item.U_EJJE_CantidadDevuelta),
+                itemDescription: item.Name,
+                itemCode: item.U_EJJE_CodigoProducto,
+                numFactura: item.U_EJJE_NumeroFactura + '',
+                fechaFactura: item.U_EJJE_FechaFactura,
+                vencido: moment(item.U_EJJE_FechaV).isBefore(moment()),
+              };
+            });
             this.listadoLotes = mappedData;
           }
-
         });
     }
   }
-
-
-
 }

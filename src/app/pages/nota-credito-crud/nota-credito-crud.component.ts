@@ -609,8 +609,8 @@ export class NotaCreditoCrudComponent implements OnInit {
           dialogRef.close();
         },
       },
-      width: '600px',
-      maxWidth: '600px',
+      width: '700px',
+      maxWidth: '800px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {

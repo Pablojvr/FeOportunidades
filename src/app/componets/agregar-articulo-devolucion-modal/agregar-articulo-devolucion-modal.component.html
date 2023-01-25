@@ -40,7 +40,7 @@
 
 
     </div>
-
+  </form>
     <div class="w-full"><p style="color:red">{{errorMsg}}</p></div>
     <mat-table [dataSource]="listadoLotes" #table class="items-table mat-elevation-z8 w-full" matSort matSortActive="id"
       matSortDirection="asc" matSortDisableClear>
@@ -91,13 +91,20 @@
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="acciones">
-        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
         <mat-cell *matCellDef="let item">
-          <a  (click)="actualizarLotesSeleccionados(item)">
+          <mat-form-field appearance="outline">
+            <mat-label>Cantidad</mat-label>
+            <input matInput name="cantidadDevolucion" [(ngModel)]="item.quantity" required (ngModelChange)="validateTotal(item)"
+            [max]="item.cantidadFacturada - item.devuelta"  type="number"
+              class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+              <mat-hint>{{"Max:"+ (item.cantidadFacturada - item.devuelta)}}</mat-hint>
+            </mat-form-field>
+          <!-- <a  (click)="actualizarLotesSeleccionados(item)">
               <p  *ngIf="!item.selected"><mat-icon class="mat-18">add</mat-icon> Agregar</p>
               <p  *ngIf="item.selected"><mat-icon class="mat-18">remove</mat-icon> Quitar</p>
 
-          </a>
+          </a> -->
 
         </mat-cell>
       </ng-container>
@@ -112,13 +119,13 @@
       </tbody>
     </mat-table>
 
-  </form>
+
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancelar</button>
 
   <button [disabled]="listadoLotes.length==0" mat-flat-button color="primary" cdkFocusInitial
-    [mat-dialog-close]="lotesSeleccionados">
+    [mat-dialog-close]="actualizarLotesSeleccionados()">
     Agregar
   </button>
 </mat-dialog-actions>

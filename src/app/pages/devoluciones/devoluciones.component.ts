@@ -326,7 +326,7 @@ export class DevolucionesComponent implements OnInit {
         },
       },
       width: '700px',
-      maxWidth: '600px',
+      maxWidth: '900px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
