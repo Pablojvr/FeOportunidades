@@ -412,6 +412,9 @@ export class FacturasComponent implements OnInit {
       sol.tipoDocumento = this.form.serie.value;
       sol.giro = this.form.proveedor.value.notes;
       sol.estadoFacturaFK = valid ? 2 : 1;
+      sol.usuario =  JSON.parse(
+        localStorage.getItem('loggedInUser') ?? '{}'
+      )?.nombre;
       // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
       sol.serie = this.form.serie.value;
     }
