@@ -112,9 +112,16 @@
           <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item"
-              >${{
+              >
+              <span *ngIf="item.totalLinea == null">
+                ${{item.Quantity*item.UnitPrice | number : '1.2-2'}}
+              </span>
+              <span *ngIf="item.totalLinea != null">
+              ${{
                item.totalLinea| number : '1.2-2'
-              }}</mat-cell
+              }}
+              </span>
+              </mat-cell
             >
           </ng-container>
           <ng-container matColumnDef="comentario">
@@ -146,6 +153,54 @@
           <textarea
             matInput
             [(ngModel)]="item.Comments"
+            [readonly]="readOnly"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field
+          appearance="outline"
+          style="width: 25%; padding-top: 30px"
+        >
+          <mat-label>Dias credito:</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="item.U_EJJE_DiasCredito"
+            [readonly]="readOnly"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field
+          appearance="outline"
+          style="width: 25%; padding-top: 30px"
+        >
+          <mat-label>Bonificacion</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="item.U_EJJE_Bonificacion"
+            [readonly]="readOnly"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field
+          appearance="outline"
+          style="width: 25%; padding-top: 30px"
+        >
+          <mat-label>Ventas</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="item.U_EJJE_Vinetas"
+            [readonly]="readOnly"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field
+          appearance="outline"
+          style="width: 25%; padding-top: 30px"
+        >
+          <mat-label>Descuento</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="item.U_EJJE_Descuento"
             [readonly]="readOnly"
           ></textarea>
         </mat-form-field>
