@@ -257,6 +257,7 @@ export class PreviewFacturasComponent implements OnInit {
           u_EJJE_Giro:xs.giro,
           u_EJJE_TipoDocumento: this.getTipoDocumento(xs.serie),
           u_EJJE_NitSocioNegocio: xs.nit,
+          u_EJJE_NrcSocioNegocio:xs.nrc,
           u_EJJE_CorDes:"DES-FAC-"+this.solicitud.idFactura,
           u_EJJE_Usuario:this.solicitud.usuario,
           // u_EJJE_TipoDocumento: xs.serie,

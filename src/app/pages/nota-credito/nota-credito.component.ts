@@ -77,6 +77,7 @@ export class NotaCreditoComponent implements OnInit {
             u_EJJE_Giro: data.giro,
             u_EJJE_TipoDocumento: 'NCF',
             u_EJJE_NitSocioNegocio: data.nit,
+            u_EJJE_NrcSocioNegocio:data.nrc,
             u_EJJE_NumeroDocumento: data.numeroDocumento,
             U_EJJE_CorDes: 'FACT-' + data.idFactura,
             DocDate: moment().format(),
