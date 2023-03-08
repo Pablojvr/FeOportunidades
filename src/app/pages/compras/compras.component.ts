@@ -45,6 +45,10 @@ export class ComprasComponent implements OnInit {
   solicitud: any;
   saving: any = false;
   saved: any = false;
+  comentario: any;
+  diasCredito: any;
+  fechaIngreso: any;
+  descuento: any;
 
   constructor(
     private _router: Router,
@@ -138,6 +142,12 @@ export class ComprasComponent implements OnInit {
             nombreProveedor: '',
             fecha: this.solicitud.fecha,
           });
+
+
+          this.comentario= this.solicitud.comentario;
+          this.fechaIngreso= this.solicitud.fechaIngreso;
+          this.descuento= this.solicitud.descuento;
+          this.diasCredito= this.solicitud.diasCredito;
           this.dataSource.getReporte(1, 0, this.solicitud.groupCode, () => {
             this.setSolicitudData();
           });
@@ -361,6 +371,10 @@ export class ComprasComponent implements OnInit {
       solicitud = Object.assign(this.solicitud, {
         articulos: articulosSolicitados,
         fecha: this.form.fecha.value,
+        comentario:this.comentario,
+        diasCredito:this.diasCredito,
+        fechaIngreso:this.fechaIngreso,
+        descuento:this.descuento
       });
     } else {
       var laboratoryData = this.form.laboratory.value;
@@ -370,6 +384,10 @@ export class ComprasComponent implements OnInit {
         groupCode: laboratoryData.number + '',
         groupName: laboratoryData.groupName,
         articulos: articulosSolicitados,
+        comentario:this.comentario,
+        diasCredito:this.diasCredito,
+        fechaIngreso:this.fechaIngreso,
+        descuento:this.descuento
       };
     }
 

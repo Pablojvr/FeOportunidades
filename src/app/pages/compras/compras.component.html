@@ -330,7 +330,60 @@
             <!-- > -->
           </div>
         </div>
-        <div class="bottom-area">
+        <div class="bottom-area mat-elevation-z8" style="margin-top:10px">
+          <mat-divider></mat-divider>
+          <mat-card>
+          <mat-form-field
+          appearance="outline"
+          style="width: 100%; padding-top: 30px"
+        >
+          <mat-label>Comentario General</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="comentario"
+            [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field
+          appearance="outline"
+          style="width:  33.33%; padding-top: 30px"
+        >
+          <mat-label>Dias credito:</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="diasCredito"
+            [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field
+          appearance="outline"
+          style="width: 33.33%; padding-top: 30px"
+        >
+          <mat-label>Fecha ingreso</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="fechaIngreso"
+            [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
+          ></textarea>
+        </mat-form-field>
+
+
+
+        <mat-form-field
+          appearance="outline"
+          style="width:  33.34%; padding-top: 30px"
+        >
+          <mat-label>Descuento</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="descuento"
+            [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
+          ></textarea>
+        </mat-form-field>
+      </mat-card>
+        <mat-divider></mat-divider>
           <mat-divider></mat-divider>
           <div
             class="mat-elevation-z8 w-full flex flex-row py-4 items-center justify-around bg-gray-200"
