@@ -312,9 +312,24 @@
             <ng-container matColumnDef="total">
               <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
               <mat-cell class="duration-cell" *matCellDef="let item"
-                >${{ item.COMPRAR ? item.PUNIT * item.COMPRAR : 0 }}</mat-cell
+                >${{ item.COMPRAR ? item.PUNIT * item.COMPRAR : 0   | number : '1.2-2' }}</mat-cell
               >
             </ng-container>
+
+            <ng-container matColumnDef="comentario">
+              <mat-header-cell *matHeaderCellDef>Comentario</mat-header-cell>
+              <mat-cell class="duration-cell" *matCellDef="let item">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <mat-label>Comentario...</mat-label>
+                  <textarea
+                    matInput
+                    [readonly]="solicitud && solicitud?.estadoSolicitudFK != 1"
+                    [(ngModel)]="item.u_EJJE_Concepto"
+                  ></textarea>
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
             <tr class="mat-row" *matNoDataRow>

@@ -1,4 +1,3 @@
-import { ListadoDevolucionesDataSource } from './index-devoluciones-datasource';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -10,8 +9,9 @@ import { ActivatedRoute } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { DevolucionesService } from 'src/app/services/devoluciones.service';
 import Swal from 'sweetalert2';
-import { getServerErrorMessage, ListadoComprasDataSource } from '../index-compras/index-compras-datasource';
+import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 import { Usuario } from '../usuarios/usuarios-datasource';
+import { ListadoDevolucionesDataSource } from './index-devoluciones-datasource';
 
 @Component({
   selector: 'app-index-devoluciones',
@@ -143,6 +143,64 @@ export class IndexDevolucionesComponent implements OnInit {
       .subscribe();
   }
 
+  anularFacturas(item:any){
+    Swal.fire({
+      title: '¿Esta seguro?',
+      text: 'Esta nota de credito se anulara',
+      icon: 'question',
+      heightAuto: false,
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then(
+      (result) => {
+        if (!result.isConfirmed) return;
+        Swal.fire({
+          title: '',
+          text: 'Anulando devolucion #'+item.idDevolucion,
+          icon: 'info',
+          heightAuto: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+        this.devolucionesService.anularDevolucionByID(item).subscribe({
+          next: (_) => {
+            this.dataSource.removeSolicitud(item);
+            Swal.fire({
+              title: '',
+              text: 'Se ha anulado correctamente la nota de credito',
+              icon: 'success',
+              timer: 2000,
+              heightAuto: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+
+            this.onSubmit()
+          },
+          error: (error) => {
+            let errorMsg: string;
+            if (error.error instanceof ErrorEvent) {
+              errorMsg = `Error: ${error.error.message}`;
+            } else {
+              errorMsg = getServerErrorMessage(error);
+            }
+
+            Swal.fire({
+              title: '',
+              text: errorMsg,
+              icon: 'error',
+              heightAuto: false,
+            });
+          },
+        });
+      },
+      () => {}
+    );
+  }
   // printSolicitud(item: any) {
   //   Swal.fire({
   //     title: 'Generar Archivo PDF',

@@ -156,6 +156,16 @@ export class IndexNotasCreditoComponent implements OnInit {
     }).then(
       (result) => {
         if (!result.isConfirmed) return;
+        Swal.fire({
+          title: '',
+          text: 'Anulando nota de credito #'+item.idNotaCredito,
+          icon: 'info',
+          heightAuto: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
         this.devolucionesService.anularNotasCreditoByID(item).subscribe({
           next: (_) => {
             this.dataSource.removeSolicitud(item);

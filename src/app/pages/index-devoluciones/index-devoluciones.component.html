@@ -134,13 +134,13 @@
               <mat-icon class="mat-18">print</mat-icon>
             </button>
 
-              <button
-                mat-icon-button
-                *ngIf="item.estadoSolicitudFK == 1"
-
-              >
-                <mat-icon class="mat-18"> delete </mat-icon>
-              </button>
+            <button
+            mat-icon-button
+            *ngIf="item.estadoDevolucionFK == 2"
+            (click)="anularFacturas(item)"
+          >
+            <mat-icon class="mat-18"> delete </mat-icon>
+          </button>
             </mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

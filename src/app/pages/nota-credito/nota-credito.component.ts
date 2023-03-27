@@ -201,6 +201,8 @@ export class NotaCreditoComponent implements OnInit {
   }
 
   generarNotaCredito() {
+    if(this.saving) return;
+    this.saving = true;
     Swal.fire({
       title: '',
       text: 'Guardando...',
@@ -210,6 +212,7 @@ export class NotaCreditoComponent implements OnInit {
       showConfirmButton: false,
       allowOutsideClick: false,
       allowEscapeKey: false,
+
     });
 
     var facturas0 = this.factura.DocumentLines.filter(
@@ -224,6 +227,7 @@ export class NotaCreditoComponent implements OnInit {
         showCancelButton: false,
         showConfirmButton: true,
       });
+      this.saving=false;
       return;
     }
 

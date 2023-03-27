@@ -35,6 +35,7 @@ export class PreviewFacturasComponent implements OnInit {
   isLoadingFacturasMora: boolean = false;
   totalFacturasVencidas: any;
   tipoContribuyente: string = '';
+  sendingFact: boolean = false;
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
@@ -251,6 +252,7 @@ export class PreviewFacturasComponent implements OnInit {
           docDate: xs.fecha,
           additionalID: xs.nrc,
           series: this.getSeries(xs.serie)+"",
+          numDocLegal:xs.numDocLegal,
           shipToCode:xs.shipToCode,
           u_EJJE_RazonSocial:xs.razonSocial,
           u_EJJE_NombreSocioNegocio:xs.razonSocial,
@@ -273,16 +275,23 @@ export class PreviewFacturasComponent implements OnInit {
   }
 
   generarFacturas() {
-    Swal.fire({
-      title: '',
-      text: 'Guardando...',
+    if(this.sendingFact) return;
+    this.sendingFact = true;
+    var mensaje  = Swal;
+    mensaje.fire({
+      title: 'Guardando',
+      text: 'Por favor espere...',
       icon: 'info',
       heightAuto: false,
       showCancelButton: false,
       showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
     });
+    //return;
     this.ordenes.forEach((orden: any) => {
-      orden.comments = 'Venta del dia ' + new Date().toLocaleDateString("es-ES");
+      orden.comments = 'Venta del dia ' + new Date(orden.docDate).toLocaleDateString("es-ES");
+      debugger;
       orden.documentLines = orden.documentLines.map((line: any) => {
         line.unitPrice = line.price;
         line.batchNumbers = [
@@ -300,7 +309,8 @@ export class PreviewFacturasComponent implements OnInit {
         next: (_) => {
           this.saving = false;
           this.saved = true;
-          Swal.fire({
+          this.sendingFact = false;
+          mensaje.fire({
             title: 'Guardado',
             text: 'Se ha guardado correctamente...',
             icon: 'success',
@@ -321,8 +331,10 @@ export class PreviewFacturasComponent implements OnInit {
           let errorMsg: string;
           if (error.error instanceof ErrorEvent) {
             errorMsg = `Error: ${error.error.message}`;
+            this.sendingFact = false;
           } else {
             errorMsg = getServerErrorMessage2(error);
+            this.sendingFact = false;
           }
 
           Swal.fire({

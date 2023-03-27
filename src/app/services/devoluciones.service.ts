@@ -35,7 +35,15 @@ export class DevolucionesService {
       return this.http.post(`${this.baseUrl}/Devoluciones`, devolucion);
 
   }
+  anularDevolucionByID(item: any) {
 
+    return this.http.get<any>(
+      `${this.baseUrl}/Devoluciones/cancel`,
+      {
+        params: new HttpParams().set('id', item.idDevolucion)
+      }
+    );
+  }
   getItemsFacturadosByItemCodeBatchNumAndCardCode(itemCode:any, batchNum:any,  cardCode:any,vencidos:boolean = true){
     return this.http.get<Page[]>(`${this.baseUrl}/Devoluciones/getItemsFacturadosByItemCodeBatchNumAndCardCode`, {
       params: new HttpParams()

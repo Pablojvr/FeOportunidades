@@ -366,6 +366,8 @@ export class NotaCreditoCrudComponent implements OnInit {
   }
 
   guardarSolicitud() {
+    if(this.saving) return;
+    this.saving=true;
     Swal.fire({
       title: '',
       text: 'Guardando...',
@@ -373,6 +375,8 @@ export class NotaCreditoCrudComponent implements OnInit {
       heightAuto: false,
       showCancelButton: false,
       showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
     });
     debugger;
 
@@ -436,7 +440,7 @@ export class NotaCreditoCrudComponent implements OnInit {
 
     this.facturasService.guardarNotaCredito(sol).subscribe({
       next: (value: any) => {
-        this.saving = false;
+        // this.saving = false;
         this.saved = true;
         Swal.fire({
           title: 'Guardado',

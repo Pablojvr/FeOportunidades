@@ -27,6 +27,7 @@
         <div class="w-6/12 items-start"><b>Sucursal:</b> <div class="bordeInput no-margin">{{ item.shipToCode }}</div></div>
         <div class="w-full items-start"><b>Nombre Cliente:</b> <div class="bordeInput no-margin">{{ item.razonSocial }}</div></div>
         <div class="w-6/12 items-start"><b>Tipo Documento:</b> <div class="bordeInput no-margin">{{ item.serie }}</div></div>
+        <div class="w-6/12 items-start" *ngIf="item.numDocLegal"><b>Correlativo:</b> <div class="bordeInput no-margin">{{ item.numDocLegal }}</div></div>
         <div class="w-6/12 items-start"><b>Fecha:</b> <div class="bordeInput no-margin">{{ item.docDate | date : 'shortDate':'en-US' }}</div></div>
 
       </div>

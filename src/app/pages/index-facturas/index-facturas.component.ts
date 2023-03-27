@@ -28,6 +28,7 @@ export class IndexFacturasComponent implements OnInit {
   displayedColumns: any[] = [
     'codigo',
     'numDoc',
+    'numDocLegal',
     // 'numDocSAP',
     // 'correlativo',
     'fecha',

@@ -140,6 +140,12 @@
               {{ item.docNum }}
             </mat-cell>
           </ng-container>
+          <ng-container matColumnDef="numDocLegal">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Num. Fac</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+             <span *ngIf="item.numDocLegal"> {{item.serie}}-{{ item.numDocLegal }}</span>
+            </mat-cell>
+          </ng-container>
           <ng-container matColumnDef="tipo">
             <mat-header-cell *matHeaderCellDef>Tipo Factura</mat-header-cell>
             <mat-cell class="duration-cell" *matCellDef="let item">
