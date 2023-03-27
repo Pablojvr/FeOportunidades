@@ -140,6 +140,11 @@ export class OrdenCompraComponent implements OnInit {
           CardName: o.cardName,
           U_EJJE_CorDes:"DES-ORD-SOL-"+this.solicitud.idSolicitudCompra,
           DocDate: moment().format(),
+          U_EJJE_DiasCredito:this.solicitud.diasCredito,
+          U_EJJE_Bonificacion:this.solicitud.fechaIngreso,
+          U_EJJE_DescuentoDoc:this.solicitud.descuento,
+          Comments:this.solicitud.comentario,
+
           DocumentLines: [],
         };
         grouped.push(hash[key]);
