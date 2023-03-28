@@ -136,7 +136,7 @@
 
             <button
             mat-icon-button
-            *ngIf="item.estadoDevolucionFK == 2"
+            *ngIf="item.estadoDevolucionFK == 2 && user.rol.supervisorFacturacion===false"
             (click)="anularFacturas(item)"
           >
             <mat-icon class="mat-18"> delete </mat-icon>

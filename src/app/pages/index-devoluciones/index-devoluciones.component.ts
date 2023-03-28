@@ -35,6 +35,7 @@ export class IndexDevolucionesComponent implements OnInit {
 
   isLoading = false;
   errorMsg!: string;
+  user: any;
 
   constructor(
     private datePipe: DatePipe,
@@ -52,6 +53,7 @@ export class IndexDevolucionesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
     this.dataSource.getPaginatedSolicitudDeCompra('', '', 0, 10);
   }
   get form() {

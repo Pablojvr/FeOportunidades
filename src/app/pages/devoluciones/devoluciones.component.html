@@ -149,7 +149,8 @@
             <mat-cell *matCellDef="let item" class="duration-cell">
               {{
               item.numFactura
-              }}
+              }}<br>
+              <span *ngIf="item.existNumDoc">{{item.numDocLegal}}</span>
             </mat-cell>
           </ng-container>
 

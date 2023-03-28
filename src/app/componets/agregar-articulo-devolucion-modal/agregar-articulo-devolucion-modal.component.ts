@@ -144,6 +144,8 @@ export class AgregarArticuloDevolucionModalComponent implements OnInit {
                 itemCode: item.U_EJJE_CodigoProducto,
                 numFactura: item.U_EJJE_NumeroFactura + '',
                 fechaFactura: item.U_EJJE_FechaFactura,
+                numDocLegal:item.U_EJJE_TipoDocumentoFiscal + '-' +item.NumDocLegal,
+                existNumDoc:item.NumDocLegal!=null,
                 vencido: moment(item.U_EJJE_FechaV).isBefore(moment()),
               };
             });

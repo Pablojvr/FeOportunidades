@@ -81,7 +81,10 @@
       <ng-container matColumnDef="factura">
         <mat-header-cell *matHeaderCellDef>Num. Factura</mat-header-cell>
         <mat-cell *matCellDef="let item">
-          <div>{{item.numFactura}}</div>
+          <div>
+            {{item.numFactura}}<br>
+            <span *ngIf="item.existNumDoc">{{item.numDocLegal}}</span>
+          </div>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="fecha">
