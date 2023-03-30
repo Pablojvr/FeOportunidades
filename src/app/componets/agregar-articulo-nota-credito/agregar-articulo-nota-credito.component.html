@@ -96,7 +96,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Cantidad</mat-label>
             <input matInput  [(ngModel)]="item.quantity" required (ngModelChange)="validateTotal(item)"
-            [max]="item.cantidadFacturada - item.devuelta" type="number"
+            [max]="item.cantidadFacturada - item.devuelta" min="0" type="number"
               class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
               <mat-hint>{{"Max:"+ (item.cantidadFacturada - item.devuelta)}}</mat-hint>
             </mat-form-field>
