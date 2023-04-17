@@ -1,13 +1,14 @@
 {
   "name": "front-end-cofarsa",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "scripts": {
-    "ng": "ng",
+    "ng": "nx",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "node ./decorate-angular-cli.js"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +37,10 @@
     "@angular/cli": "~11.2.18",
     "@angular/compiler-cli": "~11.2.14",
     "@angular/localize": "^11.2.14",
+    "@nrwl/cli": "11.0.0",
+    "@nrwl/nx-cloud": "11.0.0",
+    "@nrwl/tao": "11.0.0",
+    "@nrwl/workspace": "11.0.0",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "autoprefixer": "^10.4.2",
