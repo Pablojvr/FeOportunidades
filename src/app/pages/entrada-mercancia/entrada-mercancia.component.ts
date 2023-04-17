@@ -483,6 +483,9 @@ export class EntradaMercanciaComponent implements OnInit {
     sol.NumeroOrden = this.solicitud.numOrdenCompra.docNum;
     sol.BaseEntry = this.solicitud.docEntry;
     sol.BaseDocNum = this.solicitud.docNum;
+    sol.Usuario =   JSON.parse(
+      localStorage.getItem('loggedInUser') ?? '{}'
+    )?.nombre;
     sol.DocNum = null;
     sol.DocEntry = null;
     sol.documentLines = sol.documentLines.map((line:any)=>{

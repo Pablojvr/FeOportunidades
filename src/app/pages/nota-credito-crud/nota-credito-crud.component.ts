@@ -424,7 +424,7 @@ export class NotaCreditoCrudComponent implements OnInit {
     sol.docDate = this.form.fecha.value;
     sol.cardCode = this.form.proveedor.value.cardCode;
     sol.cardName = this.form.proveedor.value.cardForeignName;
-    sol.u_EJJE_NombreSocioNegocio = this.form.proveedor.value.cardName;
+    sol.u_EJJE_NombreSocioNegocio = this.form.proveedor.value.cardForeignName;
     sol.u_EJJE_RazonSocial = this.form.proveedor.value.cardName;
     sol.shipToCode = this.form.ShipToCode.value;
     sol.u_EJJE_NrcSocioNegocio = this.form.proveedor.value.additionalID;

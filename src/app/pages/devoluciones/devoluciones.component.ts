@@ -220,7 +220,8 @@ export class DevolucionesComponent implements OnInit {
     var sol = Object.assign({}, this.solicitud);
     sol.fecha = this.form.fecha.value;
     sol.cardCode = this.form.proveedor.value.cardCode;
-    sol.cardName = this.form.proveedor.value.cardForeignName;
+    sol.cardName = this.form.proveedor.value.cardName;
+    sol.nombreSocioNegocio = this.form.proveedor.value.cardForeignName;
     sol.nrc = this.form.proveedor.value.additionalID;
     sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
     sol.comentario = this.comentario;
