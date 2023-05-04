@@ -27,6 +27,7 @@ export class IndexDevolucionesComponent implements OnInit {
   displayedColumns: any[] = [
     'codigo',
     'correlativo',
+    'numDocLegal',
     'fecha',
     'proveedor',
     'estado',
