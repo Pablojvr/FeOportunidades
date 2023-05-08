@@ -618,8 +618,20 @@ export class FacturasComponent implements OnInit {
             return item.itemCode != result.itemCode;
           }),
           ...filteredResults,
-        ];
-        if(tempDocumentList.length > 25){
+        ].sort((a:any,b:any)=>{
+          if (a.itemCode < b.itemCode) {
+            return -1;
+          }
+          if (a.itemCode > b.itemCode) {
+            return 1;
+          }
+
+          // itemcode must be equal
+          return 0;
+        });
+
+
+        if(tempDocumentList.length > 21){
           Swal.fire({
             title: 'Atención',
             html: 'No se puede incluir este articulo porque excede las 21 lineas',

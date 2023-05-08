@@ -255,7 +255,7 @@ export class NotaCreditoCrudComponent implements OnInit {
 
           this.form.ShipToCode.setValue(this.solicitud.shipToCode);
           this.addresses.push({addressName:this.solicitud.shipToCode});
-
+          this.comments = this.solicitud.comments;
           this.updateTotal();
           this.readOnly = true;
           this.dialogCargando.close();
