@@ -631,10 +631,10 @@ export class FacturasComponent implements OnInit {
         });
 
 
-        if(tempDocumentList.length > 21){
+        if(tempDocumentList.length > 25){
           Swal.fire({
             title: 'Atención',
-            html: 'No se puede incluir este articulo porque excede las 21 lineas',
+            html: 'No se puede incluir este articulo porque excede las 25 lineas',
             icon: 'error',
             heightAuto: false,
             showCancelButton: false,
