@@ -406,7 +406,6 @@ export class FacturasComponent implements OnInit {
       sol.cardCode = this.form.proveedor.value.cardCode;
       sol.cardName = this.form.proveedor.value.cardForeignName;
       sol.razonSocial = this.form.proveedor.value.cardName;
-      sol.shipToCode = this.form.ShipToCode.value;
       sol.nrc = this.form.proveedor.value.additionalID;
       sol.nit = this.form.proveedor.value.u_EJJE_NitSocioNegocio;
       sol.tipoDocumento = this.form.serie.value;
@@ -418,6 +417,7 @@ export class FacturasComponent implements OnInit {
       // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
       sol.serie = this.form.serie.value;
     }
+    sol.shipToCode = this.form.ShipToCode.value;
     sol.fecha = this.form.fecha.value;
     this.facturasService.guardarFactura(sol).subscribe({
       next: (value: any) => {
