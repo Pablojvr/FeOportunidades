@@ -131,24 +131,26 @@ export class ComprasComponent implements OnInit {
         } else {
           this.errorMsg = '';
           this.solicitud = data;
-          this.updateDisplayedColumns();
+
           this.comprasForm.setValue({
             laboratory: {
               groupName: this.solicitud.groupName,
               number: this.solicitud.groupCode,
             },
-            numMonths: 1,
-            numMontsCob: 1,
+            numMonths: this.solicitud.numMonths?? 4,
+            numMontsCob: this.solicitud.numMontsCob?? 2,
             nombreProveedor: '',
             fecha: this.solicitud.fecha,
           });
+          this.numMonths = this.solicitud.numMonths?? 4;
+          this.updateDisplayedColumns();
 
 
           this.comentario= this.solicitud.comentario;
           this.fechaIngreso= this.solicitud.fechaIngreso;
           this.descuento= this.solicitud.descuento;
           this.diasCredito= this.solicitud.diasCredito;
-          this.dataSource.getReporte(1, 0, this.solicitud.groupCode, () => {
+          this.dataSource.getReporte(this.solicitud.numMonths?? 4, this.solicitud.numMontsCob?? 2, this.solicitud.groupCode, () => {
             this.setSolicitudData();
           });
         }
@@ -181,7 +183,12 @@ export class ComprasComponent implements OnInit {
     this.dataSource.getReporte(
       this.numMonths,
       this.numMontsCob,
-      this.laboratory
+      this.laboratory,
+      ()=>{
+        if(this.solicitud!=null){
+          this.setSolicitudData();
+        }
+      }
     );
   }
 
@@ -212,9 +219,10 @@ export class ComprasComponent implements OnInit {
     });
     this.monthNames = this.monthNames.reverse();
     var endArray =
-      this.solicitud == null
-        ? [...this.onlyNewColums, ...this.endColumns]
-        : this.endColumns;
+      // this.solicitud == null
+        // ?
+        [...this.onlyNewColums, ...this.endColumns];
+        // : this.endColumns;
     this.displayedColumns = [
       ...this.initialColumns,
       ...this.middleColumns,

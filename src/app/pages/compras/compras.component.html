@@ -83,7 +83,7 @@
           </mat-form-field>
         </div>
         <div
-          *ngIf="solicitud == null"
+
           class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-3/12 w-full"
         >
           <span class="mx-1 mb-3">Meses historial</span>
@@ -93,12 +93,13 @@
               formControlName="numMonths"
               min="1"
               type="number"
+
               class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
             />
           </mat-form-field>
         </div>
         <div
-          *ngIf="solicitud == null"
+
           class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-3/12 w-full"
         >
           <span class="mx-1 mb-3">Meses Cobertura</span>
@@ -108,6 +109,7 @@
               formControlName="numMontsCob"
               min="1"
               type="number"
+
               class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
             />
           </mat-form-field>
@@ -115,14 +117,17 @@
         <div class="flex flex-auto"></div>
         <div class="flex flex-column items-center align-items-end">
           <button
-            *ngIf="solicitud == null"
+
             mat-flat-button
             color="primary"
             style="height: 4em; margin-bottom: 1em"
           >
-            Generar Reporte
-            <mat-icon class="mat-18">summarize</mat-icon>
+          <span *ngIf="solicitud == null">Generar Reporte</span>
+          <mat-icon *ngIf="solicitud == null" class="mat-18">summarize</mat-icon>
+          <span *ngIf="solicitud != null">Actualizar Información</span>
+          <mat-icon *ngIf="solicitud != null" class="mat-18">refresh</mat-icon>
           </button>
+
         </div>
       </form>
       <div class="w-full rounded">
