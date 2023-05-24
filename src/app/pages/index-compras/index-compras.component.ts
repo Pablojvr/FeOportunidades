@@ -11,8 +11,8 @@ import Swal from 'sweetalert2';
 import { Usuario } from '../usuarios/usuarios-datasource';
 import { ComprasService } from './../../services/compras.service';
 import {
-  getServerErrorMessage,
-  ListadoComprasDataSource
+  ListadoComprasDataSource,
+  getServerErrorMessage
 } from './index-compras-datasource';
 
 @Component({
@@ -36,12 +36,14 @@ export class IndexComprasComponent implements OnInit {
   ];
 
   isLoading = false;
+  isLoadingLab = false;
   errorMsg!: string;
   ListadoEstados: Array<any> = [];
   term$: any;
   appService: any;
   resultsLength: any;
   data: any;
+  filteredLabs: any[] = [];
 
   constructor(
     private datePipe: DatePipe,
@@ -54,13 +56,15 @@ export class IndexComprasComponent implements OnInit {
       fechaIni: [null],
       fechaFin: [null],
       estado: -1,
+      laboratory: '',
+      numSolicitud:'',
     });
     this.dataSource = new ListadoComprasDataSource(this.comprasService);
     // this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.laboratory);
   }
 
   ngOnInit(): void {
-    this.dataSource.getPaginatedSolicitudDeCompra('', '', -1, 0, 10, 'codigo','desc');
+    this.dataSource.getPaginatedSolicitudDeCompra('', '','','', -1, 0, 10, 'codigo','desc');
     this.comprasService
       .getEstados()
       .toPromise()
@@ -104,6 +108,8 @@ export class IndexComprasComponent implements OnInit {
     this.dataSource.getPaginatedSolicitudDeCompra(
       fechaIni,
       fechaFin,
+      this.form.laboratory.value.number,
+      this.form.numSolicitud.value,
       this.form.estado.value,
       this.paginator.pageIndex,
       this.paginator.pageSize,
@@ -269,6 +275,25 @@ export class IndexComprasComponent implements OnInit {
       },
       () => {}
     );
+  }
+  getProveedores() {
+    this.isLoading = true;
+    this.comprasService.getProveedores('').subscribe((data) => {
+      if (data.data?.value == undefined) {
+        this.errorMsg = data['Error'];
+        this.filteredLabs = [];
+      } else {
+        this.errorMsg = '';
+        this.filteredLabs = data.data.value;
+      }
+      this.isLoading = false;
+      console.log(data);
+      console.log(this.filteredLabs);
+    });
+  }
+  displayFn(data: any): string {
+    console.log(data);
+    return data ? data.groupName : '';
   }
 }
 

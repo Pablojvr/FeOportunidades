@@ -36,6 +36,55 @@
             </mat-select>
           </mat-form-field>
         </div>
+        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
+          <span class="mx-1 mb-3"> Laboratorio:</span>
+          <mat-form-field appearance="outline">
+            <!-- <input
+            formControlName="laboratory"
+            matInput
+            placeholder="Search"
+            aria-label="State"
+            [matAutocomplete]="auto"
+            [formControl]="searchMoviesCtrl"
+            type="text"
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          /> -->
+
+            <input
+              matInput
+              [matAutocomplete]="auto"
+              formControlName="laboratory"
+
+              (focus)="getProveedores()"
+            />
+            <mat-icon matSuffix class="mat-18">store</mat-icon>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngIf="isLoading" class="is-loading"
+                >Loading...</mat-option
+              >
+              <ng-container *ngIf="!isLoading">
+                <mat-option *ngFor="let lab of filteredLabs" [value]="lab">
+                  <span>
+                    <b>{{ lab.groupName }}</b>
+                  </span>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="flex sm:flex-col sm:flex-wrap md:flex-row md:flex-nowrap items-center md:w-4/12 w-full">
+          <span class="mx-1 mb-3"> Num. Solicitud:</span>
+          <mat-form-field appearance="outline">
+            <input
+            matInput
+            formControlName="numSolicitud"
+
+
+            class="appearance-none block w-full bg-gray-300 text-gray-700 border border-teal-800 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          />
+        </mat-form-field>
+
+        </div>
         <div class="flex flex-column items-center align-items-end ml-12">
           <button mat-flat-button color="accent" style="height: 3.7em; margin-bottom: 1.2em">
             Filtrar

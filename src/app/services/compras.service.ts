@@ -88,6 +88,8 @@ export class ComprasService {
   getPaginatedSolicitudDeCompra(
     fechaIni = '',
     fechaFin = '',
+    laboratorio = '',
+    numSolicitud = '',
     estado = 1,
     pageNumber = 0,
     pageSize = 10,
@@ -99,6 +101,8 @@ export class ComprasService {
         // .set('courseId', UserId.toString())
         .set('fechaIni', fechaIni)
         .set('fechaFin', fechaFin)
+        .set('laboratorio', laboratorio)
+        .set('numSolicitud', numSolicitud)
         .set('estado', estado.toString())
         .set('pageNumber', pageNumber.toString())
         .set('pageSize', pageSize.toString())

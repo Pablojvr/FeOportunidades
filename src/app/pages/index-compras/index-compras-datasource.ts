@@ -31,6 +31,8 @@ export class ListadoComprasDataSource extends DataSource<Object> {
   getPaginatedSolicitudDeCompra(
     fechaIni: string = '',
     fechaFin: string = '',
+    laboratorio: string = '',
+    numSolicitud: string = '',
     estado:number = -1,
     pageIndex: number = -1,
     pageSize: number = -1,
@@ -41,7 +43,7 @@ export class ListadoComprasDataSource extends DataSource<Object> {
     this.loadingSubject.next(true);
 
     this.comprasService
-      .getPaginatedSolicitudDeCompra(fechaIni, fechaFin,estado, pageIndex, pageSize,orderBy,direction)
+      .getPaginatedSolicitudDeCompra(fechaIni, fechaFin,laboratorio,numSolicitud,estado, pageIndex, pageSize,orderBy,direction)
       .pipe(
         catchError((error) => {
           Swal.fire({
