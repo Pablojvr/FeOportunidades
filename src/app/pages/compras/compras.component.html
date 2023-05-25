@@ -141,7 +141,7 @@
         <div class="flex-area">
         <div #tableContainer class="table-container">
           <mat-table
-            class="items-table mat-elevation-z8"
+            class="items-table mat-elevation-z8 custom-table"
             [dataSource]="dataSource"
             matSort
             matSortActive="id"
@@ -335,7 +335,7 @@
               </mat-cell>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell" style="vertical-align: middle" colspan="9999">
