@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { tap } from 'rxjs/operators';
+import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Usuario } from '../usuarios/usuarios-datasource';
 import { ComprasService } from './../../services/compras.service';
@@ -61,6 +61,33 @@ export class IndexComprasComponent implements OnInit {
     });
     this.dataSource = new ListadoComprasDataSource(this.comprasService);
     // this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.laboratory);
+    this.comprasForm.controls.laboratory.valueChanges
+      .pipe(
+        debounceTime(500),
+        tap(() => {
+          this.errorMsg = '';
+          this.filteredLabs = [];
+          this.isLoading = true;
+        }),
+        switchMap((value) =>
+          this.comprasService.getProveedores(value ?? '').pipe(
+            finalize(() => {
+              this.isLoading = false;
+            })
+          )
+        )
+      )
+      .subscribe((data) => {
+        if (data.data?.value == undefined) {
+          this.errorMsg = data['Error'];
+          this.filteredLabs = [];
+        } else {
+          this.errorMsg = '';
+          this.filteredLabs = data.data.value;
+        }
+        console.log(data);
+        console.log(this.filteredLabs);
+      });
   }
 
   ngOnInit(): void {

@@ -266,6 +266,7 @@ export class ComprasComponent implements OnInit {
           PROVEEDOR: item.cardName,
           CARDCODE: item.cardCode,
           VATCODE: item.vatCode,
+          SUGERIDO: item.sugerido??found.SUGERIDO,
         });
       }
     });
@@ -363,6 +364,7 @@ export class ComprasComponent implements OnInit {
           u_EJJE_UBonificada:item.BONIFICADO??0,
           u_EJJE_Concepto:item.u_EJJE_Concepto,
           line: index,
+          sugerido:item.SUGERIDO.toString()
         };
       });
       if(articulosSolicitados.length == 0){

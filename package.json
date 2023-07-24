@@ -1,6 +1,6 @@
 {
   "name": "front-end-cofarsa",
-  "version": "1.0.14",
+  "version": "1.0.16",
   "scripts": {
     "ng": "nx",
     "start": "ng serve",
