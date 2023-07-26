@@ -242,7 +242,7 @@ export class PreviewFacturasComponent implements OnInit {
     };
     return series[TipoDocumento] ?? '';
   }
-  genInvoicesByChunkSize(xs: any, chunkSize = 25) {
+  genInvoicesByChunkSize(xs: any, chunkSize = 5000) {
     let lines = xs.documentLines;
     let invoices = [];
     for (let i = 0; i < lines.length; i += chunkSize) {

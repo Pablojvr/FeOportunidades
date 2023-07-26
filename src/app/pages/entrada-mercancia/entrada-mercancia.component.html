@@ -106,7 +106,7 @@
               <div class="flex flex-row">
                 <mat-form-field appearance="outline" style="width: 100px">
                   <mat-label>Lote</mat-label>
-                  <input name="lote{{item.randomID}}" [(ngModel)]="item.lote" matInput type="text" [readonly]="readMode" required>
+                  <input maxlength="20" name="lote{{item.randomID}}" [(ngModel)]="item.lote" matInput type="text" [readonly]="readMode" required>
                 </mat-form-field>
                 <div *ngIf="!readMode" class="flex flex-col" style="padding-top:2px;height:64px;">
                   <mat-icon class="removeButton" matTooltip="Elimina la linea actual" (click)="removeItem(item)">remove

@@ -219,6 +219,8 @@ export class EntradaMercanciaComponent implements OnInit {
       heightAuto: false,
       showCancelButton: false,
       showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
     });
     this.comprasService.getPurchaseOrdersByDocNum(id).subscribe((data) => {
       if (data.data == undefined) {
@@ -305,6 +307,8 @@ export class EntradaMercanciaComponent implements OnInit {
       heightAuto: false,
       showCancelButton: false,
       showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
     });
     this.comprasService.getEntradaMercanciaByID(id).subscribe((data) => {
       if (data == undefined) {
@@ -474,6 +478,8 @@ export class EntradaMercanciaComponent implements OnInit {
       heightAuto: false,
       showCancelButton: false,
       showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
     });
 
     var sol = Object.assign({}, this.solicitud);
