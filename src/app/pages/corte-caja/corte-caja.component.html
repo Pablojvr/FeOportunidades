@@ -1,0 +1,233 @@
+<mat-card>
+  <mat-card-content>
+    <div class="flex flex-wrap justify-around">
+      <div class="w-full">
+        <h1>Nuevo Corte de Caja</h1>
+      </div>
+
+
+      <div class="flex justify-around w-full">
+        <div>
+          <span class="mx-1 mb-3"> Corte de Caja #1</span>
+        </div>
+        <div>
+          <span class="mx-1 mb-3"> Recibe: Usuario1</span>
+        </div>
+        
+        <div>
+          <span class="mx-1 mb-3"> Numero de Consolidado</span>
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Consolidado">
+          </mat-form-field>
+        </div>
+        <div>
+          <p><span class="mx-1 mb-3"> Fecha: 01/10/2023</span></p>
+        </div>
+      </div>
+
+      <div class="flex justify-around w-full">
+        <div>
+          <p><span class="mx-1 mb-3">Entrega</span>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Nombre Entrega" value="">
+            </mat-form-field>
+          </p>
+        </div>
+
+        <div>
+          <p>
+            <span class="mx-1 mb-3"> Estado</span>
+            <mat-form-field>
+              <mat-label>Seleccionar estado</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let estado of estados" [value]="estado.value">
+                  {{estado.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </p>
+        </div>
+        <div>
+          <p><span class="mx-1 mb-3"> Hora: 9:00PM</span></p>
+        </div>
+
+        <div>
+          <p>
+            <span class="mx-1 mb-3"> Tipo de Liquidacion</span>
+            <mat-form-field>
+              <mat-label>Seleccionar tipo</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let item of tipoLiquidacion" [value]="item.value">
+                  {{item.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="flex justify-around w-full">
+        <div>
+          <p>
+            <span class="mx-1 mb-3"> Tipo de documento</span>
+            <mat-form-field>
+              <mat-label>Seleccionar Tipo</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let estado of tipoDocumento" [value]="estado.value">
+                  {{estado.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </p>
+        </div>
+
+      </div>
+
+
+
+      <div class="flex justify-evenly mt-4">
+        <button mat-raised-button color="primary"><mat-icon>refresh</mat-icon>Actualizar</button>
+      </div>
+
+
+
+      <div class="w-full rounded table-responsive ">
+        <div class="">
+        <mat-table class="items-table mat-elevation-z8" [dataSource]="fakeData" matSort matSortActive="codigo"
+          matSortDirection="desc" matSortDisableClear>
+
+          <ng-container *ngFor="let column of displayedColumns; let i = index" [matColumnDef]="column">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</mat-header-cell>
+            <mat-cell *matCellDef="let item">{{ item[column] }}</mat-cell>
+          </ng-container>
+
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" style="vertical-align: middle" colspan="9999">
+              No se han encontrado registros
+            </td>
+          </tr>
+        </mat-table>
+        <mat-paginator #paginator class="mat-elevation-z8" [length]="dataSource?.solicitudesLength" [pageSize]="10"
+          [pageSizeOptions]="[10, 20, 30]"></mat-paginator>
+        </div>
+      </div>
+
+
+      <div class="w-full" >
+        <div class="grid grid-cols-6 gap-4 mt-4">
+          <div class="col-end-7 col-span-2"><h3 class=""> Total Entregas Contado: 3000$</h3></div>
+        </div>
+
+        <div class="flex flex-row mt-4">
+
+          <div class="tituloBills">
+            <h1>Billetes</h1>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="$1" value="0">
+            </mat-form-field>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="$5" value="0">
+            </mat-form-field>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="$10" value="0">
+            </mat-form-field>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="$20" value="0">
+            </mat-form-field>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="$50" value="0">
+            </mat-form-field>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="$100" value="0">
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="flex flex-row marginTop">
+
+          <div class="tituloBills">
+            <h1>Monedas</h1>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="0.01" value="0">
+            </mat-form-field>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="0.05" value="0">
+            </mat-form-field>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="0.10" value="0">
+            </mat-form-field>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="0.25" value="0">
+            </mat-form-field>
+          </div>
+
+          <div class="basis-1/4 fieldsMoney">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="1.00" value="0">
+            </mat-form-field>
+          </div>
+
+
+        </div>
+
+        <div class="grid grid-cols-6 gap-4">
+          <div class="col-end-7 col-span-2 ..."><h3 class="mx-1"> Total Arqueo: 3000$</h3></div>
+          <div class="col-end-7 col-span-2 ..."><h3 class="mx-1 mb-3"> Diferencia: 3000$</h3></div>
+        </div>
+
+
+        <div class="flex justify-evenly mt-4">
+          <button mat-raised-button color="primary" (click)="saveCorteCaja()"><mat-icon>save</mat-icon> Guardar</button>
+
+          <button mat-raised-button color="primary" (click)="aplicarCorte()"><mat-icon>edit</mat-icon> Aplicar</button>
+
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -46,6 +46,14 @@ export class FacturasService {
     );
   }
 
+  generarPago(notaCredito: any,idFactura:any) {
+
+    return this.http.post<any>(
+      `${this.baseUrl}/Facturas/notaCredito/?id=${idFactura}`,
+      notaCredito
+    );
+  }
+
   totalFacturasEnMora(cardCode: any) {
 
     return this.http.get<any>(
@@ -53,6 +61,8 @@ export class FacturasService {
       {}
     );
   }
+
+
   getPaginatedFacturas(
     fechaIni = '',
    fechaFin='',
@@ -77,6 +87,58 @@ export class FacturasService {
     });
   }
 
+
+  getRutadeCobros(
+    fechaIni = '',
+   fechaFin='',
+    estado = -1,
+    search = '',
+    pageNumber = 0,
+    pageSize = 10,
+    active = '',
+    direction = '',
+  ) {
+    return this.http.get<Page[]>(`${this.baseUrl}/Facturas`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('fechaIni', fechaIni)
+        .set('fechaFin', fechaFin)
+        .set('search', search)
+        .set('estado', estado.toString())
+        .set('pageNumber', pageNumber.toString())
+        .set('pageSize', pageSize.toString())
+        .set('orderBy', active.toString())
+        .set('direction', direction.toString()),
+    });
+  }
+
+
+  getConsolidado(
+    fechaIni = '',
+   fechaFin='',
+    estado = -1,
+    search = '',
+    pageNumber = 0,
+    pageSize = 10,
+    active = '',
+    direction = '',
+  ) {
+    return this.http.get<Page[]>(`${this.baseUrl}/getConsolidado`, {
+      params: new HttpParams()
+        // .set('courseId', UserId.toString())
+        .set('fechaIni', fechaIni)
+        .set('fechaFin', fechaFin)
+        .set('search', search)
+        .set('estado', estado.toString())
+        .set('pageNumber', pageNumber.toString())
+        .set('pageSize', pageSize.toString())
+        .set('orderBy', active.toString())
+        .set('direction', direction.toString()),
+    });
+  }
+
+  
+
   getPaginatedNotasCredito(
     fechaIni = '',
     fechaFin = '',
@@ -98,6 +160,8 @@ export class FacturasService {
       return this.http.post(`${this.baseUrl}/Facturas/newCreditNote`, sol);
 
   }
+
+  
 
   getClientes(filter = '') {
     return this.http.get<any>(`${this.baseUrl}/Facturas/GetCustomersList`, {

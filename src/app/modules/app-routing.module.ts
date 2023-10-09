@@ -9,6 +9,7 @@ import { FacturasComponent } from './../pages/facturas/facturas.component';
 import { IndexComprasComponent } from './../pages/index-compras/index-compras.component';
 import { IndexDevolucionesComponent } from './../pages/index-devoluciones/index-devoluciones.component';
 import { IndexEntradaMercanciaComponent } from './../pages/index-entrada-mercancia/index-entrada-mercancia.component';
+import { CorteCajaComponent } from './../pages/corte-caja/corte-caja.component';
 import { IndexFacturasComponent } from './../pages/index-facturas/index-facturas.component';
 import { IndexNotasCreditoComponent } from './../pages/index-notas-credito/index-notas-credito.component';
 import { IndexComponent } from './../pages/index/index.component';
@@ -51,6 +52,17 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { permission: ['compras'] },
   },
+  {
+    path: 'CorteCaja',
+    component: LayoutComponent,
+    children: [
+      { path: '', component: CorteCajaComponent },
+      { path: 'new', component: ComprasComponent },
+      { path: 'edit/:id', component: ComprasComponent },
+    ],
+    canActivate: [AuthGuard],
+    data: { permission: ['compras'] },
+  },
 
   {
     path: 'orden_compras',
@@ -75,6 +87,30 @@ const routes: Routes = [
       {
         path: '',
         component: IndexEntradaMercanciaComponent,
+      },
+      {
+        path: 'new/:id',
+        component: EntradaMercanciaComponent,
+      },
+      {
+        path: 'view/:idEntradaMercancia',
+        component: EntradaMercanciaComponent,
+      },
+      {
+        path: 'new',
+        component: EntradaMercanciaComponent,
+      },
+    ],
+    canActivate: [AuthGuard],
+    data: { permission: ['compras'] },
+  },
+  {
+    path: 'CorteNuevo',
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        component: CorteCajaComponent,
       },
       {
         path: 'new/:id',

@@ -36,6 +36,9 @@ import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { NotaCreditoCrudComponent } from './pages/nota-credito-crud/nota-credito-crud.component';
 import { AgregarArticuloNotaCreditoComponent } from './componets/agregar-articulo-nota-credito/agregar-articulo-nota-credito.component';
 import { IndexNotasCreditoComponent } from './pages/index-notas-credito/index-notas-credito.component';
+import { CorteCajaComponent } from './pages/corte-caja/corte-caja.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TabsModalComponent } from './componets/tabs-modal/tabs-modal.component';
 registerLocaleData(localeEs, 'es');
 @NgModule({
   declarations: [
@@ -64,6 +67,7 @@ registerLocaleData(localeEs, 'es');
     NotaCreditoCrudComponent,
     AgregarArticuloNotaCreditoComponent,
     IndexNotasCreditoComponent,
+    CorteCajaComponent,TabsModalComponent
   ],
   imports: [
     BrowserModule,

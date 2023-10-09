@@ -39,61 +39,23 @@ export class NavigationComponent implements OnInit {
     },
     {
       permission: "compras",
-      text: 'Compras',
+      text: 'Cortes de Caja',
       icon: 'shopping_bag',
       url: null,
       menu: [
         {
-          text: 'Solicitudes de Compra',
+          text: 'Nuevo Corte de Caja',
           icon: 'summarize',
-          url: '/compras',
+          url: '/CorteCaja',
           show: false,
         },
         {
-          text: 'Ingresos de Compra',
+          text: 'Ver Cortes de Caja',
           icon: 'archive',
-          url: '/ingreso_compras',
+          url: '/VerCortes',
         },
       ],
-    },
-    {
-      permission: "facturacion",
-      text: 'Facturas',
-      icon: 'receipt',
-      url: null,
-      menu: [
-        {
-          text: 'Facturas',
-          icon: 'receipt',
-          url: '/facturas',
-          show: false,
-        },
-        {
-          text: 'Notas de Credito',
-           icon: 'post_add',
-           url: '/notasCredito',
-         },
-      ],
-    },
-    {
-      permission: "devoluciones",
-      text: 'Devoluciones',
-      icon: 'assignment_return',
-      url: null,
-      menu: [
-        {
-          text: 'Devoluciones',
-          icon: 'assignment_return',
-          url: '/devoluciones',
-          show: false,
-        },
-        // {
-        //   text: 'Ingresos de Compra',
-        //   icon: 'post_add',
-        //   url: '/entrada_mercancia',
-        // },
-      ],
-    },
+    }
   ];
 
   menuItems :any= [];

@@ -215,29 +215,6 @@ export class NotaCreditoComponent implements OnInit {
 
     });
 
-    var facturas0 = this.factura.DocumentLines.filter(
-      (item: any) => !item.Quantity
-    ).length;
-    if (facturas0 > 0) {
-      Swal.fire({
-        title: '',
-        text: 'Datos invalidos, no se puede generar una nota de credito donde las cantidades de alguna linea sean 0',
-        icon: 'error',
-        heightAuto: false,
-        showCancelButton: false,
-        showConfirmButton: true,
-      });
-      this.saving=false;
-      return;
-    }
-
-    this.factura.DocumentLines = this.factura.DocumentLines.map((line: any) => {
-      line.batchNumbers = [
-        { Quantity: line.Quantity, BatchNumber: line.BatchNum },
-      ];
-      return line;
-    });
-
     this.facturasService
       .saveNotaCredito({
         notaCredito: this.factura,

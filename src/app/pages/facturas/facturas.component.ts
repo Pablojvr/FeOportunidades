@@ -33,6 +33,7 @@ export class FacturasComponent implements OnInit {
   displayedColumns = [
     'index',
     'codigo',
+    'iva',
     'descripcion',
     'lote',
     'vencimiento',
@@ -416,6 +417,7 @@ export class FacturasComponent implements OnInit {
       )?.nombre;
       // AdditionalID,Notes,U_EJJE_NitSocioNegocio,U_EJJE_TipoDocumento
       sol.serie = this.form.serie.value;
+      this.updateRetencion(Number(this.subtotalFactura) < 100);
     }
     sol.shipToCode = this.form.ShipToCode.value;
     sol.fecha = this.form.fecha.value;

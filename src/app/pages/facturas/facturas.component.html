@@ -149,7 +149,14 @@
             </mat-cell>
           </ng-container>
 
-
+          <ng-container matColumnDef="iva">
+            <mat-header-cell *matHeaderCellDef>Lote</mat-header-cell>
+            <mat-cell *matCellDef="let item" class="duration-cell">
+              <div class="flex flex-row">
+                {{item.taxCode}}
+              </div>
+            </mat-cell>
+          </ng-container>
           <ng-container matColumnDef="vencimiento">
             <mat-header-cell *matHeaderCellDef>Vencimiento</mat-header-cell>
             <mat-cell *matCellDef="let item" class="duration-cell">

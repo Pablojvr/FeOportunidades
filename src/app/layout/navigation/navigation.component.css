@@ -3,5 +3,9 @@
 }
 
 .is-active {
-  color: #00695c;
+  color: #6e7ae6;
+}
+
+.mat-toolbar{
+  background-color: #6e7ae6;
 }

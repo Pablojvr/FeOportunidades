@@ -1,0 +1,120 @@
+<mat-card>
+
+  <div class="flex justify-around">
+    <div class="order-last">
+
+      <h1>Agregar Pago</h1>
+
+    </div>
+  </div>
+
+  <mat-tab-group>
+
+
+    <mat-tab label="Efectivo">
+
+      <div class="flex justify-around mt-4">
+        <div>
+          <span class="mx-1 mb-3"> Monto: $</span>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Monto" value="0.00">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Transferencia">
+      <div class="flex justify-around mt-4">
+        <mat-form-field>
+          <mat-label>Seleccionar cuenta</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.value">
+              {{cuenta.nombreCuenta}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div>
+          <span class="mx-1 mb-3"> Referencia: </span>
+          <mat-form-field class="example-full-width">
+            <input type="number" matInput placeholder="Referencia">
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div class="flex justify-around mt-4">
+
+        <div>
+          <span class="mx-1 mb-3"> Fecha: </span>
+          <mat-form-field class="example-full-width">
+            <input type="date" matInput placeholder="Fecha">
+          </mat-form-field>
+        </div>
+
+        <div>
+          <span class="mx-1 mb-3"> Monto: $</span>
+          <mat-form-field class="example-full-width">
+            <input type="number" matInput placeholder="Monto" value="0.00">
+          </mat-form-field>
+        </div>
+
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Cheque">
+
+      <div class="flex justify-around mt-4">
+        <mat-form-field>
+          <mat-label>Seleccionar cuenta</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.value">
+              {{cuenta.nombreCuenta}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div>
+          <span class="mx-1 mb-3"> N° Cheque: </span>
+          <mat-form-field class="example-full-width">
+            <input type="number" matInput placeholder="N° Cheque">
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div class="flex justify-around mt-4">
+
+        <div>
+          <span class="mx-1 mb-3"> Fecha: </span>
+          <mat-form-field class="example-full-width">
+            <input type="date" matInput placeholder="Fecha">
+          </mat-form-field>
+        </div>
+
+        <div>
+          <span class="mx-1 mb-3"> Monto: $</span>
+          <mat-form-field class="example-full-width">
+            <input type="number" matInput placeholder="Monto" value="0.00">
+          </mat-form-field>
+        </div>
+
+      </div>
+
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+
+  <div class="flex justify-evenly">
+
+      <button mat-raised-button color="primary">Guardar</button>
+
+      <button mat-raised-button color="warn">Cancelar</button>
+
+  </div>
+
+</mat-card>
