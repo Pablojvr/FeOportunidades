@@ -39,6 +39,7 @@ import { IndexNotasCreditoComponent } from './pages/index-notas-credito/index-no
 import { CorteCajaComponent } from './pages/corte-caja/corte-caja.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TabsModalComponent } from './componets/tabs-modal/tabs-modal.component';
+import { IndexCorteCajaComponent } from './pages/index-corte-caja/index-corte-caja.component';
 registerLocaleData(localeEs, 'es');
 @NgModule({
   declarations: [
@@ -67,7 +68,9 @@ registerLocaleData(localeEs, 'es');
     NotaCreditoCrudComponent,
     AgregarArticuloNotaCreditoComponent,
     IndexNotasCreditoComponent,
-    CorteCajaComponent,TabsModalComponent
+    CorteCajaComponent,
+    TabsModalComponent,
+    IndexCorteCajaComponent
   ],
   imports: [
     BrowserModule,

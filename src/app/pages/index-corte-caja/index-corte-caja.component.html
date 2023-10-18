@@ -1,0 +1,109 @@
+<mat-card>
+  <mat-card-content>
+    <div class="flex flex-wrap">
+      <div class="w-full"><h1>Facturacion</h1></div>
+
+
+      <div class="w-full rounded">
+
+        <mat-table
+        class="items-table mat-elevation-z8"
+        [dataSource]="dataSource"
+        matSort
+        matSortActive="idCortedeCaja"
+        matSortDirection="desc"
+        matSortDisableClear
+      >
+        <ng-container matColumnDef="idCortedeCaja">
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >#</mat-header-cell
+          >
+          <mat-cell *matCellDef="let item">{{
+            item.idCortedeCaja
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="idCortedeCaja">
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Num. Ingreso</mat-header-cell
+          >
+          <mat-cell *matCellDef="let item">{{ item.idCortedeCaja }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+          <mat-cell class="duration-cell" *matCellDef="let item">{{
+            item.fecha | date: "shortDate"
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="entrega" >
+          <mat-header-cell *matHeaderCellDef mat-sort-header>entrega</mat-header-cell>
+          <mat-cell class="duration-cell" *matCellDef="let item">
+            {{ item.entrega }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoDocumento">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>tipoDocumento</mat-header-cell>
+          <mat-cell class="duration-cell" *matCellDef="let item">
+            {{ item.tipoDocumento }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoDocumento">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>estadoDocumento</mat-header-cell>
+          <mat-cell class="duration-cell" *matCellDef="let item">
+            {{ item.estadoDocumento }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numDocLegal">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Num. Nota</mat-header-cell>
+          <mat-cell class="duration-cell" *matCellDef="let item">
+           <span *ngIf="item.numDocLegal"> {{item.serie}}-{{ item.numDocLegal }}</span>
+          </mat-cell>
+        </ng-container>
+
+
+
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+          <mat-cell class="duration-cell" *matCellDef="let item">
+            <button
+              mat-icon-button
+              [routerLink]="['/facturas/', item.idFactura]"
+            >
+              <mat-icon class="mat-18"
+                >visibility</mat-icon
+              >
+            </button>
+            <button
+              mat-icon-button
+              *ngIf="item.estadoDocumento==1"
+              [routerLink]="['/CorteCaja/', item.idCortedeCaja]"
+            >
+
+              <mat-icon class="mat-18"
+                >edit</mat-icon
+              >
+            </button>
+
+          </mat-cell>
+        </ng-container>
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" style="vertical-align: middle" colspan="9999">
+            No se han encontrado registros
+          </td>
+        </tr>
+      </mat-table>
+
+
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

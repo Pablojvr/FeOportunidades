@@ -20,6 +20,7 @@ import { OrdenCompraComponent } from './../pages/orden-compra/orden-compra.compo
 import { PreviewFacturasComponent } from './../pages/preview-facturas/preview-facturas.component';
 import { RolesComponent } from './../pages/roles/roles.component';
 import { UsuariosComponent } from './../pages/usuarios/usuarios.component';
+import { IndexCorteCajaComponent } from '../pages/index-corte-caja/index-corte-caja.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -57,8 +58,8 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: '', component: CorteCajaComponent },
-      { path: 'new', component: ComprasComponent },
-      { path: 'edit/:id', component: ComprasComponent },
+      { path: 'index', component: IndexCorteCajaComponent },
+      { path: ':id', component: CorteCajaComponent },
     ],
     canActivate: [AuthGuard],
     data: { permission: ['compras'] },

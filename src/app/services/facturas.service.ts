@@ -1,7 +1,16 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams,HttpHeaders  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Page } from '../pages/usuarios/usuarios-datasource';
+import { ResponseData, CodeRequest } from '../interfaces/RutaCobro';
+import { map } from 'rxjs/operators'; // Importa el operador map de 'rxjs/operators']
+import { Observable } from 'rxjs';
+import {
+  CorteCaja,
+  DetallePago,
+  FacturaData,
+} from '../interfaces/FacturaData'
+
 
 @Injectable({
   providedIn: 'root',
@@ -62,6 +71,14 @@ export class FacturasService {
     );
   }
 
+  getAllCortes() {
+
+    return this.http.get<any>(
+      `${this.baseUrl}/Facturas/getAllCortes`,
+      {}
+    ).toPromise();
+  }
+
 
   getPaginatedFacturas(
     fechaIni = '',
@@ -87,55 +104,51 @@ export class FacturasService {
     });
   }
 
+  // Este método consulta la API para obtener una Ruta de Cobro por código
+  getRutaCobroByCode(code: string): Observable<ResponseData> {
+    const requestBody: CodeRequest = { code };
+    return this.http.post<ResponseData>(
+      `${this.baseUrl}/Facturas/getRutaCobro`,
+      requestBody
+    );
+  }
 
-  getRutadeCobros(
-    fechaIni = '',
-   fechaFin='',
-    estado = -1,
-    search = '',
-    pageNumber = 0,
-    pageSize = 10,
-    active = '',
-    direction = '',
-  ) {
-    return this.http.get<Page[]>(`${this.baseUrl}/Facturas`, {
-      params: new HttpParams()
-        // .set('courseId', UserId.toString())
-        .set('fechaIni', fechaIni)
-        .set('fechaFin', fechaFin)
-        .set('search', search)
-        .set('estado', estado.toString())
-        .set('pageNumber', pageNumber.toString())
-        .set('pageSize', pageSize.toString())
-        .set('orderBy', active.toString())
-        .set('direction', direction.toString()),
-    });
+  getConsolidadoByCode(code: string): Observable<ResponseData> {
+
+    const requestBody: CodeRequest = { code };
+    return this.http.post<ResponseData>(
+      `${this.baseUrl}/Facturas/getConsolidado`,
+      requestBody
+    );
   }
 
 
-  getConsolidado(
-    fechaIni = '',
-   fechaFin='',
-    estado = -1,
-    search = '',
-    pageNumber = 0,
-    pageSize = 10,
-    active = '',
-    direction = '',
-  ) {
-    return this.http.get<Page[]>(`${this.baseUrl}/getConsolidado`, {
-      params: new HttpParams()
-        // .set('courseId', UserId.toString())
-        .set('fechaIni', fechaIni)
-        .set('fechaFin', fechaFin)
-        .set('search', search)
-        .set('estado', estado.toString())
-        .set('pageNumber', pageNumber.toString())
-        .set('pageSize', pageSize.toString())
-        .set('orderBy', active.toString())
-        .set('direction', direction.toString()),
-    });
+  getCorteCajaById(code: string): Observable<ResponseData> {
+  
+    return this.http.get<ResponseData>(
+      `${this.baseUrl}/Facturas/getCorteById?corteCajaId=${code}`
+    );
   }
+
+  saveCorteCaja(CorteCaja : CorteCaja) {
+  
+    return this.http.post(`${this.baseUrl}/Facturas/guardarCorte`, CorteCaja).toPromise();
+
+  }
+
+
+  aplicarCorteCaja(CorteCaja : number) {
+  
+    return this.http.get(`${this.baseUrl}/Facturas/aplicarCorte?idCorte=${CorteCaja}`).toPromise();
+
+  }
+
+  updateCorteCaja(CorteCaja : CorteCaja) {
+  
+    return this.http.post(`${this.baseUrl}/Facturas/updateCorte`, CorteCaja).toPromise();
+ 
+  }
+  
 
   
 

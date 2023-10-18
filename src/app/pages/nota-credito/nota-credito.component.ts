@@ -49,7 +49,7 @@ export class NotaCreditoComponent implements OnInit {
       //   } else {
       //     let tempOrdenes = data.data.value.map((item: any) => {
       //       let newItem = this.capitalizeName(item);
-      //       newItem.DocumentLines = newItem.DocumentLines.map((item2: any) => {
+      //       newItem.documentLines = newItem.documentLines.map((item2: any) => {
       //         return this.capitalizeName(item2);
       //       });
       //       return newItem;
@@ -83,7 +83,7 @@ export class NotaCreditoComponent implements OnInit {
             DocDate: moment().format(),
             DocumentLines: [],
           });
-          capitalizedData.DocumentLines = data.documentLines.filter((o:any)=>{return (o.quantity - o.quantityDevuelta) > 0} ).map((o: any) => {
+          capitalizedData.documentLines = data.documentLines.filter((o:any)=>{return (o.quantity - o.quantityDevuelta) > 0} ).map((o: any) => {
             return {
               ItemCode: o['itemCode'],
               ItemName: o['itemDescription'],
@@ -195,8 +195,8 @@ export class NotaCreditoComponent implements OnInit {
   }
 
   removeItem(item: any) {
-    let index = this.factura.DocumentLines.indexOf(item);
-    this.factura.DocumentLines.splice(index, 1);
+    let index = this.factura.documentLines.indexOf(item);
+    this.factura.documentLines.splice(index, 1);
     this.table.renderRows();
   }
 
@@ -283,7 +283,7 @@ export class NotaCreditoComponent implements OnInit {
   }
 
   updateTotal() {
-    this.subtotalFactura = this.factura.DocumentLines.reduce(
+    this.subtotalFactura = this.factura.documentLines.reduce(
       (a: any, b: any) => {
         console.log( a + b.UnitPrice * b.Quantity*(1-(parseInt(b.DiscountPercent)/100)))
         return a + b.UnitPrice * b.Quantity*(1-(parseInt(b.DiscountPercent)/100));

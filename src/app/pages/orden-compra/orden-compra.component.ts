@@ -43,7 +43,7 @@ export class OrdenCompraComponent implements OnInit {
         } else {
           let tempOrdenes = data.data.value.map((item: any) => {
             let newItem = this.capitalizeName(item);
-            newItem.DocumentLines = newItem.DocumentLines.map((item2: any) => {
+            newItem.documentLines = newItem.documentLines.map((item2: any) => {
               return this.capitalizeName(item2);
 
             });
