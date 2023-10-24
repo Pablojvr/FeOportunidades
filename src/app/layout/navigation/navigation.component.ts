@@ -52,7 +52,7 @@ export class NavigationComponent implements OnInit {
         {
           text: 'Ver Cortes de Caja',
           icon: 'archive',
-          url: '/VerCortes',
+          url: '/CorteCaja/index',
         },
       ],
     }

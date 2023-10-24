@@ -134,17 +134,17 @@
                 </span>
 
 
-                <span (click)="savePago(j,item.Estado,item.CondicionPago,item.pagos)" *ngIf="column == 'efectivoR'">
+                <span (click)="savePago(j,item.estadoDocumento,item.CondicionPago,item)" *ngIf="column == 'efectivoR'">
 
                   ${{item.efectivoR}}
 
                 </span>
 
-                <span (click)="savePago(j,item.Estado,item.CondicionPago,item.pagos)" *ngIf="column == 'transfR'">
+                <span (click)="savePago(j,item.estadoDocumento,item.CondicionPago,item)" *ngIf="column == 'transfR'">
 
                   ${{item.transfR}}
 
-                </span><span (click)="savePago(j,item.Estado,item.CondicionPago,item.pagos)" *ngIf="column == 'chequesR'">
+                </span><span (click)="savePago(j,item.estadoDocumento,item.CondicionPago,item)" *ngIf="column == 'chequesR'">
 
                   ${{item.chequesR}}
 
@@ -171,7 +171,7 @@
       <div class="w-full">
         <div class="grid grid-cols-6 gap-4 mt-4">
           <div class="col-end-7 col-span-2">
-            <h3 class=""> Total Entregas Contado: {{totalEfectivo}}$</h3>
+            <h3 class=""> Total Entregas Contado: ${{totalEfectivo}}</h3>
           </div>
         </div>
 
@@ -276,16 +276,16 @@
 
         <div class="grid grid-cols-6 gap-4">
           <div class="col-end-7 col-span-2 ...">
-            <h3 class="mx-1"> Total Arqueo: {{totalContado}}$</h3>
+            <h3 class="mx-1"> Total Arqueo: ${{totalContado}}</h3>
           </div>
           <div class="col-end-7 col-span-2 ...">
-            <h3 class="mx-1 mb-3"> Diferencia: {{totalEfectivo - totalContado }}$</h3>
+            <h3 class="mx-1 mb-3"> Diferencia: ${{totalEfectivo - totalContado }}</h3>
           </div>
         </div>
 
 
         <div *ngIf="Corte.estadoDocumento != 2" class="flex justify-evenly mt-4">
-          <button mat-raised-button color="primary" (click)="aplicarCorte()"><mat-icon>edit</mat-icon> Aplicar</button>
+          <button *ngIf="Corte.idCortedeCaja != 0" mat-raised-button color="primary" (click)="aplicarCorte()"><mat-icon>edit</mat-icon> Aplicar</button>
 
 
           <button *ngIf="Corte.idCortedeCaja == 0" mat-raised-button color="primary" (click)="guardarCorte()"><mat-icon>save</mat-icon> Guardar</button>

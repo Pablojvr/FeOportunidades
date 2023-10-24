@@ -143,12 +143,21 @@ export class FacturasService {
 
   }
 
+
+  getCuentasBanco() {
+  
+    return this.http.get(`${this.baseUrl}/Facturas/getCuentaBancos`).toPromise();
+
+  }
+
   updateCorteCaja(CorteCaja : CorteCaja) {
   
     return this.http.post(`${this.baseUrl}/Facturas/updateCorte`, CorteCaja).toPromise();
  
   }
   
+
+
 
   
 

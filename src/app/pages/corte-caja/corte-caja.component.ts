@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { ComprasService } from 'src/app/services/compras.service';
 import Swal from 'sweetalert2';
@@ -36,6 +36,7 @@ export class CorteCajaComponent implements OnInit {
   dataSource: CorteCajaDataSource;
   factura: any;
   fakeData: any[] = [];
+  Cuentas : any[] = [];
 
   Corte: CorteCaja = new CorteCaja(0, '', '', '', 1, 0, [], 0);
 
@@ -43,7 +44,7 @@ export class CorteCajaComponent implements OnInit {
   totalContado: number = 0.0;
   diferencia: number = 0.0;
 
-  readOnly : boolean = false;
+  readOnly: boolean = false;
 
   saving: boolean = false;
   displayedColumns: any[] = [
@@ -61,7 +62,7 @@ export class CorteCajaComponent implements OnInit {
     'estado',
   ];
 
-  user : any;
+  user: any;
 
   numeroDocumento: string = ''; // Inicializamos con valor 0, puedes cambiarlo al valor inicial que desees
   nombreEntrega: string = '';
@@ -130,7 +131,8 @@ export class CorteCajaComponent implements OnInit {
     private comprasService: ComprasService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private FacturasService: FacturasService
+    private FacturasService: FacturasService,
+    private _router : Router
   ) {
     this.comprasForm = this._fb.group({
       fechaIni: [null],
@@ -140,8 +142,22 @@ export class CorteCajaComponent implements OnInit {
     // this.dataSource.getReporte(this.numMonths, this.numMontsCob, this.laboratory);
   }
   ngOnInit(): void {
-
     this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
+
+    this.FacturasService.getCuentasBanco().then((result : any) => {
+      this.Cuentas = result.data.map((x : any) => {
+        return {
+          value : x.acctName,
+          nombreCuenta :  x.acctName
+        }
+      } );
+
+      console.log(result);
+
+
+
+    })
+
 
     this.Corte.fecha = moment().format();
 
@@ -151,6 +167,9 @@ export class CorteCajaComponent implements OnInit {
     if (id) {
       this.readOnly = true;
       this.obtenerCorteCajaPorId(id);
+
+      
+
     } else {
       console.log('Crear Corte Caja');
     }
@@ -183,19 +202,36 @@ export class CorteCajaComponent implements OnInit {
   }
 
   calcularSumatoria() {
+
+
+    this.Corte.b1 = this.Corte.b1 == null ? 0 : this.Corte.b1;
+    this.Corte.b5 = this.Corte.b5 == null ? 0 : this.Corte.b5;
+    this.Corte.b10 = this.Corte.b10 == null ? 0 : this.Corte.b10;
+    this.Corte.b20 = this.Corte.b20 == null ? 0 : this.Corte.b20;
+    this.Corte.b50 = this.Corte.b50 == null ? 0 : this.Corte.b50;
+    this.Corte.b100 = this.Corte.b100 == null ? 0 : this.Corte.b100;
+    this.Corte.milesimasCentavo = this.Corte.milesimasCentavo == null ? 0 : this.Corte.milesimasCentavo;
+    this.Corte.mCentavo = this.Corte.mCentavo == null ? 0 : this.Corte.mCentavo;
+    this.Corte.m5 = this.Corte.m5 == null ? 0 : this.Corte.m5;
+    this.Corte.m10 = this.Corte.m10 == null ? 0 : this.Corte.m10;
+    this.Corte.m25 = this.Corte.m25 == null ? 0 : this.Corte.m25;
+    this.Corte.m1 = this.Corte.m1 == null ? 0 : this.Corte.m1;
+
+
+
     this.totalContado =
-      this.Corte.b1 * 1.0 +
-      this.Corte.b5  * 5.0 +
-      this.Corte.b10  * 10.0 +
-      this.Corte.b20  * 20.0 +
-      this.Corte.b50  * 50.0 +
-      this.Corte.b100  * 100.0 +
-      this.Corte.milesimasCentavo  * 1 +
-      this.Corte.mCentavo  * 0.01 +
-      this.Corte.m5  * 0.05 +
-      this.Corte.m10  * 0.1 +
-      this.Corte.m25  * 0.25 +
-      this.Corte.m1  * 1;
+      this.Corte.b1  * 1.0 +
+      this.Corte.b5 * 5.0 +
+      this.Corte.b10 * 10.0 +
+      this.Corte.b20 * 20.0 +
+      this.Corte.b50 * 50.0 +
+      this.Corte.b100 * 100.0 +
+      this.Corte.milesimasCentavo * 1 +
+      this.Corte.mCentavo * 0.01 +
+      this.Corte.m5 * 0.05 +
+      this.Corte.m10 * 0.1 +
+      this.Corte.m25 * 0.25 +
+      this.Corte.m1 * 1;
   }
 
   GetDocumento(): void {
@@ -253,26 +289,53 @@ export class CorteCajaComponent implements OnInit {
           const fecha = fechaArray[0];
 
           i++;
-          return new FacturaData(
-            i,
-            item.numeroDocumento,
-            fecha,
-            item.codCliente,
-            item.nomCliente,
-            item.numRecibo,
-            item.condicionPago,
-            item.monto,
-            0.0,
-            0.0,
-            0.0,
-            item.estadoDocumento,
-            new DetallePago(0.0, 0.0, 0.0, '', '', '', '', '', '')
+
+          const corteElement = this.Corte.documentLines.find(
+            (corteLine) =>
+              corteLine.numeroDocumento === item.numeroDocumento ||
+              corteLine.numRecibo === item.numRecibo
           );
+
+          if (corteElement) {
+            return new FacturaData(
+              i,
+              fecha,
+              item.codCliente,
+              item.nomCliente,
+              item.numRecibo,
+              item.numRecibo,
+              item.condicionPago,
+              item.monto,
+              corteElement.efectivoR,
+              corteElement.chequesR,
+              corteElement.transfR,
+              corteElement.estadoDocumento,
+              corteElement.pagos
+            );
+          } else {
+            return new FacturaData(
+              i,
+              fecha,
+              item.codCliente,
+              item.nomCliente,
+              item.numRecibo,
+              item.numRecibo,
+              item.condicionPago,
+              item.monto,
+              0.0,
+              0.0,
+              0.0,
+              item.estadoDocumento,
+              new DetallePago(0.0, 0.0, 0.0, '', '', '', '', '', '')
+            );
+          }
+
+          
         });
 
         // Asigna el arreglo de FacturaData al dataSource
         this.Corte.documentLines = facturaDataArray;
-
+        this.totalEfectivo = 0;
         for (let i = 0; i < this.Corte.documentLines.length; i++) {
           this.totalEfectivo =
             this.totalEfectivo + this.Corte.documentLines[i].efectivoR;
@@ -288,14 +351,20 @@ export class CorteCajaComponent implements OnInit {
   }
 
   obtenerCorteCajaPorId(codigo: any) {
-    
     console.log('Actualizar Corte Caja ' + codigo);
 
     this.FacturasService.getCorteCajaById(codigo).subscribe((result: any) => {
 
-      console.log(result)
-      
       this.Corte = result;
+
+      this.totalEfectivo = 0;
+        for (let i = 0; i < this.Corte.documentLines.length; i++) {
+          this.totalEfectivo =
+            this.totalEfectivo + this.Corte.documentLines[i].efectivoR;
+        }
+
+        this.calcularSumatoria();
+
 
 
     });
@@ -314,26 +383,51 @@ export class CorteCajaComponent implements OnInit {
           const fechaArray = fechaCompleta.split('T');
           const fecha = fechaArray[0];
 
-          return new FacturaData(
-            i,
-            fecha,
-            item.codCliente,
-            item.nomCliente,
-            item.numeroDocumento,
-            item.numRecibo,
-            item.condicionPago,
-            item.monto,
-            0.0,
-            0.0,
-            0.0,
-            item.estadoDocumento,
-            new DetallePago(0.0, 0.0, 0.0, '', '', '', '', '', '')
+          const corteElement = this.Corte.documentLines.find(
+            (corteLine) =>
+              corteLine.numeroDocumento === item.numeroDocumento ||
+              corteLine.numRecibo === item.numRecibo
           );
+
+          if (corteElement) {
+            return new FacturaData(
+              i,
+              fecha,
+              item.codCliente,
+              item.nomCliente,
+              item.numeroDocumento,
+              item.numRecibo,
+              item.condicionPago,
+              item.monto,
+              corteElement.efectivoR,
+              corteElement.chequesR,
+              corteElement.transfR,
+              corteElement.estadoDocumento,
+              corteElement.pagos
+            );
+          } else {
+            return new FacturaData(
+              i,
+              fecha,
+              item.codCliente,
+              item.nomCliente,
+              item.numeroDocumento,
+              item.numRecibo,
+              item.condicionPago,
+              item.monto,
+              0.0,
+              0.0,
+              0.0,
+              item.estadoDocumento,
+              new DetallePago(0.0, 0.0, 0.0, '', '', '', '', '', '')
+            );
+          }
         });
 
         // Asigna el arreglo de FacturaData al dataSource
         this.Corte.documentLines = facturaDataArray;
 
+        this.totalEfectivo = 0;
         for (let i = 0; i < this.Corte.documentLines.length; i++) {
           this.totalEfectivo =
             this.totalEfectivo + this.Corte.documentLines[i].efectivoR;
@@ -347,188 +441,160 @@ export class CorteCajaComponent implements OnInit {
     );
   }
 
-  savePago(row: any, Estado: any, CondicionPago: any, pago: DetallePago) {
-    console.log(row);
+  savePago(row: any, Estado: any, CondicionPago: any, documento: any) {
+    console.log(documento);
     console.log(Estado);
-    console.log(CondicionPago);
-
-    
-      let dialogRef = this.dialog.open(TabsModalComponent, {
-        data: {
-          index: row,
-          pago: pago,
-        },
-        width: '800px',
-        maxWidth: '800px',
-      });
-
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log('The dialog was closed');
-        if (result) {
-          let index = result.index;
-          let pagos = result.pago;
-
-          this.Corte.documentLines[index].efectivoR = pagos.montoEfectivo;
-          this.Corte.documentLines[index].chequesR = pagos.montoCheque;
-          this.Corte.documentLines[index].transfR = pagos.montoTransfer;
-
-          this.Corte.documentLines[index].pagos = pagos;
 
 
-          this.totalEfectivo = 0;
-
-          for (let i = 0; i < this.Corte.documentLines.length; i++) {
-            this.totalEfectivo += this.Corte.documentLines[i].efectivoR;
-          }
-
-          console.log(this.totalEfectivo);
-          console.log(JSON.stringify(this.Corte.documentLines[index], null, 2));
-        }
-      });
-    
-  }
-
-  aplicarCorte() {
-
-
-    if(this.totalContado != this.totalEfectivo){
+    if(Estado == 0){
 
       Swal.fire({
-        title: 'Error de Validacion',
-        text: 'Existe un error de validacion entre el arqueo de caja y el total',
-        icon: 'error',
+        title: 'El documento seleccionado no ha sido entregado',
+        text: 'Por favor marcar su estado como "Entregado" antes de registrar un pago.',
+        icon: 'warning',
         heightAuto: false,
-      });
+      });      
 
-    }else{
-
-
-      this.FacturasService.aplicarCorteCaja(this.Corte.idCortedeCaja).then((result : any) => {
-
-        Swal.fire({
-          title: 'Corte Aplicado',
-          text: '',
-          icon: 'success',
-          heightAuto: false,
-        });
-
-      }).catch((error : any ) => {
-      
-
-      Swal.fire({
-        title: 'Error al aplicar corte',
-        text: 'Error: ' + JSON.stringify(error, null, 2),
-        icon: 'error',
-        heightAuto: false,
-      });
-
-
-    })
+      return;
 
     }
 
 
+    if(this.Corte.estadoDocumento ==2){
+
+      return;
+
+    }
+
+    let dialogRef = this.dialog.open(TabsModalComponent, {
+      data: {
+        index: row,
+        pago: documento.pagos,
+        documento: documento.numeroDocumento,
+        monto: documento.monto,
+        cuentas : this.Cuentas
+      },
+      width: '800px',
+      maxWidth: '800px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      if (result) {
+        let index = result.index;
+        let pagos = result.pago;
+
+        this.Corte.documentLines[index].efectivoR = pagos.montoEfectivo;
+        this.Corte.documentLines[index].chequesR = pagos.montoCheque;
+        this.Corte.documentLines[index].transfR = pagos.montoTransfer;
+
+        this.Corte.documentLines[index].pagos = pagos;
+
+        this.totalEfectivo = 0;
+
+        for (let i = 0; i < this.Corte.documentLines.length; i++) {
+          this.totalEfectivo += this.Corte.documentLines[i].efectivoR;
+        }
+
+        console.log(this.totalEfectivo);
+        console.log(JSON.stringify(this.Corte.documentLines[index], null, 2));
+      }
+    });
   }
 
-  guardarCorte() {
-    this.FacturasService.saveCorteCaja(this.Corte).then((result : any) => {
-
-      Swal.fire({
-        title: 'Corte Guardado',
-        text: 'El Corte ha sido guardado con exito',
-        icon: 'success',
-        heightAuto: false,
-      });
-
-
-
-    }).catch((error : any ) => {
-      
-
-      Swal.fire({
-        title: 'Error de guardado',
-        text: 'Error: ' + JSON.stringify(error, null, 2),
-        icon: 'error',
-        heightAuto: false,
-      });
-
-
-    })
-  }
-
-
-  updateCorte() {
-    this.FacturasService.updateCorteCaja(this.Corte).then((result : any) => {
-
-      Swal.fire({
-        title: 'Corte Guardado',
-        text: 'El Corte ha sido guardado con exito',
-        icon: 'success',
-        heightAuto: false,
-      });
-
-
-
-    }).catch((error : any ) => {
-      
-
-      Swal.fire({
-        title: 'Error de guardado',
-        text: 'Error: ' + JSON.stringify(error, null, 2),
-        icon: 'error',
-        heightAuto: false,
-      });
-
-
-    })
-  }
-
-  deleteSolicitud(item: any) {
+  aplicarCorte() {
+    
     Swal.fire({
-      title: '¿Esta seguro?',
-      text: 'El elemento se eliminara permanentemente',
+      title: 'Aplicar Corte',
+      text: 'Recuerda antes de aplicar guardar los cambios al corte de caja',
       icon: 'question',
       heightAuto: false,
       showCancelButton: true,
       showConfirmButton: true,
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: 'Aplicar',
       cancelButtonText: 'Cancelar',
     }).then(
       (result) => {
         if (!result.isConfirmed) return;
-        this.comprasService.deleteSolicitudDeCompra(item).subscribe({
-          next: (_) => {
-            this.dataSource.removeSolicitud(item);
-            Swal.fire({
-              title: 'Eliminado',
-              text: 'Se ha eliminado correctamente...',
-              icon: 'success',
-              timer: 2000,
-              heightAuto: false,
-              showCancelButton: false,
-              showConfirmButton: false,
+        if (this.totalContado != this.totalEfectivo) {
+          Swal.fire({
+            title: 'Error de Validacion',
+            text: 'Existe un error de validacion entre el arqueo de caja y el total',
+            icon: 'error',
+            heightAuto: false,
+          });
+        } else {
+        
+          this.FacturasService.aplicarCorteCaja(this.Corte.idCortedeCaja)
+            .then((result: any) => {
+              Swal.fire({
+                title: 'Corte Aplicado',
+                text: '',
+                icon: 'success',
+                heightAuto: false,
+              });
+    
+              this.Corte.estadoDocumento=2;
+    
+            })
+            .catch((error: any) => {
+              Swal.fire({
+                title: 'Error al aplicar corte',
+                text: 'Error: ' + JSON.stringify(error, null, 2),
+                icon: 'error',
+                heightAuto: false,
+              });
             });
-          },
-          error: (error) => {
-            let errorMsg: string;
-            if (error.error instanceof ErrorEvent) {
-              errorMsg = `Error: ${error.error.message}`;
-            } else {
-              errorMsg = getServerErrorMessage(error);
-            }
-
-            Swal.fire({
-              title: '',
-              text: errorMsg,
-              icon: 'error',
-              heightAuto: false,
-            });
-          },
-        });
+        }
       },
       () => {}
     );
   }
 
- 
+  guardarCorte() {
+    this.FacturasService.saveCorteCaja(this.Corte)
+      .then((result: any) => {
+
+        Swal.fire({
+          title: 'Corte Guardado',
+          text: result.mensaje,
+          icon: 'success',
+          heightAuto: false,
+        });
+
+        this._router.navigate(["/CorteCaja/index"])
+
+        
+      })
+      .catch((error: any) => {
+        Swal.fire({
+          title: 'Error de guardado',
+          text: 'Error: ' + JSON.stringify(error.error, null, 2),
+          icon: 'error',
+          heightAuto: false,
+        });
+      });
+  }
+
+  updateCorte() {
+    this.FacturasService.updateCorteCaja(this.Corte)
+      .then((result: any) => {
+        Swal.fire({
+          title: 'Corte Guardado',
+          text: result.mensaje,
+          icon: 'success',
+          heightAuto: false,
+        });
+      })
+      .catch((error: any) => {
+        Swal.fire({
+          title: 'Error de guardado',
+          text: 'Error: ' + JSON.stringify(error, null, 2),
+          icon: 'error',
+          heightAuto: false,
+        });
+      });
+  }
+
+
 }
