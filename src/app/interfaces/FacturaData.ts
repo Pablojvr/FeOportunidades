@@ -17,6 +17,7 @@ export class FacturaData {
   }
 
   export class CorteCaja {
+    observaciones: string;
     usuario: number;
     numeroDocumento: string;
     fecha: string;
@@ -39,6 +40,7 @@ export class FacturaData {
     m1: number;
   
     constructor(
+      observaciones : string = "",
       usuario: number = 0,
       numeroDocumento: string = "",
       fecha: string = "",
@@ -60,6 +62,7 @@ export class FacturaData {
       m25: number = 0,
       m1: number = 0
     ) {
+      this.observaciones = observaciones;
       this.usuario = usuario;
       this.numeroDocumento = numeroDocumento;
       this.fecha = fecha;
@@ -96,7 +99,8 @@ export class FacturaData {
       public fechaTransfer: string,
       public cuentaCheque: string,
       public ReferenciaCheque: string,
-      public fechaCheque: string
+      public fechaCheque: string,
+      public postFecha: boolean
       ) {}
     
   }

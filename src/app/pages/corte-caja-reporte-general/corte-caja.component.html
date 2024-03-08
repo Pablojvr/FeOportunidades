@@ -1,0 +1,34 @@
+<mat-card>
+  <mat-card-content class="text-center">
+    <div class="flex flex-wrap justify-around">
+
+      <div class="w-full">
+        <h1 class="text-2xl font-bold mb-4">Generar Reporte Detalle de Ingresos</h1>
+      </div>
+
+      <div class="w-full md:w-1/2 lg:w-1/3">
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Inicio</mat-label>
+          <input matInput [matDatepicker]="pickerInicio" placeholder="Ingrese la fecha de inicio" [(ngModel)]="FechaInicio">
+          <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+          <mat-datepicker #pickerInicio></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="w-full md:w-1/2 lg:w-1/3">
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha Fin</mat-label>
+          <input matInput [matDatepicker]="pickerFin" placeholder="Ingrese la fecha de fin" [(ngModel)]="FechaFin" >
+          <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFin></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+
+      <div class="w-full">
+        <button (click)="generarReporte()" mat-raised-button color="primary">Generar Reporte</button>
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,6 +1,9 @@
 import {
-  Component, HostListener,
-  Input, OnInit, ViewChild
+  Component,
+  HostListener,
+  Input,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
 
 @Component({
@@ -22,7 +25,7 @@ export class NavigationComponent implements OnInit {
       url: '/home',
     },
     {
-      permission: "administrar",
+      permission: 'administrar',
       text: 'Administracion',
       icon: 'settings',
       url: null,
@@ -38,7 +41,7 @@ export class NavigationComponent implements OnInit {
       ],
     },
     {
-      permission: "compras",
+      permission: 'compras',
       text: 'Cortes de Caja',
       icon: 'shopping_bag',
       url: null,
@@ -55,10 +58,33 @@ export class NavigationComponent implements OnInit {
           url: '/CorteCaja/index',
         },
       ],
+    },{
+      permission: 'compras',
+      text: 'Reportes Corte',
+      icon: 'shopping_bag',
+      url: null,
+      menu: [
+        {
+          text: 'Reporte de impresion',
+          icon: 'summarize',
+          url: '/Reportes/reporteImpresion',
+          show: false,
+        },
+        {
+          text: 'Reporte Corte Caja General',
+          icon: 'archive',
+          url: '/Reportes/reporteGeneral',
+        },
+        {
+          text: 'Reporte Corte Caja General',
+          icon: 'archive',
+          url: '/Reportes/reporteResumen',
+        },
+      ],
     }
   ];
 
-  menuItems :any= [];
+  menuItems: any = [];
 
   public getScreenWidth: any;
   public getScreenHeight: any;
@@ -71,14 +97,14 @@ export class NavigationComponent implements OnInit {
 
     this.filterMenuItems();
   }
-  filterMenuItems(){
+  filterMenuItems() {
     var user = localStorage.getItem('loggedInUser')
       ? JSON.parse(localStorage.getItem('loggedInUser') ?? '{}')
       : null;
 
-    this.menuItems = this.allItems.filter(
-      item => { return !item.permission || user.rol[item.permission]==false }
-    )
+    this.menuItems = this.allItems.filter((item) => {
+      return !item.permission || user.rol[item.permission] == false;
+    });
   }
   @HostListener('window:resize', ['$event'])
   onWindowResize() {

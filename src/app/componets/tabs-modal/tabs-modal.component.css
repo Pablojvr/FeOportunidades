@@ -1,0 +1,13 @@
+.line1{
+    font-size: 12px;
+  }
+   
+  .line2{
+    font-size: 10px;
+  }
+
+
+  .multiline-mat-option.mat-option {
+    white-space: normal;
+    line-height: normal;
+  }

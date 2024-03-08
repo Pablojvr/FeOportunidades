@@ -1,109 +1,129 @@
 <mat-card>
   <mat-card-content>
     <div class="flex flex-wrap">
-      <div class="w-full"><h1>Cortes de caja</h1></div>
 
-      <div class="flex flex-column items-center align-items-end ml-1">
-        <button
-          mat-flat-button
-          color="primary"
-          style="height: 4em; margin-bottom: 1em"
-          routerLink="/CorteCaja/"
-        >
-          Nuevo Corte
-          <mat-icon class="mat-18">add</mat-icon>
-        </button>
+      <div class="w-full">
+        <h1>Cortes de caja</h1>
       </div>
+
+      <div class="flex flex-wrap justify-evenly w-full">
+
+        <div class="flex flex-column items-center align-items-end ml-1">
+          <button mat-flat-button color="primary" style="height: 4em; margin-bottom: 1em" routerLink="/CorteCaja/">
+            Nuevo Corte
+            <mat-icon class="mat-18">add</mat-icon>
+          </button>
+
+        </div>
+
+
+        <div style="justify-content: space-evenly !important" class="flex flex-column items-center align-items-end ml-1">
+
+
+          <mat-form-field>
+            <input matInput [matDatepicker]="pickerInicio" placeholder="Fecha Inicial"
+              (dateInput)="onFechaInicialChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput [matDatepicker]="pickerFin" placeholder="Fecha Final"
+              (dateInput)="onFechaFinalChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFin></mat-datepicker>
+          </mat-form-field>
+
+          <button mat-flat-button color="primary" (click)="aplicarFiltro()">Aplicar Filtro</button>
+
+        </div>
+
+      </div>
+
+
+
+
 
 
       <div class="w-full rounded">
 
-        <mat-table
-        class="items-table mat-elevation-z8"
-        [dataSource]="dataSource"
-        matSort
-        matSortActive="idCortedeCaja"
-        matSortDirection="desc"
-        matSortDisableClear
-      >
-        <ng-container matColumnDef="idCortedeCaja">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >#</mat-header-cell
-          >
-          <mat-cell *matCellDef="let item">{{
-            item.idCortedeCaja
-          }}</mat-cell>
-        </ng-container>
+        <mat-table class="items-table mat-elevation-z8" [dataSource]="dataSource" matSort matSortActive="idCortedeCaja"
+          matSortDirection="desc" matSortDisableClear>
+          <ng-container matColumnDef="idCortedeCaja">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+            <mat-cell *matCellDef="let item">{{
+              item.idCortedeCaja
+              }}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="numeroDocumento">
-          <mat-header-cell *matHeaderCellDef mat-sort-header
-            >numeroDocumento</mat-header-cell
-          >
-          <mat-cell *matCellDef="let item">{{ item.numeroDocumento }}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="numeroDocumento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>numeroDocumento</mat-header-cell>
+            <mat-cell *matCellDef="let item">{{ item.numeroDocumento }}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="fecha">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
-          <mat-cell class="duration-cell" *matCellDef="let item">{{
-            item.fecha | date: "shortDate"
-          }}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="fecha">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">{{
+              item.fecha | date: "shortDate"
+              }}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="entrega" >
-          <mat-header-cell *matHeaderCellDef mat-sort-header>entrega</mat-header-cell>
-          <mat-cell class="duration-cell" *matCellDef="let item">
-            {{ item.entrega }}
-          </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="entrega">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>entrega</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              {{ item.entrega }}
+            </mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="tipoDocumento">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>tipoDocumento</mat-header-cell>
-          <mat-cell class="duration-cell" *matCellDef="let item">
-            {{ item.tipoDocumento }}
-          </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="tipoDocumento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>tipoDocumento</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              {{ item.tipoDocumento }}
+            </mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="estadoDocumento">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>estadoDocumento</mat-header-cell>
-          <mat-cell class="duration-cell" *matCellDef="let item">
-            {{ item.estadoDocumento }}
-          </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="estadoDocumento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>estadoDocumento</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              {{ item.estadoDocumento }}
+            </mat-cell>
+          </ng-container>
 
 
 
-        <ng-container matColumnDef="acciones">
-          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-          <mat-cell class="duration-cell" *matCellDef="let item">
-            <button
-              mat-icon-button
-              [routerLink]="['/CorteCaja/', item.idCortedeCaja]"
-            >
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+            <mat-cell class="duration-cell" *matCellDef="let item">
+              <button mat-icon-button [routerLink]="['/CorteCaja/', item.idCortedeCaja]">
 
 
-              <mat-icon *ngIf="item.estadoDocumento == 1" class="mat-18"
-                >edit</mat-icon
-              >
+                <mat-icon *ngIf="item.estadoDocumento == 1" class="mat-18">edit</mat-icon>
 
-              <mat-icon *ngIf="item.estadoDocumento == 2" class="mat-18"
-                >visibility</mat-icon
-              >
+                <mat-icon *ngIf="item.estadoDocumento == 2" class="mat-18">visibility</mat-icon>
 
 
-            </button>
+              </button>
 
-          </mat-cell>
-        </ng-container>
+              <button *ngIf="item.estadoDocumento == 1 && rol == 1" mat-icon-button (click)="borrarCorte(item.idCortedeCaja)" >
 
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" style="vertical-align: middle" colspan="9999">
-            No se han encontrado registros
-          </td>
-        </tr>
-      </mat-table>
+                <mat-icon class="mat-18">delete</mat-icon>
+
+                
+              </button>
+
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" style="vertical-align: middle" colspan="9999">
+              No se han encontrado registros
+            </td>
+          </tr>
+        </mat-table>
 
 
       </div>

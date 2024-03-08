@@ -38,7 +38,7 @@ export class CorteCajaComponent implements OnInit {
   fakeData: any[] = [];
   Cuentas : any[] = [];
 
-  Corte: CorteCaja = new CorteCaja(0, '', '', '', 1, 0, [], 0);
+  Corte: CorteCaja = new CorteCaja("",0, '', '', '', 1, 0, [], 0);
 
   totalEfectivo: number = 0.0;
   totalContado: number = 0.0;
@@ -124,6 +124,7 @@ export class CorteCajaComponent implements OnInit {
 
   isLoading = false;
   errorMsg!: string;
+  rol:any;
 
   constructor(
     private datePipe: DatePipe,
@@ -143,19 +144,19 @@ export class CorteCajaComponent implements OnInit {
   }
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
+    this.rol = this.user.rol.id;
 
     this.FacturasService.getCuentasBanco().then((result : any) => {
       this.Cuentas = result.data.map((x : any) => {
         return {
-          value : x.acctName,
-          nombreCuenta :  x.acctName
+          value : x.glAccount,
+          nombreCuenta :  x.acctName,
+          nombreCuentaAux : x.acctName + " - " + x.account,
+          Ncuenta : x.account
         }
       } );
 
       console.log(result);
-
-
-
     })
 
 
@@ -167,9 +168,6 @@ export class CorteCajaComponent implements OnInit {
     if (id) {
       this.readOnly = true;
       this.obtenerCorteCajaPorId(id);
-
-      
-
     } else {
       console.log('Crear Corte Caja');
     }
@@ -226,7 +224,7 @@ export class CorteCajaComponent implements OnInit {
       this.Corte.b20 * 20.0 +
       this.Corte.b50 * 50.0 +
       this.Corte.b100 * 100.0 +
-      this.Corte.milesimasCentavo * 1 +
+      this.Corte.milesimasCentavo * 0.0001 +
       this.Corte.mCentavo * 0.01 +
       this.Corte.m5 * 0.05 +
       this.Corte.m10 * 0.1 +
@@ -302,7 +300,7 @@ export class CorteCajaComponent implements OnInit {
               fecha,
               item.codCliente,
               item.nomCliente,
-              item.numRecibo,
+              item.numeroDocumento,
               item.numRecibo,
               item.condicionPago,
               item.monto,
@@ -318,7 +316,7 @@ export class CorteCajaComponent implements OnInit {
               fecha,
               item.codCliente,
               item.nomCliente,
-              item.numRecibo,
+              item.numeroDocumento,
               item.numRecibo,
               item.condicionPago,
               item.monto,
@@ -326,7 +324,7 @@ export class CorteCajaComponent implements OnInit {
               0.0,
               0.0,
               item.estadoDocumento,
-              new DetallePago(0.0, 0.0, 0.0, '', '', '', '', '', '')
+              new DetallePago(0.0, 0.0, 0.0, '', '', '', '', '', '',false)
             );
           }
 
@@ -419,7 +417,7 @@ export class CorteCajaComponent implements OnInit {
               0.0,
               0.0,
               item.estadoDocumento,
-              new DetallePago(0.0, 0.0, 0.0, '', '', '', '', '', '')
+              new DetallePago(0.0, 0.0, 0.0, '', '', '', '', '', '',false)
             );
           }
         });
@@ -516,14 +514,16 @@ export class CorteCajaComponent implements OnInit {
     }).then(
       (result) => {
         if (!result.isConfirmed) return;
-        if (this.totalContado != this.totalEfectivo) {
-          Swal.fire({
+        //if (this.totalContado != this.totalEfectivo) {
+          /*Swal.fire({
             title: 'Error de Validacion',
             text: 'Existe un error de validacion entre el arqueo de caja y el total',
             icon: 'error',
             heightAuto: false,
           });
-        } else {
+
+          */
+        //} else {
         
           this.FacturasService.aplicarCorteCaja(this.Corte.idCortedeCaja)
             .then((result: any) => {
@@ -545,13 +545,16 @@ export class CorteCajaComponent implements OnInit {
                 heightAuto: false,
               });
             });
-        }
+        //}
       },
       () => {}
     );
   }
 
   guardarCorte() {
+
+    this.Corte.usuario = this.rol;
+
     this.FacturasService.saveCorteCaja(this.Corte)
       .then((result: any) => {
 

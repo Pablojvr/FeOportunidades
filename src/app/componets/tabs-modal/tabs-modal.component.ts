@@ -11,7 +11,7 @@ import { FacturasService } from '../../services/facturas.service'; // Asegúrate
 export class TabsModalComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,private FacturasService: FacturasService) {}
 
-  pago: DetallePago = new DetallePago(0, 0, 0, '', '', '', '', '', '');
+  pago: DetallePago = new DetallePago(0, 0, 0, '', '', '', '', '', '', false);
 
   cuentas = this.data.cuentas;
 

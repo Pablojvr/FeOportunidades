@@ -37,6 +37,9 @@ import { NotaCreditoCrudComponent } from './pages/nota-credito-crud/nota-credito
 import { AgregarArticuloNotaCreditoComponent } from './componets/agregar-articulo-nota-credito/agregar-articulo-nota-credito.component';
 import { IndexNotasCreditoComponent } from './pages/index-notas-credito/index-notas-credito.component';
 import { CorteCajaComponent } from './pages/corte-caja/corte-caja.component';
+import { CorteCajaReporteComponent } from './pages/corte-caja-reporte/corte-caja.component';
+import { CorteCajaReporteGeneralComponent } from './pages/corte-caja-reporte-general/corte-caja.component';
+import { CorteCajaResumenComponent } from './pages/corte-caja-reporte-resumen/corte-caja.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TabsModalComponent } from './componets/tabs-modal/tabs-modal.component';
 import { IndexCorteCajaComponent } from './pages/index-corte-caja/index-corte-caja.component';
@@ -69,6 +72,9 @@ registerLocaleData(localeEs, 'es');
     AgregarArticuloNotaCreditoComponent,
     IndexNotasCreditoComponent,
     CorteCajaComponent,
+    CorteCajaReporteComponent,
+    CorteCajaReporteGeneralComponent,
+    CorteCajaResumenComponent,
     TabsModalComponent,
     IndexCorteCajaComponent
   ],

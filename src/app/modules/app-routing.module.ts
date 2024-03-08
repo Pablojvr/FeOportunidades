@@ -10,6 +10,8 @@ import { IndexComprasComponent } from './../pages/index-compras/index-compras.co
 import { IndexDevolucionesComponent } from './../pages/index-devoluciones/index-devoluciones.component';
 import { IndexEntradaMercanciaComponent } from './../pages/index-entrada-mercancia/index-entrada-mercancia.component';
 import { CorteCajaComponent } from './../pages/corte-caja/corte-caja.component';
+import { CorteCajaReporteComponent } from './../pages/corte-caja-reporte/corte-caja.component';
+import { CorteCajaReporteGeneralComponent } from './../pages/corte-caja-reporte-general/corte-caja.component';
 import { IndexFacturasComponent } from './../pages/index-facturas/index-facturas.component';
 import { IndexNotasCreditoComponent } from './../pages/index-notas-credito/index-notas-credito.component';
 import { IndexComponent } from './../pages/index/index.component';
@@ -21,6 +23,7 @@ import { PreviewFacturasComponent } from './../pages/preview-facturas/preview-fa
 import { RolesComponent } from './../pages/roles/roles.component';
 import { UsuariosComponent } from './../pages/usuarios/usuarios.component';
 import { IndexCorteCajaComponent } from '../pages/index-corte-caja/index-corte-caja.component';
+import { CorteCajaResumenComponent } from '../pages/corte-caja-reporte-resumen/corte-caja.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -64,7 +67,17 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { permission: ['compras'] },
   },
-
+  {
+    path: 'Reportes',
+    component: LayoutComponent,
+    children: [
+      { path: 'reporteImpresion', component: CorteCajaReporteComponent },
+      { path: 'reporteGeneral', component: CorteCajaReporteGeneralComponent },
+      { path: 'reporteResumen', component: CorteCajaResumenComponent },
+    ],
+    canActivate: [AuthGuard],
+    data: { permission: ['compras'] },
+  },
   {
     path: 'orden_compras',
     component: LayoutComponent,
@@ -141,32 +154,31 @@ const routes: Routes = [
         path: ':idNotaCredito',
         component: NotaCreditoComponent,
       },
-    ]
-    },
+    ],
+  },
 
-    {
-      path: 'notasCredito',
-      component: LayoutComponent,
-      children: [
-        {
-          path: '',
-          component: IndexNotasCreditoComponent,
-        },
-        {
-          path: 'new/:idFactura',
-          component: NotaCreditoCrudComponent,
-        },
-        {
-          path: 'new',
-          component: NotaCreditoCrudComponent,
-        },
-        {
-          path: 'view/:idNotaCredito',
-          component: NotaCreditoCrudComponent,
-        },
-
-      ]
+  {
+    path: 'notasCredito',
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        component: IndexNotasCreditoComponent,
       },
+      {
+        path: 'new/:idFactura',
+        component: NotaCreditoCrudComponent,
+      },
+      {
+        path: 'new',
+        component: NotaCreditoCrudComponent,
+      },
+      {
+        path: 'view/:idNotaCredito',
+        component: NotaCreditoCrudComponent,
+      },
+    ],
+  },
   {
     path: 'facturas',
     component: LayoutComponent,
@@ -199,7 +211,6 @@ const routes: Routes = [
     path: 'devoluciones',
     component: LayoutComponent,
     children: [
-
       {
         path: '',
         component: IndexDevolucionesComponent,

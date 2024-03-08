@@ -18,6 +18,7 @@ import {
 export class FacturasService {
 
   public baseUrl = environment.apiURL;
+  public reporteURL = "http://172.16.0.4:82/api";
   constructor(private http: HttpClient) {}
 
 
@@ -71,12 +72,29 @@ export class FacturasService {
     );
   }
 
-  getAllCortes() {
+  getAllCortes(fechaInicio: Date | null, fechaFin: Date | null) {
+
+
+    let params = new HttpParams();
+
+    // Validar y agregar parámetro solo si la fecha de inicio no es nula
+    if (fechaInicio) {
+      params = params.set('fechaInicio', fechaInicio.toISOString());
+    }
+
+    // Validar y agregar parámetro solo si la fecha final no es nula
+    if (fechaFin) {
+      params = params.set('fechaFin', fechaFin.toISOString());
+    }
+
+
 
     return this.http.get<any>(
       `${this.baseUrl}/Facturas/getAllCortes`,
-      {}
+      { params }
     ).toPromise();
+
+    
   }
 
 
@@ -137,9 +155,34 @@ export class FacturasService {
   }
 
 
+  deleteCorteCaja(id : any) {
+  
+    return this.http.delete(`${this.baseUrl}/Facturas/eliminarCorteCaja/${id}`).toPromise();
+
+  }
+
   aplicarCorteCaja(CorteCaja : number) {
   
     return this.http.get(`${this.baseUrl}/Facturas/aplicarCorte?idCorte=${CorteCaja}`).toPromise();
+
+  }
+
+  GenerarDetalleIngreso(FInicio : any,FFin : any) {
+  
+    return this.http.get(`${this.reporteURL}/OrdenCompra/?FInicio=${FInicio}&FFin=${FFin}`).toPromise();
+
+  }
+
+  GenerarResumenCorte(fechaCorte : any) {
+  
+    return this.http.get(`${this.reporteURL}/EntradaMercancia/?fechaCorte=${fechaCorte}`).toPromise();
+
+  }
+
+
+  GenerarCorteReporteID(IdCorte : any) {
+  
+    return this.http.get(`${this.reporteURL}/Reportes/${IdCorte}`).toPromise();
 
   }
 

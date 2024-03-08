@@ -2,37 +2,35 @@
   <mat-card-content>
     <div class="flex flex-wrap justify-around">
       <div class="w-full">
-        <h1 *ngIf="Corte.idCortedeCaja==0" >Nuevo Corte de Caja</h1>
-        <h1 *ngIf="Corte.idCortedeCaja!=0" >Editando Corte de caja #{{Corte.idCortedeCaja}}</h1>
+        <h1 *ngIf="Corte.idCortedeCaja==0">Nuevo Corte de Caja</h1>
+        <h1 *ngIf="Corte.idCortedeCaja!=0">Editando Corte de caja #{{Corte.idCortedeCaja}}</h1>
       </div>
 
       <div class="flex  w-full flex-wrap align-items items-baseline">
 
-        <div class="w-1/3" >
+        <div class="w-1/3">
           <span class=" mx-1 mb-3"> Recibe: {{Corte.usuario}}</span>
         </div>
 
-        <div class="w-1/3" >
+        <div class="w-1/3">
           <span class=" mx-1 mb-3"> Numero de documento</span>
           <mat-form-field class="example-full-width">
-            <input [readonly]="readOnly"
-
-            [disabled]="readOnly" matInput type="text" placeholder="Numero" [(ngModel)]="Corte.numeroDocumento">
+            <input [readonly]="readOnly" [disabled]="readOnly" matInput type="text" placeholder="Numero"
+              [(ngModel)]="Corte.numeroDocumento">
           </mat-form-field>
         </div>
 
 
-        <div class="w-1/3" >
+        <div class="w-1/3">
           <p><span class=" mx-1 mb-3">Fecha: {{Corte.fecha}}</span></p>
         </div>
 
 
-        <div class="w-1/3" >
+        <div class="w-1/3">
           <p><span class=" mx-1 mb-3">Entrega</span>
             <mat-form-field class="example-full-width">
-              <input [readonly]="readOnly"
-
-            [disabled]="readOnly"matInput placeholder="Nombre Entrega" [(ngModel)]="Corte.entrega">
+              <input [readonly]="readOnly" [disabled]="readOnly" matInput placeholder="Nombre Entrega"
+                [(ngModel)]="Corte.entrega">
             </mat-form-field>
           </p>
         </div>
@@ -40,7 +38,7 @@
 
 
 
-        <div class="w-1/3" >
+        <div class="w-1/3">
           <p>
             <span class=" mx-1 mb-3"> Tipo de documento</span>
             <mat-form-field>
@@ -55,55 +53,62 @@
         </div>
 
 
-        <div *ngIf="Corte.idCortedeCaja!=0"  class="w-1/3" >
+        <div *ngIf="Corte.idCortedeCaja!=0" class="w-1/3">
           <p>
             <span class=" mx-1 mb-3"> Estado
 
-              <span *ngIf="Corte.estadoDocumento == 1" >
-                  Recibido
+              <span *ngIf="Corte.estadoDocumento == 1">
+                Recibido
               </span>
-              <span *ngIf="Corte.estadoDocumento == 2" >
+              <span *ngIf="Corte.estadoDocumento == 2">
                 Aplicado
-            </span>
+              </span>
 
             </span>
-            
+
           </p>
         </div>
 
 
-      </div>
-
-      <div class="flex justify-around w-full">
-
+        <div class="w-1/3">
+          <p>
+            <span class=" mx-1 mb-3"> Obsevaciones</span>
+            <mat-form-field>
+              <mat-label></mat-label>
+              <textarea  [(ngModel)]="Corte.observaciones" matInput></textarea>
+            </mat-form-field>
+          </p>
+        </div>
 
         
 
+
       </div>
+
 
 
 
 
       <div *ngIf="Corte.estadoDocumento != 2" class="flex justify-evenly mt-4">
-        <button (click)="GetDocumento()" mat-raised-button
-          color="primary"><mat-icon>refresh</mat-icon>Actualizar Facturas</button>
+        <button (click)="GetDocumento()" mat-raised-button color="primary"><mat-icon>refresh</mat-icon>Actualizar
+          Facturas</button>
       </div>
 
 
 
       <div class="w-full rounded table-responsive ">
         <div class="">
-          <mat-table class="items-table mat-elevation-z8" [dataSource]="Corte.documentLines" matSort matSortActive="codigo"
-            matSortDirection="desc" matSortDisableClear>
+          <mat-table class="items-table mat-elevation-z8" [dataSource]="Corte.documentLines" matSort
+            matSortActive="codigo" matSortDirection="desc" matSortDisableClear>
 
             <ng-container *ngFor="let column of displayedColumns; let i = index" [matColumnDef]="column">
               <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</mat-header-cell>
               <mat-cell *matCellDef="let item; let j = index">
 
-                <span 
-                  *ngIf="column != 'estado' && column != 'efectivoR' && column != 'transfR' && column != 'chequesR' && column != 'condicionPago' ">{{
-                  item[column] 
-                }}</span>
+                <span
+                  *ngIf="column != 'estado' && column != 'efectivoR' && column != 'transfR' && column != 'chequesR' && column != 'condicionPago' && column != 'monto' ">{{
+                  item[column]
+                  }}</span>
 
                 <span *ngIf="column == 'estado'"> <mat-form-field>
 
@@ -119,19 +124,26 @@
                       </mat-option>
                     </mat-select>
 
-                  </mat-form-field> 
+                  </mat-form-field>
+                </span>
+
+
+                <span *ngIf="column == 'monto'">
+                  ${{item.monto}}
                 </span>
 
                 <span *ngIf="column == 'condicionPago'">
 
-                  <span *ngIf="item.condicionPago == 12" >
-                      CONTADO
+                  <span *ngIf="item.condicionPago == 5">
+                    CONTADO
                   </span>
-                  <span *ngIf="item.condicionPago != 12" >
+                  <span *ngIf="item.condicionPago != 5">
                     CREDITO
-                </span>
+                  </span>
 
                 </span>
+
+
 
 
                 <span (click)="savePago(j,item.estadoDocumento,item.CondicionPago,item)" *ngIf="column == 'efectivoR'">
@@ -144,7 +156,8 @@
 
                   ${{item.transfR}}
 
-                </span><span (click)="savePago(j,item.estadoDocumento,item.CondicionPago,item)" *ngIf="column == 'chequesR'">
+                </span><span (click)="savePago(j,item.estadoDocumento,item.CondicionPago,item)"
+                  *ngIf="column == 'chequesR'">
 
                   ${{item.chequesR}}
 
@@ -171,7 +184,7 @@
       <div class="w-full">
         <div class="grid grid-cols-6 gap-4 mt-4">
           <div class="col-end-7 col-span-2">
-            <h3 class=""> Total Entregas Contado: ${{totalEfectivo}}</h3>
+            <h3 class=""> Total de efectivo a recibir: ${{totalEfectivo}}</h3>
           </div>
         </div>
 
@@ -184,42 +197,48 @@
           <div class="basis-1/4 fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input matInput  type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b1" placeholder="$1" value="0">
+              <input matInput type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b1" placeholder="$1"
+                value="0">
             </mat-form-field>
           </div>
 
           <div class="basis-1/4 fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input matInput  type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b5" placeholder="$5" value="0">
+              <input matInput type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b5" placeholder="$5"
+                value="0">
             </mat-form-field>
           </div>
 
           <div class="basis-1/4 fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input matInput  type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b10" placeholder="$10" value="0">
+              <input matInput type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b10" placeholder="$10"
+                value="0">
             </mat-form-field>
           </div>
 
           <div class="basis-1/4 fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input matInput  type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b20" placeholder="$20" value="0">
+              <input matInput type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b20" placeholder="$20"
+                value="0">
             </mat-form-field>
           </div>
 
           <div class="basis-1/4 fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input matInput  type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b50" placeholder="$50" value="0">
+              <input matInput type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b50" placeholder="$50"
+                value="0">
             </mat-form-field>
           </div>
 
           <div class="basis-1/4 fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input matInput  type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b100" placeholder="$100" value="0">
+              <input matInput type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.b100" placeholder="$100"
+                value="0">
             </mat-form-field>
           </div>
 
@@ -234,40 +253,46 @@
           <div class="basis-1/4 fieldsMoney fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input type="number"  (change)="calcularSumatoria()" [(ngModel)]="Corte.mCentavo" matInput placeholder="0.01" value="0">
+              <input type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.mCentavo" matInput
+                placeholder="0.01" value="0">
             </mat-form-field>
           </div>
 
           <div class="basis-1/4 fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input type="number"  (change)="calcularSumatoria()" [(ngModel)]="Corte.m5" matInput placeholder="0.05" value="0">
+              <input type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.m5" matInput placeholder="0.05"
+                value="0">
             </mat-form-field>
           </div>
 
           <div class="basis-1/4 fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input type="number"  (change)="calcularSumatoria()" [(ngModel)]="Corte.m10" matInput placeholder="0.10" value="0">
+              <input type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.m10" matInput placeholder="0.10"
+                value="0">
             </mat-form-field>
           </div>
 
           <div class="basis-1/4 fieldsMoney">
 
             <mat-form-field class="Dolares" class="example-full-width">
-              <input type="number"  (change)="calcularSumatoria()" [(ngModel)]="Corte.m25" matInput placeholder="0.25" value="0">
+              <input type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.m25" matInput placeholder="0.25"
+                value="0">
             </mat-form-field>
           </div>
 
           <div class="basis-1/4 fieldsMoney">
             <mat-form-field class="Dolares" class="example-full-width">
-              <input type="number"  (change)="calcularSumatoria()" [(ngModel)]="Corte.m1" matInput placeholder="1.00" value="0">
+              <input type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.m1" matInput placeholder="1.00"
+                value="0">
             </mat-form-field>
           </div>
 
-            <div class="basis-1/4 fieldsMoney">
+          <div class="basis-1/4 fieldsMoney">
             <mat-form-field class="Dolares" class="example-full-width">
-              <input type="number"  (change)="calcularSumatoria()" [(ngModel)]="Corte.milesimasCentavo" matInput placeholder="0.0001" value="0">
+              <input type="number" (change)="calcularSumatoria()" [(ngModel)]="Corte.milesimasCentavo" matInput
+                placeholder="0.0001" value="0">
             </mat-form-field>
           </div>
 
@@ -279,20 +304,19 @@
             <h3 class="mx-1"> Total Arqueo: ${{totalContado}}</h3>
           </div>
           <div class="col-end-7 col-span-2 ...">
-            <h3 class="mx-1 mb-3"> Diferencia: ${{totalEfectivo - totalContado }}</h3>
+            <h3 class="mx-1 mb-3"> Diferencia: ${{ totalContado - totalEfectivo }}</h3>
           </div>
         </div>
 
 
         <div *ngIf="Corte.estadoDocumento != 2" class="flex justify-evenly mt-4">
-          <button *ngIf="Corte.idCortedeCaja != 0" mat-raised-button color="primary" (click)="aplicarCorte()"><mat-icon>edit</mat-icon> Aplicar</button>
+          <button *ngIf="Corte.idCortedeCaja != 0" mat-raised-button color="primary"
+            (click)="aplicarCorte()"><mat-icon>edit</mat-icon> Aplicar</button>
 
-
-          <button *ngIf="Corte.idCortedeCaja == 0" mat-raised-button color="primary" (click)="guardarCorte()"><mat-icon>save</mat-icon> Guardar</button>
-          <button *ngIf="Corte.idCortedeCaja != 0" mat-raised-button color="primary" (click)="updateCorte()"><mat-icon>update</mat-icon> Guardar Cambios</button>
-
-
-
+          <button *ngIf="Corte.idCortedeCaja == 0" mat-raised-button color="primary"
+            (click)="guardarCorte()"><mat-icon>save</mat-icon> Guardar</button>
+          <button *ngIf="Corte.idCortedeCaja != 0" mat-raised-button color="primary"
+            (click)="updateCorte()"><mat-icon>update</mat-icon> Guardar Cambios</button>
         </div>
       </div>
     </div>

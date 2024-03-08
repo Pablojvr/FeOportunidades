@@ -12,6 +12,9 @@ import Swal from 'sweetalert2';
 import { getServerErrorMessage } from '../index-compras/index-compras-datasource';
 import { Usuario } from '../usuarios/usuarios-datasource';
 import { FacturasDataSource } from './index-corte-caja-datasource';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-index-corte-caja',
@@ -32,12 +35,16 @@ export class IndexCorteCajaComponent implements OnInit {
     'entrega',
     'tipoDocumento',
     'estadoDocumento',
-    'acciones'
+    'acciones',
   ];
 
   isLoading = false;
   errorMsg!: string;
   user: any;
+  rol: any;
+
+  fechaInicial: Date | null = null;
+  fechaFinal: Date | null = null;
 
   constructor(
     private datePipe: DatePipe,
@@ -58,26 +65,11 @@ export class IndexCorteCajaComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedInUser') ?? '{}');
-    this.facturasService
-      .getAllCortes()
-      .then((result: any) => {
 
-        console.log(result);
+    this.rol = this.user.rol.id;
 
-        this.dataSource = result;
+    this.getCortes();
 
-      })
-      .catch((error: any) => {
-
-        Swal.fire({
-          title: '',
-          text: '',
-          icon: 'error',
-          heightAuto: false,
-        });
-        return;
-
-      });
   }
   get form() {
     return this.comprasForm.controls;
@@ -108,52 +100,26 @@ export class IndexCorteCajaComponent implements OnInit {
     });
   }
 
-  anularFacturas(item: any) {
-    Swal.fire({
-      title: '¿Esta seguro?',
-      text: 'La factura sera anulada en SAP',
-      icon: 'question',
-      heightAuto: false,
-      showCancelButton: true,
-      showConfirmButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then(
-      (result) => {
-        if (!result.isConfirmed) return;
-        this.facturasService.anularFacturasByID(item).subscribe({
-          next: (_) => {
-            this.dataSource.removeFacturas(item);
-            Swal.fire({
-              title: '',
-              text: 'Se ha anulado correctamente la factura',
-              icon: 'success',
-              timer: 2000,
-              heightAuto: false,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-          },
-          error: (error) => {
-            let errorMsg: string;
-            if (error.error instanceof ErrorEvent) {
-              errorMsg = `Error: ${error.error.message}`;
-            } else {
-              errorMsg = getServerErrorMessage(error);
-            }
+    getCortes() {
+    this.facturasService
+      .getAllCortes(this.fechaInicial,this.fechaFinal)
+      .then((result: any) => {
+        console.log(result);
 
-            Swal.fire({
-              title: '',
-              text: errorMsg,
-              icon: 'error',
-              heightAuto: false,
-            });
-          },
+        this.dataSource = result;
+      })
+      .catch((error: any) => {
+        Swal.fire({
+          title: '',
+          text: '',
+          icon: 'error',
+          heightAuto: false,
         });
-      },
-      () => {}
-    );
+        return;
+      });
   }
+
+
 
   generarNotaCreditoFacturas(item: any) {
     Swal.fire({
@@ -203,4 +169,109 @@ export class IndexCorteCajaComponent implements OnInit {
       () => {}
     );
   }
+
+  onFechaInicialChange(event: MatDatepickerInputEvent<Date>): void {
+    this.fechaInicial = event.value;
+  }
+
+  onFechaFinalChange(event: MatDatepickerInputEvent<Date>): void {
+    this.fechaFinal = event.value;
+  }
+
+  aplicarFiltro(): void {
+    
+    if (this.fechaInicial && this.fechaFinal) {
+      
+      if (this.fechaInicial > this.fechaFinal) {
+        Swal.fire({
+          title: '',
+          text: 'La fecha de inicio no puede ser mayor que la fecha final',
+          icon: 'error',
+          heightAuto: false,
+        });
+        return;
+      }
+
+       
+       this.facturasService.getAllCortes(this.fechaInicial, this.fechaFinal)
+       .then((resultado) => {
+        
+        this.dataSource = resultado;
+
+         console.log('Resultado de getAllCortes:', resultado);
+
+
+         
+       })
+       .catch((error) => {
+         
+         console.error('Error al llamar a getAllCortes:', error);
+       });
+
+
+
+
+      
+
+
+    } else {
+      Swal.fire({
+        title: '',
+        text: 'Uno o más campos están vacíos',
+        icon: 'error',
+        heightAuto: false,
+      });
+    }
+  }
+
+  borrarCorte(idCorteCaja : any): void {
+
+
+    Swal.fire({
+      title: 'Eliminar Corte',
+      text: 'Desea eliminar el corte',
+      icon: 'warning',
+      heightAuto: false,
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'ELiminar',
+      cancelButtonText: 'Cancelar',
+    }).then(
+      (result) => {
+        if (!result.isConfirmed) return;
+
+
+        this.facturasService.deleteCorteCaja(idCorteCaja)
+        .then((resultado) => {
+         
+          
+         
+
+        })
+        .catch((error) => {
+    
+          Swal.fire({
+            title: 'Corte Eliminado exitosamente',
+            text: "",
+            icon: 'success',
+            heightAuto: false,
+          });
+
+          
+          
+        });
+
+        
+      },
+      () => {}
+    );
+
+
+
+
+
+
+
+  }
+
 }

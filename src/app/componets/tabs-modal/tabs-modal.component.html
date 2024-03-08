@@ -13,7 +13,6 @@
 
 
     <mat-tab label="Efectivo">
-
       <div class="flex justify-around mt-4">
         <div>
           <span class="mx-1 mb-3"> Monto: $</span>
@@ -22,16 +21,21 @@
           </mat-form-field>
         </div>
       </div>
-
     </mat-tab>
 
     <mat-tab label="Transferencia">
       <div class="flex justify-around mt-4">
-        <mat-form-field>
+        
+        <mat-form-field class="example-full-width Cuentas">
           <mat-label>Seleccionar cuenta</mat-label>
           <mat-select [(ngModel)]="pago.cuentaTransfer" >
-            <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.value">
-              {{cuenta.nombreCuenta}}
+            <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.value" class="multiline-mat-option">
+              <div class="line1">
+                <b>{{ cuenta.nombreCuenta}}</b>
+              </div>
+              <div class="line2">
+                Numero: {{ cuenta.Ncuenta}}
+              </div>
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -68,11 +72,17 @@
     <mat-tab label="Cheque">
 
       <div class="flex justify-around mt-4">
-        <mat-form-field>
+        
+        <mat-form-field class="example-full-width Cuentas">
           <mat-label>Seleccionar cuenta</mat-label>
-          <mat-select [(ngModel)]="pago.cuentaCheque">
-            <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.value">
-              {{cuenta.nombreCuenta}}
+          <mat-select [(ngModel)]="pago.cuentaTransfer" >
+            <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.value" class="multiline-mat-option">
+              <div class="line1">
+                <b>{{ cuenta.nombreCuenta}}</b>
+              </div>
+              <div class="line2">
+                Numero: {{ cuenta.Ncuenta}}
+              </div>
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -86,15 +96,18 @@
 
       </div>
 
-      <div class="flex justify-around mt-4">
+      <div class="flex justify-around mt-4 items-baseline">
 
-        <!-- <div>
+         <div>
           <span class="mx-1 mb-3"></span>
           <mat-checkbox class="example-margin"
+          [(ngModel)]="pago.postFecha"
                   [color]=""
                   [indeterminate]=""> Cheque Postfecha
           </mat-checkbox>
-        </div> -->
+        </div> 
+
+
 
         <div>
           <span class="mx-1 mb-3"> Fecha: </span>
@@ -122,7 +135,7 @@
 
       <button mat-raised-button color="primary" [mat-dialog-close]="savePago()" >Guardar</button>
 
-      <button mat-raised-button color="warn">Cancelar</button>
+      <button [mat-dialog-close]="" mat-raised-button color="warn">Cancelar</button>
 
   </div>
 
