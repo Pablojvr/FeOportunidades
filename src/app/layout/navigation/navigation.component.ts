@@ -65,18 +65,18 @@ export class NavigationComponent implements OnInit {
       url: null,
       menu: [
         {
-          text: 'Reporte de impresion',
+          text: 'Corte de Caja',
           icon: 'summarize',
           url: '/Reportes/reporteImpresion',
           show: false,
         },
         {
-          text: 'Reporte Corte Caja General',
+          text: 'Detalle de Ingresos',
           icon: 'archive',
           url: '/Reportes/reporteGeneral',
         },
         {
-          text: 'Reporte Corte Caja General',
+          text: 'Resumen de Cortes',
           icon: 'archive',
           url: '/Reportes/reporteResumen',
         },

@@ -129,7 +129,9 @@ export class CorteCajaResumenComponent implements OnInit {
     console.log(this.FechaInicio)
 
     var fechaIni =
-      this.datePipe.transform(this.FechaInicio, 'dd-MM-yyyy') ?? '';
+      this.datePipe.transform(this.FechaInicio, 'MM-dd-yyyy') ?? '';
+
+      console.log(fechaIni);
 
       window.open("http://172.16.0.4:82/api/EntradaMercancia/?fechaCorte="+fechaIni, "_blank");
 

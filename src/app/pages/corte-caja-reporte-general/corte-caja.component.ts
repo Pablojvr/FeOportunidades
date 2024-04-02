@@ -130,10 +130,10 @@ export class CorteCajaReporteGeneralComponent implements OnInit {
     
 
     var fechaIni =
-      this.datePipe.transform(this.FechaInicio, 'dd-MM-yyyy') ?? '';
+      this.datePipe.transform(this.FechaInicio, 'MM-dd-yyyy') ?? '';
 
     var fechaFin =
-      this.datePipe.transform(this.FechaFin, 'dd-MM-yyyy') ?? '';
+      this.datePipe.transform(this.FechaFin, 'MM-dd-yyyy') ?? '';
 
     console.log(fechaFin)
     console.log(this.FechaInicio)
